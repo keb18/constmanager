@@ -1,18 +1,18 @@
-const express = require('express');
-const app = express();
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
+const express = require('express'),
+    app = express(),
+    bodyParser = require('body-parser'),
+    mongoose = require('mongoose');
 
 // Connect to the mongodb company server
-mongoose.connect('mongodb://localhost/company');
+mongoose.connect('mongodb://localhost/main_database');
 
 // Make public folder accessible by default
-app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + '/public'));
 
 // Setup Body Parser
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
+// use routes without the *.ejs extension
 app.set('view engine', 'ejs');
 
 // Landing page
@@ -20,30 +20,46 @@ app.get('/', function (req, res) {
     res.render('landing');
 });
 
+// Setup the project schema
+let projectSchema = new mongoose.Schema({
+    projectName: String,
+    projectNumber: String,
+    projectCreated: { type: Date, default: Date.now }
+});
+let Project = mongoose.model('Project', projectSchema);
 
-var projects = [
-    { projectName: "24 High Street", projectNumber: "22331", projectDateCreated: "12/03/2018" },
-    { projectName: "21 High Street", projectNumber: "22111", projectDateCreated: "12/03/2018" },
-    { projectName: "23 High Street", projectNumber: "21231", projectDateCreated: "12/03/2018" }
-];
-
-// Dashboard (Campgrounds)
+// Dashboard
 // Show company dashboard
 app.get('/dashboard', function (req, res) {
-    res.render('dashboard', { projects: projects });
+    // Get all projects from db
+    Project.find({}, function (err, allProjects) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.render('dashboard', { projects: allProjects });
+        }
+    });
 });
 
-// Add a new project (campground)
+// Add a new project
 app.post('/dashboard', function (req, res) {
     // get data from form and add to projects array
     let name = req.body.projectName;
     let number = req.body.projectNumber;
     let newProject = { projectName: name, projectNumber: number }
-    projects.push(newProject);
-    // redirect back to the dashboard
-    res.redirect('/dashboard')
+    // Create a new project and add to the db
+    Project.create(newProject, function (err, newlyCreatedProject) {
+        if (err) {
+            console.log(err);
+        } else {
+            // redirect back to the dashboard
+            res.redirect('/dashboard')
+        }
+    });
+
 });
 
+// Show new project creation page
 app.get('/dashboard/new', function (req, res) {
     res.render('new_project');
 });
