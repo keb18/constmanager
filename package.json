@@ -1,0 +1,29 @@
+{
+  "name": "constmanager",
+  "version": "1.0.0",
+  "description": "Web app for project management for the construction industry",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keb18/constmanager.git"
+  },
+  "keywords": [
+    "web",
+    "app",
+    "construction",
+    "project",
+    "management",
+    "structural",
+    "design",
+    "architecture"
+  ],
+  "author": "Ahmed Buaishi <abuaishi@gmail.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/keb18/constmanager/issues"
+  },
+  "homepage": "https://github.com/keb18/constmanager#readme"
+}
