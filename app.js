@@ -1,9 +1,15 @@
-var express = require('express');
-var app = express();
-var bodyParser = require('body-parser')
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
+// Connect to the mongodb company server
+mongoose.connect('mongodb://localhost/company');
 
+// Make public folder accessible by default
 app.use(express.static(__dirname + "/public"));
+
+// Setup Body Parser
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
@@ -27,7 +33,7 @@ app.get('/dashboard', function (req, res) {
     res.render('dashboard', { projects: projects });
 });
 
-// Add a new project
+// Add a new project (campground)
 app.post('/dashboard', function (req, res) {
     // get data from form and add to projects array
     let name = req.body.projectName;
