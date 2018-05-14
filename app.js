@@ -20,33 +20,41 @@ app.get('/', function (req, res) {
     res.render('landing');
 });
 
+
 // Setup the project schema
 let projectSchema = new mongoose.Schema({
     projectName: String,
     projectNumber: String,
+    projectDescription: String,
     projectCreated: { type: Date, default: Date.now }
 });
 let Project = mongoose.model('Project', projectSchema);
 
 // Dashboard
-// Show company dashboard
+// INDEX - Show company dashboard
 app.get('/dashboard', function (req, res) {
     // Get all projects from db
     Project.find({}, function (err, allProjects) {
         if (err) {
             console.log(err);
         } else {
-            res.render('dashboard', { projects: allProjects });
+            res.render('index', { projects: allProjects });
         }
     });
 });
 
-// Add a new project
+// CREATE - Add a new project
 app.post('/dashboard', function (req, res) {
     // get data from form and add to projects array
-    let name = req.body.projectName;
-    let number = req.body.projectNumber;
-    let newProject = { projectName: name, projectNumber: number }
+    let name = req.body.projectName,
+        number = req.body.projectNumber,
+        description = req.body.projectDescription;
+
+    let newProject = { 
+        projectName: name, 
+        projectNumber: number,
+        projectDescription: description
+    }
     // Create a new project and add to the db
     Project.create(newProject, function (err, newlyCreatedProject) {
         if (err) {
@@ -56,13 +64,21 @@ app.post('/dashboard', function (req, res) {
             res.redirect('/dashboard')
         }
     });
-
 });
 
-// Show new project creation page
+// NEW - Show new project creation page
 app.get('/dashboard/new', function (req, res) {
     res.render('new_project');
 });
+
+// SHOW - Show more info about one project
+app.get('/dashboard/:id', function(req, res){
+    // find project with provided id
+
+    // render the project template with the specified id
+    res.render('show_project');
+});
+
 
 
 
