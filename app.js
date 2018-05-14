@@ -3,6 +3,11 @@ const express = require('express'),
     bodyParser = require('body-parser'),
     mongoose = require('mongoose');
 
+// Set-up module imports for the mongoose schemas
+const Project = require('./models/project'),
+    Company = require('./models/company'),
+    User = require('./models/user');
+
 // Connect to the mongodb company server
 mongoose.connect('mongodb://localhost/main_database');
 
@@ -21,15 +26,6 @@ app.get('/', function (req, res) {
 });
 
 
-// Setup the project schema
-let projectSchema = new mongoose.Schema({
-    projectName: String,
-    projectNumber: String,
-    projectDescription: String,
-    projectCreated: { type: Date, default: Date.now }
-});
-let Project = mongoose.model('Project', projectSchema);
-
 // Dashboard
 // INDEX - Show company dashboard
 app.get('/dashboard', function (req, res) {
@@ -38,7 +34,7 @@ app.get('/dashboard', function (req, res) {
         if (err) {
             console.log(err);
         } else {
-            res.render('index', { projects: allProjects });
+            res.render('dashboard', { projects: allProjects });
         }
     });
 });
@@ -50,8 +46,8 @@ app.post('/dashboard', function (req, res) {
         number = req.body.projectNumber,
         description = req.body.projectDescription;
 
-    let newProject = { 
-        projectName: name, 
+    let newProject = {
+        projectName: name,
         projectNumber: number,
         projectDescription: description
     }
@@ -72,11 +68,16 @@ app.get('/dashboard/new', function (req, res) {
 });
 
 // SHOW - Show more info about one project
-app.get('/dashboard/:id', function(req, res){
+app.get('/dashboard/:id', function (req, res) {
     // find project with provided id
-
-    // render the project template with the specified id
-    res.render('show_project');
+    Project.findById(req.params.id, function (err, foundProject) {
+        if (err) {
+            console.log(err);
+        } else {
+            // render the project template with the specified id
+            res.render('show_project', {project: foundProject});
+        }
+    });
 });
 
 
