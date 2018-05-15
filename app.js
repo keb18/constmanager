@@ -145,7 +145,7 @@ app.get('/dashboard/:companyId/:projectId', function (req, res) {
         if (err) {
             console.log(err);
         } else {
-            console.log(foundProject);
+            // console.log(foundProject);
             // render the project template with the specified id
             res.render('showProject', { project: foundProject });
         }
