@@ -8,6 +8,11 @@ const Project = require('./models/project'),
     Company = require('./models/company'),
     User = require('./models/user');
 
+// Set-up the seeds to populate the database with data
+let seedDB = require('./seeds');
+// seedDB();
+
+
 // Connect to the mongodb company server
 mongoose.connect('mongodb://localhost/main_database');
 
@@ -26,21 +31,83 @@ app.get('/', function (req, res) {
 });
 
 
-// Dashboard
-// INDEX - Show company dashboard
-app.get('/dashboard', function (req, res) {
+// =================================================================
+// ========================== ADMIN ===============================
+// ADMIN DASHBOARD
+app.get('/adminDashboard', function (req, res) {
     // Get all projects from db
-    Project.find({}, function (err, allProjects) {
+    Company.find({}, function (err, allCompanies) {
         if (err) {
             console.log(err);
         } else {
-            res.render('dashboard', { projects: allProjects });
+            res.render('adminDashboard', { companies: allCompanies });
         }
     });
 });
 
-// CREATE - Add a new project
-app.post('/dashboard', function (req, res) {
+
+// CREATE
+// ADMIN CREATE NEW COMPANY
+app.post('/adminDashboard', function (req, res) {
+    // get data from form and add to projects array
+    let name = req.body.companyName;
+
+    let newCompany = {
+        companyName: name
+    }
+    // Create a new project and add to the db
+    Company.create(newCompany, function (err, newlyCreatedCompany) {
+        if (err) {
+            console.log(err);
+        } else {
+            // redirect back to the dashboard
+            res.redirect('/adminDashboard')
+        }
+    });
+});
+
+
+// ADMIN NEW COMPANY CREATION PAGE
+app.get('/adminDashboard/new', function (req, res) {
+    res.render('newCompany');
+});
+
+
+// ADMIN SHOW MORE INFO ABOUT ONE COMPANY
+app.get('/adminDashboard/:id', function (req, res) {
+    // find project with provided id
+    Company.findById(req.params.id, function (err, foundCompany) {
+        if (err) {
+            console.log(err);
+        } else {
+            // render the project template with the specified id
+            res.render('showCompany', { company: foundCompany });
+        }
+    });
+});
+
+
+// =================================================================
+// ========================== COMPANY ==============================
+// INDEX
+// COMPANY DASHBOARD
+app.get('/dashboard/:companyId', function (req, res) {
+    Company.findById(req.params.companyId).populate('projects').exec(function (err, foundCompany) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(foundCompany);
+            // render the project template with the specified id
+            // res.send("This is the company dashboard page");
+            res.render('dashboard', { projects: foundCompany.projects });
+        }
+    });
+});
+
+
+// CREATE
+// COMPANY CREATE NEW PROJECT
+app.post('/dashboard/:companyId', function (req, res) {
     // get data from form and add to projects array
     let name = req.body.projectName,
         number = req.body.projectNumber,
@@ -62,26 +129,28 @@ app.post('/dashboard', function (req, res) {
     });
 });
 
-// NEW - Show new project creation page
-app.get('/dashboard/new', function (req, res) {
-    res.render('new_project');
+
+// NEW
+// COMPANY NEW PROJECT CREATION PAGE
+app.get('/dashboard/:companyId/new', function (req, res) {
+    res.render('newProject');
 });
 
-// SHOW - Show more info about one project
-app.get('/dashboard/:id', function (req, res) {
+
+// SHOW
+// COMPANY SHOW MORE INFO ABOUT ONE PROJECT
+app.get('/dashboard/:companyId/:projectId', function (req, res) {
     // find project with provided id
-    Project.findById(req.params.id, function (err, foundProject) {
+    Project.findById(req.params.id).populate('projects').exec(function (err, foundProject) {
         if (err) {
             console.log(err);
         } else {
+            console.log(foundProject);
             // render the project template with the specified id
-            res.render('show_project', {project: foundProject});
+            res.render('showProject', { project: foundProject });
         }
     });
 });
-
-
-
 
 
 

@@ -1,0 +1,58 @@
+<% include partials/header %>
+
+<body>
+    <div class="container">
+        <header class="jumbotron">
+            <h2>ConstManager Admin Dashboard</h2>
+        </header>
+
+        <h3>Current Companies</h3>
+
+        <table class="table table-hover text-center">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Company id</th>
+                    <th>Company name</th>
+                    <th>Date joined</th>
+                    <th>Open company</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% companies.forEach(function(company, i){ %>
+                    <td>
+                        <%= i %>
+                    </td>
+                    <td>
+                        <%= company._id %>
+                    </td>
+                    <td>
+                        <%= company.companyName %>
+                    </td>
+                    <td>
+                        <%= company.companyJoined.toUTCString() %>
+                    </td>
+                    <td class="text-center">
+                        <a href="/adminDashboard/<%= company._id %>">
+                            <i class="fas fa-folder-open" aria-hidden="true"></i>
+                        </a>
+                    </td>
+            </tbody>
+            <% }); %>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <strong> New project</strong>
+                    </td>
+                    <td>
+                        <a href="/adminDashboard/new">
+                            <i class="fas fa-plus" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                </tr>
+        </table>
+    </div>
+
+    <% include partials/footer %>

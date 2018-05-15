@@ -1,0 +1,54 @@
+<% include partials/header %>
+    <div class="container">
+        <header class="jumbotron">
+            <h2>Create new company</h2>
+            <p>Input all the information relating to the new company</p>
+        </header>
+
+        <form action="/adminDashboard" method="POST">
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputCompanyName">Company name</label>
+                    <input type="text" class="form-control" name="companyName" placeholder="name">
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="inputCompanyNumber">Company number</label>
+                    <input type="text" class="form-control" name="companyNumber" placeholder="2/5554-3">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputAddress">Address</label>
+                <input type="text" class="form-control" placeholder="1234 Main St">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="inputCompanyCountry">Country</label>
+                    <input type="text" class="form-control" name="companyCountry" placeholder="country">
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="inputCompanyCity">City</label>
+                    <input type="text" class="form-control" name="companyCity" placeholder="company city">
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="inputCompanyZip">Zip code</label>
+                    <input type="text" class="form-control" name="companyZip" placeholder="company zip">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputDescription">Description</label>
+                <input type="text" class="form-control" name="companyDescription"placeholder="description">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit!</button>
+        </form>
+        <button onclick="goBack()" type="button" class="btn btn-link" id="backAnchor">Go back</button>
+    </div>
+
+    <% include partials/footer %>
