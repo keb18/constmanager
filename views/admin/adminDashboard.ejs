@@ -1,45 +1,45 @@
-<% include partials/header %>
+<% include ../partials/header %>
 
 <body>
     <div class="container">
         <header class="jumbotron">
-            <h2>Company Name Goes Here</h2>
+            <h2>ConstManager Admin Dashboard</h2>
         </header>
 
-        <h3>Current Projects</h3>
+        <h3>Current Companies</h3>
 
         <table class="table table-hover text-center">
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Project number</th>
-                    <th>Project name</th>
-                    <th>Date created</th>
-                    <th>Open project</th>
+                    <th>Company id</th>
+                    <th>Company name</th>
+                    <th>Date joined</th>
+                    <th>Open company</th>
                 </tr>
             </thead>
             <tbody>
-                <% projects.forEach(function(project, i){ %>
+                <% companies.forEach(function(company, i){ %>
                     <td>
                         <%= i %>
                     </td>
                     <td>
-                        <%= project.projectNumber %>
+                        <%= company._id %>
                     </td>
                     <td>
-                        <%= project.projectName %>
+                        <%= company.companyName %>
                     </td>
                     <td>
-                        <%= project.projectCreated.toUTCString() %>
+                        <%= company.companyJoined.toUTCString() %>
                     </td>
                     <td class="text-center">
-                        <a href="/dashboard/<%= project._id %>">
+                        <a href="/adminDashboard/company/<%= company._id %>">
                             <i class="fas fa-folder-open" aria-hidden="true"></i>
                         </a>
                     </td>
             </tbody>
             <% }); %>
-                <tr id="addProject">
+                <tr>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -47,7 +47,7 @@
                         <strong> New project</strong>
                     </td>
                     <td>
-                        <a href="/dashboard/new">
+                        <a href="/adminDashboard/new">
                             <i class="fas fa-plus" aria-hidden="true"></i>
                         </a>
                     </td>
@@ -55,4 +55,4 @@
         </table>
     </div>
 
-    <% include partials/footer %>
+    <% include ../partials/footer %>

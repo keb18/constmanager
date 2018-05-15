@@ -1,17 +1,14 @@
 const express = require('express'),
     app = express(),
     bodyParser = require('body-parser'),
-    mongoose = require('mongoose');
+    mongoose = require('mongoose'),
+    passport = require('passport'),
+    LocalStrategy = require('passport-local');
 
 // Set-up module imports for the mongoose schemas
 const Project = require('./models/project'),
     Company = require('./models/company'),
     User = require('./models/user');
-
-// Set-up the seeds to populate the database with data
-let seedDB = require('./seeds');
-// seedDB();
-
 
 // Connect to the mongodb company server
 mongoose.connect('mongodb://localhost/main_database');
@@ -40,7 +37,7 @@ app.get('/adminDashboard', function (req, res) {
         if (err) {
             console.log(err);
         } else {
-            res.render('adminDashboard', { companies: allCompanies });
+            res.render('admin/adminDashboard', { companies: allCompanies });
         }
     });
 });
@@ -69,19 +66,19 @@ app.post('/adminDashboard', function (req, res) {
 
 // ADMIN NEW COMPANY CREATION PAGE
 app.get('/adminDashboard/new', function (req, res) {
-    res.render('newCompany');
+    res.render('admin/newCompany');
 });
 
 
 // ADMIN SHOW MORE INFO ABOUT ONE COMPANY
-app.get('/adminDashboard/:id', function (req, res) {
+app.get('/adminDashboard/company/:id', function (req, res) {
     // find project with provided id
     Company.findById(req.params.id, function (err, foundCompany) {
         if (err) {
             console.log(err);
         } else {
             // render the project template with the specified id
-            res.render('showCompany', { company: foundCompany });
+            res.render('admin/showCompany', { company: foundCompany });
         }
     });
 });
@@ -96,35 +93,13 @@ app.get('/dashboard/:companyId', function (req, res) {
         if (err) {
             console.log(err);
         } else {
-            console.log(foundCompany);
+            // console.log(foundCompany);
             // render the project template with the specified id
             // res.send("This is the company dashboard page");
-            res.render('dashboard', { projects: foundCompany.projects });
-        }
-    });
-});
-
-
-// CREATE
-// COMPANY CREATE NEW PROJECT
-app.post('/dashboard/:companyId', function (req, res) {
-    // get data from form and add to projects array
-    let name = req.body.projectName,
-        number = req.body.projectNumber,
-        description = req.body.projectDescription;
-
-    let newProject = {
-        projectName: name,
-        projectNumber: number,
-        projectDescription: description
-    }
-    // Create a new project and add to the db
-    Project.create(newProject, function (err, newlyCreatedProject) {
-        if (err) {
-            console.log(err);
-        } else {
-            // redirect back to the dashboard
-            res.redirect('/dashboard')
+            res.render('company/dashboard', {
+                projects: foundCompany.projects,
+                company: foundCompany
+            });
         }
     });
 });
@@ -132,26 +107,57 @@ app.post('/dashboard/:companyId', function (req, res) {
 
 // NEW
 // COMPANY NEW PROJECT CREATION PAGE
-app.get('/dashboard/:companyId/new', function (req, res) {
-    res.render('newProject');
+app.get('/dashboard/:companyId/project/new', function (req, res) {
+    Company.findById(req.params.companyId, function (err, foundCompany) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.render('project/newProject', { company: foundCompany });
+        }
+    });
+});
+
+
+// CREATE
+// COMPANY CREATE NEW PROJECT
+app.post('/dashboard/:companyId/project', function (req, res) {
+    // lookup company using ID
+    Company.findById(req.params.companyId, function (err, company) {
+        if (err) {
+            console.log(err);
+            res.redirect("/dashboard/" + company._id);
+        } else {
+            // Create a new project and add to the db
+            Project.create(req.body.project, function (err, newlyCreatedProject) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    company.projects.push(newlyCreatedProject);
+                    company.save();
+                    // redirect back to the dashboard
+                    res.redirect("/dashboard/" + company._id);
+                }
+            });
+        }
+    });
 });
 
 
 // SHOW
 // COMPANY SHOW MORE INFO ABOUT ONE PROJECT
-app.get('/dashboard/:companyId/:projectId', function (req, res) {
+app.get('/dashboard/:companyId/project/:projectId', function (req, res) {
     // find project with provided id
-    Project.findById(req.params.id).populate('projects').exec(function (err, foundProject) {
+    Project.findById(req.params.projectId).populate('projects').exec(function (err, foundProject) {
         if (err) {
             console.log(err);
         } else {
-            // console.log(foundProject);
             // render the project template with the specified id
-            res.render('showProject', { project: foundProject });
-        }
+            res.render('project/showProject', {
+                project: foundProject
+            });
+        };
     });
 });
-
 
 
 // Express to listen for requests (start server)

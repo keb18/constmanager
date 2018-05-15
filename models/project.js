@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 // Setup the project schema
 let projectSchema = new mongoose.Schema({
     projectName: String,
-    projectNumber: String,
+    projectNumber: { type: String, unique: true },
     // projectNumber: { type: String, unique: true },
     projectDescription: String,
     projectCreated: { type: Date, default: Date.now }
