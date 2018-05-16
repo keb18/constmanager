@@ -46,7 +46,7 @@ app.get('/', function (req, res) {
 // =================================================================
 // ========================== ADMIN ===============================
 // ADMIN DASHBOARD
-app.get('/adminDashboard', function (req, res) {
+app.get('/adminDashboard', isLoggedIn, disableCache, function (req, res) {
     // Get all projects from db
     Company.find({}, function (err, allCompanies) {
         if (err) {
@@ -60,7 +60,7 @@ app.get('/adminDashboard', function (req, res) {
 
 // CREATE
 // ADMIN CREATE NEW COMPANY
-app.post('/adminDashboard', function (req, res) {
+app.post('/adminDashboard', isLoggedIn, disableCache, function (req, res) {
     // get data from form and add to projects array
     let newCompany = {
         companyName: req.body.companyName
@@ -78,13 +78,13 @@ app.post('/adminDashboard', function (req, res) {
 
 
 // ADMIN NEW COMPANY CREATION PAGE
-app.get('/adminDashboard/new', function (req, res) {
+app.get('/adminDashboard/new', isLoggedIn, disableCache, function (req, res) {
     res.render('admin/newCompany');
 });
 
 
 // ADMIN SHOW MORE INFO ABOUT ONE COMPANY
-app.get('/adminDashboard/company/:id', function (req, res) {
+app.get('/adminDashboard/company/:id', isLoggedIn, disableCache, function (req, res) {
     // find project with provided id
     Company.findById(req.params.id, function (err, foundCompany) {
         if (err) {
@@ -101,7 +101,7 @@ app.get('/adminDashboard/company/:id', function (req, res) {
 // ========================== COMPANY ==============================
 // INDEX
 // COMPANY DASHBOARD
-app.get('/dashboard/:companyId', function (req, res) {
+app.get('/dashboard/:companyId', isLoggedIn, disableCache, function (req, res) {
     Company.findById(req.params.companyId).populate('projects').exec(function (err, foundCompany) {
         if (err) {
             console.log(err);
@@ -119,8 +119,8 @@ app.get('/dashboard/:companyId', function (req, res) {
 
 
 // NEW
-// COMPANY NEW PROJECT CREATION PAGE
-app.get('/dashboard/:companyId/project/new', function (req, res) {
+// NEW PROJECT CREATION PAGE
+app.get('/dashboard/:companyId/project/new', isLoggedIn, disableCache,function (req, res) {
     Company.findById(req.params.companyId, function (err, foundCompany) {
         if (err) {
             console.log(err);
@@ -132,8 +132,8 @@ app.get('/dashboard/:companyId/project/new', function (req, res) {
 
 
 // CREATE
-// COMPANY CREATE NEW PROJECT
-app.post('/dashboard/:companyId/project', function (req, res) {
+// CREATE NEW PROJECT
+app.post('/dashboard/:companyId/project', isLoggedIn, disableCache, function (req, res) {
     // lookup company using ID
     Company.findById(req.params.companyId, function (err, company) {
         if (err) {
@@ -157,22 +157,30 @@ app.post('/dashboard/:companyId/project', function (req, res) {
 
 
 // SHOW
-// COMPANY SHOW MORE INFO ABOUT ONE PROJECT
-app.get('/dashboard/:companyId/project/:projectId', function (req, res) {
+// SHOW MORE INFO ABOUT ONE PROJECT
+app.get('/dashboard/:companyId/project/:projectId', isLoggedIn, disableCache, function (req, res) {
     // find project with provided id
     Project.findById(req.params.projectId).populate('projects').exec(function (err, foundProject) {
         if (err) {
             console.log(err);
         } else {
-            // render the project template with the specified id
-            res.render('project/showProject', {
-                project: foundProject
+            Company.findById(req.params.companyId, function (err, foundCompany) {
+                if (err) {
+                    console.log(err);
+                    res.redirect("/dashboard/" + company._id);
+                } else {
+                    // render the project template with the specified id
+                    res.render('project/showProject', {
+                        project: foundProject,
+                        company: foundCompany
+                    });
+                }
             });
         };
     });
 });
 
-
+// ==================================================
 // Authorisation routes
 // Show the register form
 app.get('/register', function (req, res) {
@@ -214,6 +222,46 @@ app.post('/register', function (req, res) {
     });
 });
 
+// Show the login form
+app.get('/login', function (req, res) {
+    res.render('login');
+});
+
+// Handle login logic
+app.post('/login', function (req, res, next) {
+    passport.authenticate('local', function (err, user, info) {
+        if (err) { return next(err); }
+        if (!user) { return res.redirect('/login'); }
+        req.logIn(user, function (err) {
+            if (err) { return next(err); }
+            return res.redirect('/dashboard/' + user.company);
+        });
+    })(req, res, next);
+});
+
+// Handle logout logic
+app.get('/logout', function(req, res){
+    req.logout();
+    res.redirect('/');
+});
+
+
+
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+        next();
+    } else {
+        // req.flash("error", "You need to be logged in to do that."); // is handled in the /login
+        res.redirect("/login");
+    }
+}
+
+function disableCache(req, res, next) {
+    res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+    next();
+}
+
+
 // Express to listen for requests (start server)
 const hostname = '127.0.0.1';
 const port = 3000;
@@ -221,3 +269,5 @@ const port = 3000;
 app.listen(port, hostname, function () {
     console.log(`Server running at http://${hostname}:${port}/`);
 });
+
+// http://127.0.0.1:3000/dashboard/5afb81de9254e75ec4878acb

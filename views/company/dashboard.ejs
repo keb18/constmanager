@@ -1,58 +1,67 @@
 <% include ../partials/header %>
 
-<body>
-    <div class="container">
-        <header class="jumbotron">
-            <h2>Company Name Goes Here</h2>
-        </header>
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="#">Dashboard</a>
+    </li>
+    <li class="breadcrumb-item active"><%= company.companyName %></li>
+  </ol>
 
-        <h3>Current Projects</h3>
+<div class="container" style="padding-left: 0px; padding-right: 0px">
+    <header class="jumbotron">
+        <h2>Current Projects</h2>
+        <p>Select a project to view more information</p>
+    </header>
+    <!-- ========================== CONTENT =============================== -->
 
-        <table class="table table-hover text-center">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Project number</th>
-                    <th>Project name</th>
-                    <th>Date created</th>
-                    <th>Open project</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% projects.forEach(function(project, i){ %>
-                    <td>
-                        <%= i %>
-                    </td>
-                    <td>
-                        <%= project.projectNumber %>
-                    </td>
-                    <td>
-                        <%= project.projectName %>
-                    </td>
-                    <td>
-                        <%= project.projectCreated.toUTCString() %>
-                    </td>
-                    <td class="text-center">
-                        <a href="/dashboard/<%= company._id %>/project/<%= project._id %>">
-                            <i class="fas fa-folder-open" aria-hidden="true"></i>
-                        </a>
-                    </td>
-            </tbody>
-            <% }); %>
-                <tr id="addProject">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>
-                        <strong> New project</strong>
-                    </td>
-                    <td>
-                        <a href="/dashboard/<%= company._id %>/project/new">
-                            <i class="fas fa-plus" aria-hidden="true"></i>
-                        </a>
-                    </td>
-                </tr>
-        </table>
-    </div>
+    <table class="table table-hover text-center">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Project number</th>
+                <th>Project name</th>
+                <th>Date created</th>
+                <th>Open project</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% projects.forEach(function(project, i){ %>
+                <td>
+                    <%= i %>
+                </td>
+                <td>
+                    <%= project.projectNumber %>
+                </td>
+                <td>
+                    <%= project.projectName %>
+                </td>
+                <td>
+                    <%= project.projectCreated.toUTCString() %>
+                </td>
+                <td class="text-center">
+                    <a href="/dashboard/<%= company._id %>/project/<%= project._id %>">
+                        <i class="fas fa-folder-open" aria-hidden="true"></i>
+                    </a>
+                </td>
+        </tbody>
+        <% }); %>
+            <tr id="addProject">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <strong> New project</strong>
+                </td>
+                <td>
+                    <a href="/dashboard/<%= company._id %>/project/new">
+                        <i class="fas fa-plus" aria-hidden="true"></i>
+                    </a>
+                </td>
+            </tr>
+    </table>
+
+    <!-- ========================== CONTENT =============================== -->
+
 
     <% include ../partials/footer %>
