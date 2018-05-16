@@ -10,6 +10,21 @@ const Project = require('./models/project'),
     Company = require('./models/company'),
     User = require('./models/user');
 
+// Passport configuration
+app.use(require('express-session')({
+    secret: "put the keyboard on your head",
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+
 // Connect to the mongodb company server
 mongoose.connect('mongodb://localhost/main_database');
 
@@ -47,10 +62,8 @@ app.get('/adminDashboard', function (req, res) {
 // ADMIN CREATE NEW COMPANY
 app.post('/adminDashboard', function (req, res) {
     // get data from form and add to projects array
-    let name = req.body.companyName;
-
     let newCompany = {
-        companyName: name
+        companyName: req.body.companyName
     }
     // Create a new project and add to the db
     Company.create(newCompany, function (err, newlyCreatedCompany) {
@@ -159,6 +172,47 @@ app.get('/dashboard/:companyId/project/:projectId', function (req, res) {
     });
 });
 
+
+// Authorisation routes
+// Show the register form
+app.get('/register', function (req, res) {
+    res.render('register');
+});
+
+// Handle register logic
+app.post('/register', function (req, res) {
+    let newUser = new User({ username: req.body.username });
+    User.register(newUser, req.body.password, function (err, user) {
+        if (err) {
+            console.log(err);
+            return res.render('register');
+        }
+
+        // Populate the user fields
+        user.firstName = req.body.firstName;
+        user.lastName = req.body.lastName;
+        user.email = req.body.email;
+        user.accountType = "owner";
+        // doc.visits.$inc();  == increment a value
+
+        // Create a new project and add to the db
+        Company.create({ companyName: req.body.companyName }, function (err, newlyCreatedCompany) {
+            if (err) {
+                console.log(err);
+            } else {
+                // Associate company with user
+                newlyCreatedCompany.users.push(user);
+                newlyCreatedCompany.save();
+                // Associate user with the company
+                user.company.push(newlyCreatedCompany);
+                user.save();
+                passport.authenticate('local')(req, res, function () {
+                    res.redirect('/dashboard/' + newlyCreatedCompany._id);
+                });
+            }
+        });
+    });
+});
 
 // Express to listen for requests (start server)
 const hostname = '127.0.0.1';
