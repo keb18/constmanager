@@ -14,17 +14,17 @@ let mid = require("../middleware");
 router.get('/:companyId',
   mid.isLoggedIn,
   mid.disableCache,
+  // mid.checkCompanyAuth,
   function (req, res) {
+    // console.log(req.user);
     Company.findById(req.params.companyId).populate('projects').exec(function (err, foundCompany) {
       if (err) {
         console.log(err);
       } else {
-        // console.log(foundCompany);
-        // render the project template with the specified id
-        // res.send("This is the company dashboard page");
         res.render('company/dashboard', {
           projects: foundCompany.projects,
-          company: foundCompany
+          company: foundCompany,
+          currentUser: req.user
         });
       }
     });
@@ -62,6 +62,7 @@ router.post('/:companyId/project',
           if (err) {
             console.log(err);
           } else {
+            // console.log(req.user);
             company.projects.push(newlyCreatedProject);
             company.save();
             // redirect back to the dashboard

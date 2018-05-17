@@ -1,7 +1,7 @@
 // Set-up module imports for the mongoose schemas
 let Project = require('../models/project'),
-  Company = require('../models/company'),
-  User = require('../models/user');
+    Company = require('../models/company'),
+    User = require('../models/user');
 
 // MIDDLEWARE
 var middlewareObject = {};
@@ -18,13 +18,52 @@ middlewareObject.isLoggedIn = function (req, res, next) {
 }
 
 // DISABLE CACHE
-// caching disabled for every route to ensure that
-// when hitting back after logging out it won't show
-// an area which should be accessed only by users
+// caching disabled for every route to ensure that when hitting back after logging out it won't show an area which should be accessed only by users
 middlewareObject.disableCache = function (req, res, next) {
     res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
     next();
 }
+
+
+// Check if user is allowed to access the company
+middlewareObject.checkCompanyAuth = function (req, res, next) {
+    if (req.isAuthenticated()) {
+        // req.params.companyId gets it from the route which calls this function
+        Company.findById(req.params.companyId, function (err, foundCompany) {
+            if (err) {
+                req.flash("error", "Campground was not found."); // is handled in the "back"
+                res.redirect("back");
+            } else {
+                console.log(foundCompany.users);
+                console.log(req.user._id);
+                // if (foundCompany.users.equals(req.user._id)) { // equals is a mongoose method
+                //     // continue executing the code
+                //     next();
+                // } else {
+                //     // req.flash("error", "You are not part of this organisation.");
+                //     res.redirect("back");
+                // }
+            }
+        });
+    }
+}
+
+// Check if user is allowed to access the project
+middlewareObject.checkProjectAuth = function (req, res, next) {
+    if (req.isAuthenticated()) {
+        // req.params.projectId gets it from the route which calls this function
+        if (req.params.projectId.equals(req.user._id)) { // equals is a mongoose method
+            // continue executing the code
+            next();
+        } else {
+            // req.flash("error", "You are not allowed to access this project.");
+            res.redirect("back");
+        }
+    }
+}
+
+
+
 
 // // CHECK CAMPGROUND OWNERSHIP
 // middlewareObject.checkCampOwnership = function (req, res, next) {

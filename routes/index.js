@@ -37,6 +37,7 @@ router.post('/register', function (req, res) {
     user.lastName = req.body.lastName;
     user.email = req.body.email;
     user.accountType = "owner";
+    user.position = "manager";
     // doc.visits.$inc();  == increment a value
 
     // Create a new project and add to the db

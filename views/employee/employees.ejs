@@ -6,6 +6,7 @@
       <a href="#">Dashboard</a>
     </li>
     <li class="breadcrumb-item active"><%= company.companyName %></li>
+    <li class="breadcrumb-item active">Employees</li>
   </ol>
 
 <div class="container" style="padding-left: 0px; padding-right: 0px">
@@ -19,28 +20,28 @@
         <thead>
             <tr>
                 <th>#</th>
-                <th>Project number</th>
-                <th>Project name</th>
-                <th>Date created</th>
-                <th>Open project</th>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Joined</th>
+                <th>Open</th>
             </tr>
         </thead>
         <tbody>
-            <% projects.forEach(function(project, i){ %>
+            <% employees.forEach(function(employee, i){ %>
                 <td>
                     <%= i %>
                 </td>
                 <td>
-                    <%= project.projectNumber %>
+                    <%= employee.firstName %> <%= employee.lastName %>
                 </td>
                 <td>
-                    <%= project.projectName %>
+                    <%= employee.position %>
                 </td>
                 <td>
-                    <%= project.projectCreated.toUTCString() %>
+                    <%= employee.userJoined.toUTCString() %>
                 </td>
                 <td class="text-center">
-                    <a href="/dashboard/<%= company._id %>/project/<%= project._id %>">
+                    <a href="/dashboard/<%= company._id %>/employee/new">
                         <i class="fas fa-folder-open" aria-hidden="true"></i>
                     </a>
                 </td>
@@ -51,10 +52,10 @@
                 <td></td>
                 <td></td>
                 <td>
-                    <strong> New project</strong>
+                    <strong> Add employee</strong>
                 </td>
                 <td>
-                    <a href="/dashboard/<%= company._id %>/project/new">
+                    <a href="/dashboard/<%= company._id %>/employee/new">
                         <i class="fas fa-plus" aria-hidden="true"></i>
                     </a>
                 </td>

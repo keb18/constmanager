@@ -1,0 +1,97 @@
+<% include ../partials/header %>
+
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="#">Dashboard</a>
+    </li>
+    <li class="breadcrumb-item active">New employee</li>
+  </ol>
+
+    <div class="container">
+        <header class="jumbotron">
+            <h2>Add new employee</h2>
+            <p>Input all the information relating to the new employee</p>
+        </header>
+
+        <form action="/dashboard/<%= company._id %>/employee" method="POST">
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputEmployeeName">First name</label>
+                    <input type="text" class="form-control" name="employee[firstName]" placeholder="John">
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="inputEmployeeNumber">Last name</label>
+                    <input type="text" class="form-control" name="employee[lastName]" placeholder="Doe">
+                </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                  <label for="inputEmployeeAccountType">Account type</label>
+                  <input type="text" class="form-control" name="employee[accountType]" placeholder="account type">
+              </div>
+
+              <div class="form-group col-md-4">
+                  <label for="inputEmployeePosition">Position</label>
+                  <input type="text" class="form-control" name="employee[position]" placeholder="position">
+              </div>
+
+              <div class="form-group col-md-4">
+                  <label for="inputEmployeePassword">Salary</label>
+                  <input type="number" class="form-control" name="employee[salary]" placeholder="salary">
+              </div>
+          </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="inputEmployeeEmail">Email</label>
+                    <input type="text" class="form-control" name="employee[email]" placeholder="email">
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="inputEmployeeUserName">Username</label>
+                    <input type="text" class="form-control" name="username" placeholder="username">
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="inputEmployeePassword">Last number</label>
+                    <input type="password" class="form-control" name="password" placeholder="password">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputAddress">Address</label>
+                <input type="text" class="form-control" name="employee[Address]" placeholder="1234 Main St">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="inputProjectCountry">Country</label>
+                    <input type="text" class="form-control" name="employee[Country]" placeholder="country">
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="inputProjectCity">City</label>
+                    <input type="text" class="form-control" name="employee[City]" placeholder="employee city">
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="inputProjectZip">Zip code</label>
+                    <input type="text" class="form-control" name="employee[Zip]" placeholder="employee zip">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputDescription">Description</label>
+                <input type="text" class="form-control" name="employeeDescription"placeholder="description">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit!</button>
+        </form>
+        <button onclick="goBack()" type="button" class="btn btn-link" id="backAnchor">Go back</button>
+    </div>
+
+    <% include ../partials/footer %>
