@@ -13,6 +13,7 @@ let Project = require('./models/project'),
 // Require the external routes
 let companyRoutes = require('./routes/company'),
     adminRoutes = require('./routes/admin'),
+    employeesRoutes = require('./routes/employees'),
     indexRoutes = require('./routes/index');
 
 // Passport configuration
@@ -46,6 +47,7 @@ app.set('view engine', 'ejs');
 // Use the route files
 app.use('/dashboard', companyRoutes);
 app.use('/adminDashboard', adminRoutes);
+app.use('/dashboard', employeesRoutes);
 app.use(indexRoutes);
 
 
