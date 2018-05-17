@@ -14,7 +14,8 @@ let Project = require('./models/project'),
 let companyRoutes = require('./routes/company'),
     adminRoutes = require('./routes/admin'),
     employeesRoutes = require('./routes/employees'),
-    indexRoutes = require('./routes/index');
+    indexRoutes = require('./routes/index'),
+    projectsRoutes = require('./routes/projects');
 
 // Passport configuration
 app.use(require('express-session')({
@@ -49,6 +50,7 @@ app.use('/dashboard', companyRoutes);
 app.use('/adminDashboard', adminRoutes);
 app.use('/dashboard', employeesRoutes);
 app.use(indexRoutes);
+app.use('/dashboard', projectsRoutes);
 
 
 // Express to listen for requests (start server)

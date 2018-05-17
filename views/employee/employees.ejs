@@ -1,66 +1,154 @@
 <% include ../partials/header %>
 
-<!-- Breadcrumbs-->
-<ol class="breadcrumb">
-    <li class="breadcrumb-item">
-      <a href="#">Dashboard</a>
-    </li>
-    <li class="breadcrumb-item active"><%= company.companyName %></li>
-    <li class="breadcrumb-item active">Employees</li>
-  </ol>
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Employees</li>
+    </ol>
 
-<div class="container" style="padding-left: 0px; padding-right: 0px">
+    <!-- ========================== CONTENT =============================== -->
+
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Employees</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Add Employee</a>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+
+            <table class="table table-hover text-center table-sm">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Joined</th>
+                        <th>Open</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% employees.forEach(function(employee, i){ %>
+                        <td>
+                            <%= i %>
+                        </td>
+                        <td>
+                            <%= employee.firstName %>
+                                <%= employee.lastName %>
+                        </td>
+                        <td>
+                            <%= employee.position %>
+                        </td>
+                        <td>
+                            <%= employee.userJoined.toLocaleString('en-GB', { timeZone: 'UTC' }) %>
+                        </td>
+                        <td class="text-center">
+                            <a href="/dashboard/<%= company._id %>/employee/<%= employee._id %>">
+                                <i class="fas fa-folder-open" aria-hidden="true"></i>
+                            </a>
+                        </td>
+                </tbody>
+                <% }); %>
+            </table>
+        </div>
+
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+
+            <form class="tablist-views" action="/dashboard/<%= company._id %>/employee" method="POST">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputEmployeeName">First name</label>
+                        <input type="text" class="form-control" name="employee[firstName]" placeholder="John">
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="inputEmployeeNumber">Last name</label>
+                        <input type="text" class="form-control" name="employee[lastName]" placeholder="Doe">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="inputEmployeeAccountType">Account type</label>
+                        <input type="text" class="form-control" name="employee[accountType]" placeholder="account type">
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="inputEmployeePosition">Position</label>
+                        <input type="text" class="form-control" name="employee[position]" placeholder="position">
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="inputEmployeePassword">Salary</label>
+                        <input type="number" class="form-control" name="employee[salary]" placeholder="salary">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="inputEmployeeEmail">Email</label>
+                        <input type="text" class="form-control" name="employee[email]" placeholder="email">
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="inputEmployeeUserName">Username</label>
+                        <input type="text" class="form-control" name="username" placeholder="username">
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="inputEmployeePassword">Last number</label>
+                        <input type="password" class="form-control" name="password" placeholder="password">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputAddress">Address</label>
+                    <input type="text" class="form-control" name="employee[Address]" placeholder="1234 Main St">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="inputProjectCountry">Country</label>
+                        <input type="text" class="form-control" name="employee[Country]" placeholder="country">
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="inputProjectCity">City</label>
+                        <input type="text" class="form-control" name="employee[City]" placeholder="employee city">
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="inputProjectZip">Zip code</label>
+                        <input type="text" class="form-control" name="employee[Zip]" placeholder="employee zip">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputDescription">Description</label>
+                    <input type="text" class="form-control" name="employeeDescription" placeholder="description">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit!</button>
+            </form>
+            <button onclick="goBack()" type="button" class="btn btn-link" id="backAnchor">Go back</button>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+
+
+    </div>
+    </div>
+
+    <!-- <div class="container" style="padding-left: 0px; padding-right: 0px">
     <header class="jumbotron">
         <h2>Latest Current Projects</h2>
         <p>Select a project to view more information</p>
-    </header>
-    <!-- ========================== CONTENT =============================== -->
-
-    <table class="table table-hover text-center">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Position</th>
-                <th>Joined</th>
-                <th>Open</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% employees.forEach(function(employee, i){ %>
-                <td>
-                    <%= i %>
-                </td>
-                <td>
-                    <%= employee.firstName %> <%= employee.lastName %>
-                </td>
-                <td>
-                    <%= employee.position %>
-                </td>
-                <td>
-                    <%= employee.userJoined.toUTCString() %>
-                </td>
-                <td class="text-center">
-                    <a href="/dashboard/<%= company._id %>/employee/new">
-                        <i class="fas fa-folder-open" aria-hidden="true"></i>
-                    </a>
-                </td>
-        </tbody>
-        <% }); %>
-            <tr id="addProject">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                    <strong> Add employee</strong>
-                </td>
-                <td>
-                    <a href="/dashboard/<%= company._id %>/employee/new">
-                        <i class="fas fa-plus" aria-hidden="true"></i>
-                    </a>
-                </td>
-            </tr>
-    </table>
+    </header> -->
 
     <!-- ========================== CONTENT =============================== -->
 

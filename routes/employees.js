@@ -31,28 +31,7 @@ router.get('/:companyId/employees',
   });
 
 
-// NEW EMPLOYEE CREATION PAGE
-router.get('/:companyId/employee/new',
-  mid.isLoggedIn,
-  mid.disableCache,
-  function (req, res) {
-    Company.findById(req.params.companyId, function (err, foundCompany) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.render('employee/newEmployee', { company: foundCompany });
-      }
-    });
-  });
-
-
-// CREATE NEW PROJECT
-// router.post('/:companyId/employee', function(req, res){
-//   console.log(req.body.employee);
-//   console.log(req.body.employee.employeeUserName);
-//   console.log(req.body.employee.employeePassword);
-// });
-
+// CREATE NEW EMPLOYEE
 router.post('/:companyId/employee',
   mid.isLoggedIn,
   mid.disableCache,
@@ -63,15 +42,6 @@ router.post('/:companyId/employee',
         console.log(err);
         return res.render('employee/employees');
       }
-
-
-      // user.firstName = req.body.employeeFirstName;
-      // user.lastName = req.body.employeeLastNumber;
-      // user.email = req.body.email;
-      // user.position = req.body.position;
-      // user.salary = req.body.salary;
-      // user.accountType = req.body.accountType;
-      // user.userJoined = Date.now();
 
       // Create a new project and add to the db
       Company.findById(req.params.companyId, function (err, foundCompany) {
@@ -107,5 +77,31 @@ router.post('/:companyId/employee',
   });
 
 
+// SHOW MORE INFO ABOUT ONE employee
+router.get('/:companyId/employee/:employeeId',
+mid.isLoggedIn,
+mid.disableCache,
+function (req, res) {
+  // find user and populate the projects
+  User.findById(req.params.employeeId).populate('projects').exec(function (err, foundUser) {
+    if (err) {
+      console.log(err);
+    } else {
+      // find company and serve it to the template
+      Company.findById(req.params.companyId, function (err, foundCompany) {
+        if (err) {
+          console.log(err);
+          res.redirect("/dashboard/" + company._id);
+        } else {
+          // render the project template with the specified id
+          res.render('employee/showEmployee', {
+            company: foundCompany,
+            employee: foundUser,
+          });
+        }
+      });
+    };
+  });
+});
 
 module.exports = router;

@@ -3,9 +3,8 @@
 <!-- Breadcrumbs-->
 <ol class="breadcrumb">
     <li class="breadcrumb-item">
-      <a href="#">Dashboard</a>
+      <a href="/dashboard/<%= company._id %>">Dashboard</a>
     </li>
-    <li class="breadcrumb-item active"><%= company.companyName %></li>
   </ol>
 
 <div class="container" style="padding-left: 0px; padding-right: 0px">
@@ -15,51 +14,7 @@
     </header>
     <!-- ========================== CONTENT =============================== -->
 
-    <table class="table table-hover text-center">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Project number</th>
-                <th>Project name</th>
-                <th>Date created</th>
-                <th>Open project</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% projects.forEach(function(project, i){ %>
-                <td>
-                    <%= i %>
-                </td>
-                <td>
-                    <%= project.projectNumber %>
-                </td>
-                <td>
-                    <%= project.projectName %>
-                </td>
-                <td>
-                    <%= project.projectCreated.toUTCString() %>
-                </td>
-                <td class="text-center">
-                    <a href="/dashboard/<%= company._id %>/project/<%= project._id %>">
-                        <i class="fas fa-folder-open" aria-hidden="true"></i>
-                    </a>
-                </td>
-        </tbody>
-        <% }); %>
-            <tr id="addProject">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                    <strong> New project</strong>
-                </td>
-                <td>
-                    <a href="/dashboard/<%= company._id %>/project/new">
-                        <i class="fas fa-plus" aria-hidden="true"></i>
-                    </a>
-                </td>
-            </tr>
-    </table>
+    <h1>CONTENT GOES HERE</h1>
 
     <!-- ========================== CONTENT =============================== -->
 
