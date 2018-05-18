@@ -52,6 +52,16 @@ app.use('/dashboard', employeesRoutes);
 app.use(indexRoutes);
 app.use('/dashboard', projectsRoutes);
 
+// pass currentUser to all routes to be able to
+// use it in the header for example. This is actually
+// a middleware that will run for every route
+app.use(function (req, res, next) {
+    res.locals.currentUser = req.user;
+    // res.locals.error = req.flash("error");
+    // res.locals.success = req.flash("success");
+    next(); // move to the actual code
+});
+
 
 // Express to listen for requests (start server)
 const hostname = '127.0.0.1';
