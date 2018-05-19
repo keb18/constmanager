@@ -25,6 +25,21 @@ middlewareObject.disableCache = function (req, res, next) {
 }
 
 
+// Find the company from database
+middlewareObject.getCompany = function(req, res, next) {
+    Company.findById(req.params.companyId, function (err, foundCompany) {
+        if (err) {
+          console.log(err);
+          res.redirect("/dashboard/" + company._id);
+        } else {
+            // Serve foundCompany
+            req.currentCompany = foundCompany;
+            next();
+        }
+      });
+}
+
+
 // Check if user is allowed to access the company
 middlewareObject.checkCompanyAuth = function (req, res, next) {
     if (req.isAuthenticated()) {

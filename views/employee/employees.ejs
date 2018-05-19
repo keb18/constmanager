@@ -48,7 +48,7 @@
                             <%= employee.userJoined.toLocaleString('en-GB', { timeZone: 'UTC' }) %>
                         </td>
                         <td class="text-center">
-                            <a href="/dashboard/<%= company._id %>/employee/<%= employee._id %>">
+                            <a href="/dashboard/<%= currentCompany._id %>/employee/<%= employee._id %>">
                                 <i class="fas fa-folder-open" aria-hidden="true"></i>
                             </a>
                         </td>
@@ -59,7 +59,7 @@
 
         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
 
-            <form class="tablist-views" action="/dashboard/<%= company._id %>/employee" method="POST">
+            <form class="tablist-views" action="/dashboard/<%= currentCompany._id %>/employee" method="POST">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="inputEmployeeName">First name</label>

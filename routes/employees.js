@@ -23,8 +23,7 @@ router.get('/:companyId/employees',
       } else {
         res.render('employee/employees', {
           employees: foundCompany.users,
-          company: foundCompany,
-          currentUser: req.user
+          currentCompany: foundCompany
         });
       }
     });
@@ -64,8 +63,7 @@ router.post('/:companyId/employee',
                 } else {
                   res.render('employee/employees', {
                     employees: foundCompany.users,
-                    company: foundCompany,
-                    currentUser: req.user
+                    currentCompany: foundCompany
                   });
                 }
               });
@@ -95,8 +93,8 @@ function (req, res) {
         } else {
           // render the project template with the specified id
           res.render('employee/showEmployee', {
-            company: foundCompany,
-            employee: foundUser,
+            currentCompany: foundCompany,
+            employee: foundUser
           });
         }
       });

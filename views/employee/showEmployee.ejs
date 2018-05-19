@@ -2,10 +2,10 @@
 <!-- Breadcrumbs-->
 <ol class="breadcrumb">
   <li class="breadcrumb-item">
-    <a href="/dashboard/<%= company._id %>">Dashboard</a>
+    <a href="/dashboard/<%= currentCompany._id %>">Dashboard</a>
   </li>
   <li class="breadcrumb-item">
-    <a href="/dashboard/<%= company._id %>/employees">Employees</a>
+    <a href="/dashboard/<%= currentCompany._id %>/employees">Employees</a>
   </li>
   <li class="breadcrumb-item active"><%= employee.firstName %> <%= employee.lastName %></li>
 </ol>

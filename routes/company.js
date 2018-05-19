@@ -23,8 +23,7 @@ router.get('/:companyId',
       } else {
         res.render('company/dashboard', {
           projects: foundCompany.projects,
-          company: foundCompany,
-          currentUser: req.user
+          currentCompany: foundCompany
         });
       }
     });

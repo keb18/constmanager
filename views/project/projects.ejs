@@ -3,7 +3,7 @@
     <!-- Breadcrumbs-->
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
-            <a href="/dashboard/<%= company._id %>">Dashboard</a>
+            <a href="/dashboard/<%= currentCompany._id %>">Dashboard</a>
         </li>
         <li class="breadcrumb-item active">Projects</li>
     </ol>
@@ -47,7 +47,7 @@
                             <%= project.projectCreated.toLocaleString('en-GB', { timeZone: 'UTC' }) %>
                         </td>
                         <td class="text-center">
-                            <a href="/dashboard/<%= company._id %>/project/<%= project._id %>">
+                            <a href="/dashboard/<%= currentCompany._id %>/project/<%= project._id %>">
                                 <i class="fas fa-folder-open" aria-hidden="true"></i>
                             </a>
                         </td>
@@ -58,7 +58,7 @@
 
         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
 
-            <form class="tablist-views" action="/dashboard/<%= company._id %>/project" method="POST">
+            <form class="tablist-views" action="/dashboard/<%= currentCompany._id %>/project" method="POST">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="inputProjectName">Project name</label>

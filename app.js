@@ -44,6 +44,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // use routes without the *.ejs extension
 app.set('view engine', 'ejs');
 
+// pass currentUser to all routes to be able to
+// use it in the header for example. This is actually
+// a middleware that will run for every route
+app.use(function (req, res, next) {
+    // Pass current logged user to all routes
+    res.locals.currentUser = req.user;
+    
+    // res.locals.error = req.flash("error");
+    // res.locals.success = req.flash("success");
+    next(); // move to the actual code
+});
 
 // Use the route files
 app.use('/dashboard', companyRoutes);
@@ -52,15 +63,7 @@ app.use('/dashboard', employeesRoutes);
 app.use(indexRoutes);
 app.use('/dashboard', projectsRoutes);
 
-// pass currentUser to all routes to be able to
-// use it in the header for example. This is actually
-// a middleware that will run for every route
-app.use(function (req, res, next) {
-    res.locals.currentUser = req.user;
-    // res.locals.error = req.flash("error");
-    // res.locals.success = req.flash("success");
-    next(); // move to the actual code
-});
+
 
 
 // Express to listen for requests (start server)
