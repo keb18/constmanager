@@ -1,5 +1,5 @@
 const mongoose = require('mongoose'),
-        passportLocalMongoose = require('passport-local-mongoose');
+    passportLocalMongoose = require('passport-local-mongoose');
 
 // Setup the user schema
 let userSchema = new mongoose.Schema({
@@ -12,8 +12,14 @@ let userSchema = new mongoose.Schema({
     salary: Number,
     accountType: String,
     userJoined: { type: Date, default: Date.now },
-    company: [{type: mongoose.Schema.Types.ObjectId, ref: "Company"}],
-    projects: [{type: mongoose.Schema.Types.ObjectId, ref: "Project"}]
+    company: [{ type: mongoose.Schema.Types.ObjectId, ref: "Company" }],
+    projects: [{ type: mongoose.Schema.Types.ObjectId, ref: "Project" }],
+    timesheets: {
+        date: { type: Date },
+        project: String,
+        description: String,
+        hours: Number
+    }
 });
 
 userSchema.plugin(passportLocalMongoose);

@@ -15,7 +15,8 @@ let companyRoutes = require('./routes/company'),
     adminRoutes = require('./routes/admin'),
     employeesRoutes = require('./routes/employees'),
     indexRoutes = require('./routes/index'),
-    projectsRoutes = require('./routes/projects');
+    projectsRoutes = require('./routes/projects'),
+    timesheetsRoutes = require('./routes/timesheets');
 
 // Passport configuration
 app.use(require('express-session')({
@@ -33,7 +34,9 @@ passport.deserializeUser(User.deserializeUser());
 
 
 // Connect to the mongodb company server
-mongoose.connect('mongodb://localhost/main_database');
+mongoose.connect('mongodb://localhost/main_database')
+    .then(() => { console.log('Successfully connected to the MongoDB database.') })
+    .catch(() => { console.log('Error connecting to the MongoDB database') });
 
 // Make public folder accessible by default
 app.use(express.static(__dirname + '/public'));
@@ -50,7 +53,7 @@ app.set('view engine', 'ejs');
 app.use(function (req, res, next) {
     // Pass current logged user to all routes
     res.locals.currentUser = req.user;
-    
+
     // res.locals.error = req.flash("error");
     // res.locals.success = req.flash("success");
     next(); // move to the actual code
@@ -62,6 +65,7 @@ app.use('/adminDashboard', adminRoutes);
 app.use('/dashboard', employeesRoutes);
 app.use(indexRoutes);
 app.use('/dashboard', projectsRoutes);
+app.use('/dashboard', timesheetsRoutes);
 
 
 
