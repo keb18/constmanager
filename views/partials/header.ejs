@@ -34,7 +34,7 @@
         </li>
 
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Projects">
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="/<%= currentCompany._id %>/user/<%=currentUser._id %>">
             <i class="fa fa-fw fa-user-cog"></i>
             <span class="nav-link-text">
               <%= currentUser.firstName %>
@@ -47,13 +47,6 @@
           <a class="nav-link" href="/<%= currentCompany._id %>/projects">
             <i class="fa fa-fw fa-industry"></i>
             <span class="nav-link-text">Projects</span>
-          </a>
-        </li>
-
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Timesheets">
-          <a class="nav-link" href="/<%= currentCompany._id %>/timesheets">
-            <i class="fa fa-fw fa-clipboard-list"></i>
-            <span class="nav-link-text">Timesheets</span>
           </a>
         </li>
 
