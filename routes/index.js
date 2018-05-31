@@ -11,7 +11,7 @@ let Project = require('../models/project'),
 let mid = require('../middleware');
 
 // Landing page
-router.get('/', function (req, res) {
+router.get('/', (req, res) => {
   res.render('landing');
 });
 
@@ -19,21 +19,21 @@ router.get('/', function (req, res) {
 // ===================================================================
 // ======================== Authorisation routes =====================
 // Show the register form
-router.get('/register', function (req, res) {
+router.get('/register', (req, res) => {
   res.render('register');
 });
 
 // Handle register logic
-router.post('/register', function (req, res) {
+router.post('/register', (req, res) => {
   // Check if company name exists
-  const checkCompany = Company.find({ companyName: req.body.companyName });
+  let checkCompany = Company.find({ companyName: req.body.companyName });
   if (!(checkCompany.length > 0)) {
     req.flash('error', `Company with the name "${req.body.companyName}" already exists.`);
     return res.redirect('back');
   }
   // Start registering the User using passport
   let newUser = new User({ username: req.body.username });
-  User.register(newUser, req.body.password, function (err, user) {
+  User.register(newUser, req.body.password, (err, user) => {
     if (err) {
       req.flash('error', err.message);
       mid.errorDb(err);
@@ -47,7 +47,7 @@ router.post('/register', function (req, res) {
     user.position = "manager";
 
     // Create a new company and add to the db
-    Company.create({ companyName: req.body.companyName }, function (err, newlyCreatedCompany) {
+    Company.create({ companyName: req.body.companyName }, (err, newlyCreatedCompany) => {
       if (err) {
         req.flash('error', "Something went wrong when creating the company.");
         mid.errorDb(err);
@@ -59,7 +59,7 @@ router.post('/register', function (req, res) {
       // Associate new user with the company
       user.company.push(newlyCreatedCompany);
       user.save();
-      passport.authenticate('local')(req, res, function () {
+      passport.authenticate('local')(req, res, () => {
         res.redirect('/' + newlyCreatedCompany._id);
       });
     });
@@ -67,20 +67,19 @@ router.post('/register', function (req, res) {
 });
 
 // Show the login form
-router.get('/login', function (req, res) {
-  // req.flash("error", "You need to be logged.")
+router.get('/login', (req, res) => {
   res.render('login');
 });
 
 // Handle login logic
-router.post('/login', function (req, res, next) {
-  passport.authenticate('local', function (err, user, info) {
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
     if (err) { return next(err); }
     if (!user) {
       req.flash("error", `${info.message}. Please check your credentials.`);
       return res.redirect('/login');
     }
-    req.logIn(user, function (err) {
+    req.logIn(user, (err) => {
       if (err) {
         req.flash("error", err);
         mid.errorDb(err);
@@ -94,7 +93,7 @@ router.post('/login', function (req, res, next) {
 });
 
 // Handle logout logic
-router.get('/logout', function (req, res) {
+router.get('/logout', (req, res) => {
   req.logout();
   req.flash("success", "You have been logged out!")
   res.redirect('/');
