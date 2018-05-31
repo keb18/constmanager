@@ -15,20 +15,21 @@ router.get('/:companyId/projects',
   mid.isLoggedIn,
   mid.disableCache,
   // mid.checkCompanyAuth,
-  function (req, res) {
+  (req, res) => {
     // Find the company and populate it with the current projects
-    Company.findById(req.params.companyId).populate('projects').exec(function (err, foundCompany) {
-      if (err) {
-        mid.errorDb(err);
-        req.flash("error", "There was a problem fetching the projects from the database.");
-        res.redirect('back');
-      } else {
-        res.render('project/projects', {
-          projects: foundCompany.projects,
-          currentCompany: foundCompany
-        });
-      }
-    });
+    Company.findById(req.params.companyId).populate('projects')
+      .exec((err, foundCompany) => {
+        if (err) {
+          mid.errorDb(err);
+          req.flash("error", "There was a problem fetching the projects from the database.");
+          res.redirect('back');
+        } else {
+          res.render('project/projects', {
+            projects: foundCompany.projects,
+            currentCompany: foundCompany
+          });
+        }
+      });
   });
 
 
@@ -37,9 +38,9 @@ router.post('/:companyId/project',
   mid.isLoggedIn,
   mid.disableCache,
   mid.getCompany,
-  function (req, res) {
+  (req, res) => {
     // Create a new project and add to the db
-    Project.create(req.body.project, function (err, newlyCreatedProject) {
+    Project.create(req.body.project, (err, newlyCreatedProject) => {
       if (err) {
         mid.errorDb(err);
         req.flash("error", "There was a problem creating a new project.");
@@ -102,7 +103,7 @@ router.get('/:companyId/project/:projectId',
   mid.getCompany,
   function (req, res) {
     // find project with provided id and serve it to the template
-    Project.findById(req.params.projectId, function (err, foundProject) {
+    Project.findById(req.params.projectId, (err, foundProject) => {
       if (err) {
         mid.errorDb();
         req.flash("error", "The project was not found in the database.");
@@ -118,7 +119,6 @@ router.get('/:companyId/project/:projectId',
     });
   });
 
-module.exports = router;
 
 // Show contract information
 router.get('/:companyId/project/:projectId/contract',
@@ -127,7 +127,7 @@ router.get('/:companyId/project/:projectId/contract',
   mid.getCompany,
   function (req, res) {
     // find project with provided id and serve it to the template
-    Project.findById(req.params.projectId, function (err, foundProject) {
+    Project.findById(req.params.projectId, (err, foundProject) => {
       if (err) {
         mid.errorDb();
         req.flash("error", "The project was not found in the database.");
@@ -137,3 +137,5 @@ router.get('/:companyId/project/:projectId/contract',
       };
     });
   });
+
+  module.exports = router;
