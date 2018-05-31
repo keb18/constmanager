@@ -17,53 +17,61 @@
 <body class="bg-dark">
   <div class="container">
     <div class="card card-register mx-auto mt-5">
-      <div class="card-header">Register an Account</div>
-      <div class="card-body">
-        <form action="/register" method="POST">
-          <div class="form-group">
+      <% include ./partials/flash %>
+        <div class="card-header">Register an Account</div>
+        <div class="card-body">
+          <form action="/register" method="POST">
             <div class="form-group">
-              <label for="registerInputCompanyName">Company name</label>
-              <input class="form-control" id="registerInputCompanyName" type="text" aria-describedby="companyNameHelp" name="companyName"
-                placeholder="Enter company name">
-            </div>
-            <div class="form-row">
-              <div class="col-md-6">
-                <label for="registerInputName">First name</label>
-                <input class="form-control" id="registerInputName" type="text" name="firstName" placeholder="Enter first name">
+              <div class="form-group">
+                <label for="registerInputCompanyName">Company name</label>
+                <input class="form-control" id="registerInputCompanyName" type="text" aria-describedby="companyNameHelp" name="companyName"
+                  placeholder="Enter company name" required oninvalid="this.setCustomValidity('Please enter company name.')"
+                  oninput="setCustomValidity('')">
               </div>
-              <div class="col-md-6">
-                <label for="registerInputLastName">Last name</label>
-                <input class="form-control" id="registerInputLastName" type="text" aria-describedby="nameHelp" name="lastName" placeholder="Enter last name">
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="registerInputEmail">Email address</label>
-            <input class="form-control" id="registerInputEmail1" type="email" aria-describedby="emailHelp" name="email" placeholder="Enter email">
-          </div>
-          <div class="form-group">
-            <label for="registerInputUserName">Username</label>
-            <input class="form-control" id="registerInputUserName" type="text" aria-describedby="usernameHelp" name="username" placeholder="Enter username">
-          </div>
-          <div class="form-group">
-            <div class="form-row">
-              <div class="col-md-6">
-                <label for="registerInputPassword1">Password</label>
-                <input class="form-control" id="registerInputPassword1" type="password" name="password" placeholder="Password">
-              </div>
-              <div class="col-md-6">
-                <label for="registerConfirmPassword">Confirm password</label>
-                <input class="form-control" id="registerConfirmPassword" type="password" name="confirmPassword" placeholder="Confirm password">
+              <div class="form-row">
+                <div class="col-md-6">
+                  <label for="registerInputFirstName">First name</label>
+                  <input class="form-control" id="registerInputFirstName" type="text" name="firstName" placeholder="John" required
+                    oninvalid="this.setCustomValidity('Please enter first name.')" oninput="setCustomValidity('')">
+                </div>
+                <div class="col-md-6">
+                  <label for="registerInputLastName">Last name</label>
+                  <input class="form-control" id="registerInputLastName" type="text" aria-describedby="nameHelp" name="lastName" placeholder="Doe"
+                    required oninvalid="this.setCustomValidity('Please enter last name.')" oninput="setCustomValidity('')">
+                </div>
               </div>
             </div>
+            <div class="form-group">
+              <label for="registerInputEmail">Email address</label>
+              <input class="form-control" id="registerInputEmail" type="email" aria-describedby="emailHelp" name="email" placeholder="you@example.org"
+                required oninvalid="this.setCustomValidity('Please enter email')" oninput="setCustomValidity('')">
+            </div>
+            <div class="form-group">
+              <label for="registerInputUserName">Username</label>
+              <input class="form-control" id="registerInputUserName" type="text" aria-describedby="usernameHelp" name="username" placeholder="Enter username"
+                required oninvalid="this.setCustomValidity('Please enter username')" oninput="setCustomValidity('')">
+            </div>
+            <div class="form-group">
+              <div class="form-row">
+                <div class="col-md-6">
+                  <label for="registerInputPassword1">Password</label>
+                  <input class="form-control" id="registerInputPassword" type="password" name="password" placeholder="*******" required oninvalid="this.setCustomValidity('Please enter password')"
+                    oninput="setCustomValidity('')">
+                </div>
+                <div class="col-md-6">
+                  <label for="registerConfirmPassword">Confirm password</label>
+                  <input class="form-control" id="registerConfirmPassword" type="password" name="confirmPassword" placeholder="*******" required
+                    oninvalid="this.setCustomValidity('Please confirm password')" oninput="setCustomValidity('')">
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-block">Register</button>
+          </form>
+          <div class="text-center">
+            <a class="d-block small mt-3" href="/login">Login Page</a>
+            <a class="d-block small" href="/forgot-password">Forgot Password?</a>
           </div>
-          <button class="btn btn-primary btn-block">Register</button>
-        </form>
-        <div class="text-center">
-          <a class="d-block small mt-3" href="/login">Login Page</a>
-          <a class="d-block small" href="/forgot-password">Forgot Password?</a>
         </div>
-      </div>
     </div>
   </div>
 

@@ -12,9 +12,14 @@ middlewareObject.isLoggedIn = function (req, res, next) {
     if (req.isAuthenticated()) {
         next();
     } else {
-        // req.flash("error", "You need to be logged in to do that."); // is handled in the /login
+        req.flash("error", "You need to be logged in to do that.");
         res.redirect('/login');
     }
+}
+
+// HANDLE DATABASE ERROR LOGS
+middlewareObject.errorDb = function (err) {
+    console.log(err);
 }
 
 // DISABLE CACHE
@@ -26,17 +31,17 @@ middlewareObject.disableCache = function (req, res, next) {
 
 
 // Find the company from database
-middlewareObject.getCompany = function(req, res, next) {
+middlewareObject.getCompany = function (req, res, next) {
     Company.findById(req.params.companyId, function (err, foundCompany) {
         if (err) {
-          console.log(err);
-          res.redirect("/dashboard/" + company._id);
+            console.log(err);
+            res.redirect("/dashboard/" + company._id);
         } else {
             // Serve foundCompany
             req.currentCompany = foundCompany;
             next();
         }
-      });
+    });
 }
 
 

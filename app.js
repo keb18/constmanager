@@ -3,7 +3,8 @@ const express = require('express'),
     bodyParser = require('body-parser'),
     mongoose = require('mongoose'),
     passport = require('passport'),
-    LocalStrategy = require('passport-local');
+    LocalStrategy = require('passport-local'),
+    flash = require('connect-flash');
 
 // Set-up module imports for the mongoose schemas
 let Project = require('./models/project'),
@@ -17,6 +18,9 @@ let companyRoutes = require('./routes/company'),
     indexRoutes = require('./routes/index'),
     projectsRoutes = require('./routes/projects'),
     timesheetsRoutes = require('./routes/timesheets');
+
+// Setup moment for use
+app.locals.moment = require("moment");
 
 // Passport configuration
 app.use(require('express-session')({
@@ -44,6 +48,9 @@ app.use(express.static(__dirname + '/public'));
 // Setup Body Parser
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Setup connect flash
+app.use(flash());
+
 // use routes without the *.ejs extension
 app.set('view engine', 'ejs');
 
@@ -53,19 +60,20 @@ app.set('view engine', 'ejs');
 app.use(function (req, res, next) {
     // Pass current logged user to all routes
     res.locals.currentUser = req.user;
-
-    // res.locals.error = req.flash("error");
-    // res.locals.success = req.flash("success");
+    // Pass the message in any route
+    res.locals.error = req.flash("error");
+    res.locals.success = req.flash("success");
     next(); // move to the actual code
 });
 
 // Use the route files
-app.use('/dashboard', companyRoutes);
-app.use('/adminDashboard', adminRoutes);
-app.use('/dashboard', employeesRoutes);
 app.use(indexRoutes);
-app.use('/dashboard', projectsRoutes);
-app.use('/dashboard', timesheetsRoutes);
+app.use(companyRoutes);
+app.use('/adminDashboard', adminRoutes);
+app.use(employeesRoutes);
+app.use(projectsRoutes);
+app.use(timesheetsRoutes);
+
 
 
 

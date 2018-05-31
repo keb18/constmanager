@@ -7,7 +7,7 @@ let userSchema = new mongoose.Schema({
     password: String,
     firstName: String,
     lastName: String,
-    email: String,
+    email: { type: String, unique: true },
     position: String,
     salary: Number,
     accountType: String,

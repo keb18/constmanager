@@ -16,13 +16,13 @@ router.get('/:companyId/projects',
   mid.disableCache,
   // mid.checkCompanyAuth,
   function (req, res) {
-    // console.log(req.user);
     // Find the company and populate it with the current projects
     Company.findById(req.params.companyId).populate('projects').exec(function (err, foundCompany) {
       if (err) {
-        console.log(err);
+        mid.errorDb(err);
+        req.flash("error", "There was a problem fetching the projects from the database.");
+        res.redirect('back');
       } else {
-        // console.log(req.user);
         res.render('project/projects', {
           projects: foundCompany.projects,
           currentCompany: foundCompany
@@ -41,7 +41,9 @@ router.post('/:companyId/project',
     // Create a new project and add to the db
     Project.create(req.body.project, function (err, newlyCreatedProject) {
       if (err) {
-        console.log(err);
+        mid.errorDb(err);
+        req.flash("error", "There was a problem creating a new project.");
+        res.redirect('back');
       } else {
         // Get the current company from middleware
         foundCompany = req.currentCompany;
@@ -54,8 +56,9 @@ router.post('/:companyId/project',
         currentUser.projects.push(newlyCreatedProject);
         currentUser.save();
 
+        req.flash("success", "New project has been created.");
         // redirect back to the dashboard
-        res.redirect("/dashboard/" + foundCompany._id + "/projects");
+        res.redirect(`/${foundCompany._id}/projects`);
       }
     });
   });
@@ -101,7 +104,9 @@ router.get('/:companyId/project/:projectId',
     // find project with provided id and serve it to the template
     Project.findById(req.params.projectId, function (err, foundProject) {
       if (err) {
-        console.log(err);
+        mid.errorDb();
+        req.flash("error", "The project was not found in the database.");
+        res.redirect('back');
       } else {
         // render the project template for the specified projectid
         res.render('project/showProject', {
@@ -114,3 +119,21 @@ router.get('/:companyId/project/:projectId',
   });
 
 module.exports = router;
+
+// Show contract information
+router.get('/:companyId/project/:projectId/contract',
+  mid.isLoggedIn,
+  mid.disableCache,
+  mid.getCompany,
+  function (req, res) {
+    // find project with provided id and serve it to the template
+    Project.findById(req.params.projectId, function (err, foundProject) {
+      if (err) {
+        mid.errorDb();
+        req.flash("error", "The project was not found in the database.");
+        res.redirect('back');
+      } else {
+        return res.json(foundProject)
+      };
+    });
+  });

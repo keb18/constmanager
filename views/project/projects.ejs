@@ -3,24 +3,24 @@
     <!-- Breadcrumbs-->
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
-            <a href="/dashboard/<%= currentCompany._id %>">Dashboard</a>
+            <a href="/<%= currentCompany._id %>/dashboard">Dashboard</a>
         </li>
         <li class="breadcrumb-item active">Projects</li>
     </ol>
 
     <!-- ========================== CONTENT =============================== -->
 
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <ul class="nav nav-tabs" id="projectTab" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Projects</a>
+            <a class="nav-link active" id="projects-tab" data-toggle="tab" href="#projects" role="tab" aria-controls="projects" aria-selected="true">Projects</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Add Project</a>
+            <a class="nav-link" id="add-project-tab" data-toggle="tab" href="#add-project" role="tab" aria-controls="add-project" aria-selected="false">Add Project</a>
         </li>
     </ul>
 
-    <div class="tab-content" id="myTabContent">
-        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+    <div class="tab-content" id="projectTabContent">
+        <div class="tab-pane fade show active" id="projects" role="tabpanel" aria-labelledby="projects-tab">
 
             <table class="table table-hover text-center table-sm">
                 <thead>
@@ -44,10 +44,10 @@
                             <%= project.projectName %>
                         </td>
                         <td>
-                            <%= project.projectCreated.toLocaleString('en-GB', { timeZone: 'UTC' }) %>
+                            <%= moment(project.projectCreated).calendar() %>
                         </td>
                         <td class="text-center">
-                            <a href="/dashboard/<%= currentCompany._id %>/project/<%= project._id %>">
+                            <a href="/<%= currentCompany._id %>/project/<%= project._id %>">
                                 <i class="fas fa-folder-open" aria-hidden="true"></i>
                             </a>
                         </td>
@@ -56,40 +56,46 @@
             </table>
         </div>
 
-        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+        <div class="tab-pane fade" id="add-project" role="tabpanel" aria-labelledby="add-project-tab">
 
-            <form class="tablist-views" action="/dashboard/<%= currentCompany._id %>/project" method="POST">
+            <form class="tablist-views" action="/<%= currentCompany._id %>/project" method="POST">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="inputProjectName">Project name</label>
-                        <input type="text" class="form-control" name="project[projectName]" placeholder="Hester House">
+                        <input type="text" class="form-control" name="project[projectName]" placeholder="Hester House" required oninvalid="this.setCustomValidity('Please enter project name.')"
+                        oninput="setCustomValidity('')">
                     </div>
 
                     <div class="form-group col-md-6">
                         <label for="inputProjectNumber">Project number</label>
-                        <input type="text" class="form-control" name="project[projectNumber]" placeholder="2/5554-3">
+                        <input type="text" class="form-control" name="project[projectNumber]" placeholder="2/5554-3" required oninvalid="this.setCustomValidity('Please enter project number.')"
+                        oninput="setCustomValidity('')">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="inputAddress">Address</label>
-                    <input type="text" class="form-control" placeholder="1234 Main St">
+                    <input type="text" class="form-control" placeholder="1234 Main St" required oninvalid="this.setCustomValidity('Please enter project address.')"
+                    oninput="setCustomValidity('')">
                 </div>
 
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label for="inputProjectCountry">Country</label>
-                        <input type="text" class="form-control" name="project[projectCountry]" placeholder="country">
+                        <input type="text" class="form-control" name="project[projectCountry]" placeholder="country" required oninvalid="this.setCustomValidity('Please enter project country.')"
+                        oninput="setCustomValidity('')">
                     </div>
 
                     <div class="form-group col-md-4">
                         <label for="inputProjectCity">City</label>
-                        <input type="text" class="form-control" name="project[projectCity]" placeholder="project city">
+                        <input type="text" class="form-control" name="project[projectCity]" placeholder="project city" required oninvalid="this.setCustomValidity('Please enter project city.')"
+                        oninput="setCustomValidity('')">
                     </div>
 
                     <div class="form-group col-md-4">
                         <label for="inputProjectZip">Zip code</label>
-                        <input type="text" class="form-control" name="project[projectZip]" placeholder="project zip">
+                        <input type="text" class="form-control" name="project[projectZip]" placeholder="project zip" required oninvalid="this.setCustomValidity('Please enter project zip.')"
+                        oninput="setCustomValidity('')">
                     </div>
                 </div>
 
@@ -100,20 +106,12 @@
 
                 <button type="submit" class="btn btn-primary">Submit!</button>
             </form>
-            <button onclick="goBack()" type="button" class="btn btn-link" id="backAnchor">Go back</button>
         </div>
     </div>
     <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
 
-
     </div>
 
-
-    <!-- <div class="container" style="padding-left: 0px; padding-right: 0px">
-    <header class="jumbotron">
-        <h2>Latest Current Projects</h2>
-        <p>Select a project to view more information</p>
-    </header> -->
 
     <!-- ========================== CONTENT =============================== -->
 

@@ -3,7 +3,7 @@
     <!-- Breadcrumbs-->
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
-            <a href="#">Dashboard</a>
+            <a href="/<%= currentCompany._id %>/dashboard">Dashboard</a>
         </li>
         <li class="breadcrumb-item active">Employees</li>
     </ol>
@@ -48,7 +48,7 @@
                             <%= employee.userJoined.toLocaleString('en-GB', { timeZone: 'UTC' }) %>
                         </td>
                         <td class="text-center">
-                            <a href="/dashboard/<%= currentCompany._id %>/employee/<%= employee._id %>">
+                            <a href="/<%= currentCompany._id %>/employee/<%= employee._id %>">
                                 <i class="fas fa-folder-open" aria-hidden="true"></i>
                             </a>
                         </td>
@@ -59,83 +59,93 @@
 
         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
 
-            <form class="tablist-views" action="/dashboard/<%= currentCompany._id %>/employee" method="POST">
+            <form class="tablist-views" action="/<%= currentCompany._id %>/employee" method="POST">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="inputEmployeeName">First name</label>
-                        <input type="text" class="form-control" name="employee[firstName]" placeholder="John">
+                        <input type="text" class="form-control" name="employee[firstName]" placeholder="John" required oninvalid="this.setCustomValidity('Please enter employee first name.')"
+                        oninput="setCustomValidity('')">
                     </div>
 
                     <div class="form-group col-md-6">
                         <label for="inputEmployeeNumber">Last name</label>
-                        <input type="text" class="form-control" name="employee[lastName]" placeholder="Doe">
+                        <input type="text" class="form-control" name="employee[lastName]" placeholder="Doe" required oninvalid="this.setCustomValidity('Please enter employee last name.')"
+                        oninput="setCustomValidity('')">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label for="inputEmployeeAccountType">Account type</label>
-                        <input type="text" class="form-control" name="employee[accountType]" placeholder="account type">
+                        <input type="text" class="form-control" name="employee[accountType]" placeholder="account type" required oninvalid="this.setCustomValidity('Please enter employee account type.')"
+                        oninput="setCustomValidity('')">
                     </div>
 
                     <div class="form-group col-md-4">
                         <label for="inputEmployeePosition">Position</label>
-                        <input type="text" class="form-control" name="employee[position]" placeholder="position">
+                        <input type="text" class="form-control" name="employee[position]" placeholder="position" required oninvalid="this.setCustomValidity('Please enter employee position.')"
+                        oninput="setCustomValidity('')">
                     </div>
 
                     <div class="form-group col-md-4">
                         <label for="inputEmployeePassword">Salary</label>
-                        <input type="number" class="form-control" name="employee[salary]" placeholder="salary">
+                        <input type="number" class="form-control" name="employee[salary]" placeholder="salary" required oninvalid="this.setCustomValidity('Please enter employee salary.')"
+                        oninput="setCustomValidity('')">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label for="inputEmployeeEmail">Email</label>
-                        <input type="text" class="form-control" name="employee[email]" placeholder="email">
+                        <input type="email" class="form-control" name="employee[email]" placeholder="email" required oninvalid="this.setCustomValidity('Please enter a valid employee email.')" oninput="setCustomValidity('')">
                     </div>
 
                     <div class="form-group col-md-4">
                         <label for="inputEmployeeUserName">Username</label>
-                        <input type="text" class="form-control" name="username" placeholder="username">
+                        <input type="text" class="form-control" name="username" placeholder="username" required oninvalid="this.setCustomValidity('Please enter employee username.')"
+                        oninput="setCustomValidity('')">
                     </div>
 
                     <div class="form-group col-md-4">
-                        <label for="inputEmployeePassword">Last number</label>
-                        <input type="password" class="form-control" name="password" placeholder="password">
+                        <label for="inputEmployeePassword">Password</label>
+                        <input type="password" class="form-control" name="password" placeholder="password" required oninvalid="this.setCustomValidity('Please enter employee password.')"
+                        oninput="setCustomValidity('')">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="inputAddress">Address</label>
-                    <input type="text" class="form-control" name="employee[Address]" placeholder="1234 Main St">
+                    <input type="text" class="form-control" name="employee[Address]" placeholder="1234 Main St" required oninvalid="this.setCustomValidity('Please enter employee home address.')"
+                    oninput="setCustomValidity('')">
                 </div>
 
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label for="inputProjectCountry">Country</label>
-                        <input type="text" class="form-control" name="employee[Country]" placeholder="country">
+                        <input type="text" class="form-control" name="employee[Country]" placeholder="country" required oninvalid="this.setCustomValidity('Please enter employee home country.')"
+                        oninput="setCustomValidity('')">
                     </div>
 
                     <div class="form-group col-md-4">
                         <label for="inputProjectCity">City</label>
-                        <input type="text" class="form-control" name="employee[City]" placeholder="employee city">
+                        <input type="text" class="form-control" name="employee[City]" placeholder="city" required oninvalid="this.setCustomValidity('Please enter employee home city name.')"
+                        oninput="setCustomValidity('')">
                     </div>
 
                     <div class="form-group col-md-4">
                         <label for="inputProjectZip">Zip code</label>
-                        <input type="text" class="form-control" name="employee[Zip]" placeholder="employee zip">
+                        <input type="text" class="form-control" name="employee[Zip]" placeholder="employee zip" required oninvalid="this.setCustomValidity('Please enter employee home zip.')"
+                        oninput="setCustomValidity('')">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="inputDescription">Description</label>
-                    <input type="text" class="form-control" name="employeeDescription" placeholder="description">
+                    <label for="inputNotes">Notes</label>
+                    <input type="text" class="form-control" name="employeeNotes" placeholder="notes">
                 </div>
 
                 <button type="submit" class="btn btn-primary">Submit!</button>
             </form>
-            <button onclick="goBack()" type="button" class="btn btn-link" id="backAnchor">Go back</button>
         </div>
     </div>
     <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">

@@ -11,7 +11,7 @@ let mid = require("../middleware");
 
 
 // INDEX - COMPANY DASHBOARD
-router.get('/:companyId',
+router.get('/:companyId/dashboard',
   mid.isLoggedIn,
   mid.disableCache,
   // mid.checkCompanyAuth,
@@ -19,7 +19,9 @@ router.get('/:companyId',
     // console.log(req.user);
     Company.findById(req.params.companyId).populate('projects').exec(function (err, foundCompany) {
       if (err) {
+        mid.errorDb();
         console.log(err);
+        res.redirect('back');
       } else {
         res.render('company/dashboard', {
           projects: foundCompany.projects,

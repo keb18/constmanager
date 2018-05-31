@@ -25,42 +25,50 @@ router.get('/register', function (req, res) {
 
 // Handle register logic
 router.post('/register', function (req, res) {
+  // Check if company name exists
+  const checkCompany = Company.find({ companyName: req.body.companyName });
+  if (!(checkCompany.length > 0)) {
+    req.flash('error', `Company with the name "${req.body.companyName}" already exists.`);
+    return res.redirect('back');
+  }
+  // Start registering the User using passport
   let newUser = new User({ username: req.body.username });
   User.register(newUser, req.body.password, function (err, user) {
     if (err) {
-      console.log(err);
-      return res.render('register');
+      req.flash('error', err.message);
+      mid.errorDb(err);
+      return res.redirect('back');
     }
-
     // Populate the user fields
     user.firstName = req.body.firstName;
     user.lastName = req.body.lastName;
     user.email = req.body.email;
     user.accountType = "owner";
     user.position = "manager";
-    // doc.visits.$inc();  == increment a value
 
-    // Create a new project and add to the db
+    // Create a new company and add to the db
     Company.create({ companyName: req.body.companyName }, function (err, newlyCreatedCompany) {
       if (err) {
-        console.log(err);
-      } else {
-        // Associate company with user
-        newlyCreatedCompany.users.push(user);
-        newlyCreatedCompany.save();
-        // Associate user with the company
-        user.company.push(newlyCreatedCompany);
-        user.save();
-        passport.authenticate('local')(req, res, function () {
-          res.redirect('/dashboard/' + newlyCreatedCompany._id);
-        });
+        req.flash('error', "Something went wrong when creating the company.");
+        mid.errorDb(err);
+        return res.redirect('back');
       }
+      // Associate company with new user
+      newlyCreatedCompany.users.push(user);
+      newlyCreatedCompany.save();
+      // Associate new user with the company
+      user.company.push(newlyCreatedCompany);
+      user.save();
+      passport.authenticate('local')(req, res, function () {
+        res.redirect('/' + newlyCreatedCompany._id);
+      });
     });
   });
 });
 
 // Show the login form
 router.get('/login', function (req, res) {
+  // req.flash("error", "You need to be logged.")
   res.render('login');
 });
 
@@ -68,10 +76,19 @@ router.get('/login', function (req, res) {
 router.post('/login', function (req, res, next) {
   passport.authenticate('local', function (err, user, info) {
     if (err) { return next(err); }
-    if (!user) { return res.redirect('/login'); }
+    if (!user) {
+      req.flash("error", `${info.message}. Please check your credentials.`);
+      return res.redirect('/login');
+    }
     req.logIn(user, function (err) {
-      if (err) { return next(err); }
-      return res.redirect('/dashboard/' + user.company);
+      if (err) {
+        req.flash("error", err);
+        mid.errorDb(err);
+        return next(err);
+      }
+      // Flash success message
+      req.flash("success", `Welcome back ${user.firstName} ${user.lastName}`);
+      return res.redirect(`/${user.company}/dashboard`);
     });
   })(req, res, next);
 });
@@ -79,6 +96,7 @@ router.post('/login', function (req, res, next) {
 // Handle logout logic
 router.get('/logout', function (req, res) {
   req.logout();
+  req.flash("success", "You have been logged out!")
   res.redirect('/');
 });
 

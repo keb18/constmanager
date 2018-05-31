@@ -2,10 +2,10 @@
   <!-- Breadcrumbs-->
   <ol class="breadcrumb">
     <li class="breadcrumb-item">
-      <a href="/dashboard/<%= currentCompany._id %>">Dashboard</a>
+      <a href="/<%= currentCompany._id %>/dashboard">Dashboard</a>
     </li>
     <li class="breadcrumb-item">
-      <a href="/dashboard/<%= currentCompany._id %>/projects">Projects</a>
+      <a href="/<%= currentCompany._id %>/projects">Projects</a>
     </li>
     <li class="breadcrumb-item active">
       <%= project.projectName %> -
@@ -20,27 +20,49 @@
     </p>
   </div>
 
-  <ul class="nav nav-tabs" id="myTab" role="tablist">
+  <ul class="nav nav-tabs" id="projectInfoTab" role="tablist">
     <li class="nav-item">
-      <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Projects</a>
+      <a class="nav-link active" id="project-tab" data-toggle="tab" href="#project" role="tab" aria-controls="project" aria-selected="true">Project</a>
     </li>
+    
     <li class="nav-item">
-      <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Add Project</a>
+      <a class="nav-link" id="contract-tab" data-toggle="tab" href="#contract" role="tab" aria-controls="contract" aria-selected="false">Contract</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-link" id="project-plan-tab" data-toggle="tab" href="#project-plan" role="tab" aria-controls="project-plan" aria-selected="false">Project Plan</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-link" id="team-tab" data-toggle="tab" href="#team" role="tab" aria-controls="team" aria-selected="false">Team</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-link" id="financials-tab" data-toggle="tab" href="#financials" role="tab" aria-controls="financials" aria-selected="false">Financials</a>
     </li>
   </ul>
 
-  <div class="tab-content" id="myTabContent">
-    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-      <p>CONTENT</p>
+
+  <div class="tab-content" id="projectInfoTabContent">
+    <div class="tab-pane fade show active" id="project" role="tabpanel" aria-labelledby="project-tab">
+        <p>PROJECT</p>
     </div>
 
-    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-      <p>CONTENT</p>
+    <div class="tab-pane fade" id="contract" role="tabpanel" aria-labelledby="contract-tab">
+        <p>CONTRACT</p>
     </div>
-  </div>
-  <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
 
+    <div class="tab-pane fade" id="project-plan" role="tabpanel" aria-labelledby="project-plan-tab">
+      <p>PROJECT PLAN</p>
+    </div>
 
+    <div class="tab-pane fade" id="team" role="tabpanel" aria-labelledby="team-tab">
+      <p>TEAM</p>
+    </div>
+
+    <div class="tab-pane fade" id="financials" role="tabpanel" aria-labelledby="financials-tab">
+      <p>FINANCIALS</p>
+    </div>
   </div>
   
 
