@@ -17,7 +17,7 @@ let companyRoutes = require('./routes/company'),
     employeesRoutes = require('./routes/employees'),
     indexRoutes = require('./routes/index'),
     projectsRoutes = require('./routes/projects'),
-    timesheetsRoutes = require('./routes/timesheets');
+    userRoutes = require('./routes/user');
 
 // Setup moment for use
 app.locals.moment = require("moment");
@@ -72,7 +72,7 @@ app.use(companyRoutes);
 app.use('/adminDashboard', adminRoutes);
 app.use(employeesRoutes);
 app.use(projectsRoutes);
-app.use(timesheetsRoutes);
+app.use(userRoutes);
 
 
 

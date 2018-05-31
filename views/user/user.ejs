@@ -1,0 +1,100 @@
+<% include ../partials/header %>
+  <!-- Breadcrumbs-->
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="/<%= currentCompany._id %>/dashboard">Dashboard</a>
+    </li>
+
+    <li class="breadcrumb-item active">
+        <%= currentUser.firstName %> <%= currentUser.lastName %>
+    </li>
+  </ol>
+
+
+  <ul class="nav nav-tabs" id="employeeInfoTab" role="tablist">
+      <!-- Settings tab -->
+      <li class="nav-item">
+        <a class="nav-link active" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="true">Settings</a>
+      </li>
+  
+      <!-- Employee navs -->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
+        <div class="dropdown-menu">
+                     
+          <a class="dropdown-item" id="time-sheet-tab" data-toggle="tab" href="#time-sheet" role="tab" aria-controls="time-sheet" aria-selected="false">Time Sheets</a>
+
+          <a class="dropdown-item" id="expense-sheet-tab" data-toggle="tab" href="#expense-sheet" role="tab" aria-controls="expense-sheet" aria-selected="false">Expense Sheets</a>
+          
+          <a class="dropdown-item" id="holidays-tab" data-toggle="tab" href="#holidays" role="tab" aria-controls="holidays" aria-selected="false">Holidays</a>
+  
+          <a class="dropdown-item" id="training-record-tab" data-toggle="tab" href="#training-record" role="tab" aria-controls="training-record" aria-selected="false">Training Record</a>
+  
+          <a class="dropdown-item" id="training-course-tab" data-toggle="tab" href="#training-course" role="tab" aria-controls="training-course" aria-selected="false">Training Course</a>
+  
+          <a class="dropdown-item" id="skills-tab" data-toggle="tab" href="#skills" role="tab" aria-controls="skills" aria-selected="false">Skills</a>
+        </div>
+      
+        <!-- Income navs -->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Financials</a>
+        <div class="dropdown-menu">
+          
+          <a class="dropdown-item" id="salary-tab" data-toggle="tab" href="#salary" role="tab" aria-controls="salary" aria-selected="false">Salary</a>
+  
+          <a class="dropdown-item" id="pay-slips-tab" data-toggle="tab" href="#pay-slips" role="tab" aria-controls="pay-slips" aria-selected="false">Pay slips</a>
+        </div>
+      </li>
+    </ul>
+  
+  
+    <div class="tab-content" id="employeeInfoTabContent">
+      <!-- Settings tab -->
+      <div class="tab-pane fade show active" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+          <p>SETTINGS</p>
+      </div>
+
+      <!-- Employee tab -->
+      <div class="tab-pane fade" id="time-sheet" role="tabpanel" aria-labelledby="time-sheet-tab">
+          <p><% include ./partials/timesheets %></p>
+      </div>
+      
+      <div class="tab-pane fade" id="expense-sheet" role="tabpanel" aria-labelledby="expense-sheet-tab">
+          <p>EXPENSE SHEET</p>
+      </div>
+  
+      <div class="tab-pane fade" id="holidays" role="tabpanel" aria-labelledby="holidays-tab">
+        <p>HOLIDAYS</p>
+      </div>
+  
+      <div class="tab-pane fade" id="training-record" role="tabpanel" aria-labelledby="training-record-tab">
+        <p>TRAINING RECORD</p>
+      </div>
+  
+      <div class="tab-pane fade" id="training-course" role="tabpanel" aria-labelledby="training-course-tab">
+        <p>TRAINING COURSE</p>
+      </div>
+  
+      <div class="tab-pane fade" id="skills" role="tabpanel" aria-labelledby="skills-tab">
+        <p>SKILLS</p>
+      </div>
+  
+      <!-- Income tab -->
+      <div class="tab-pane fade" id="salary" role="tabpanel" aria-labelledby="salary-tab">
+        <p>SALARY</p>
+      </div>
+  
+      <div class="tab-pane fade" id="pay-slips" role="tabpanel" aria-labelledby="pay-slips-tab">
+        <p>PAY SLIPS</p>
+      </div>
+  
+  
+      </div>
+    </div>
+
+
+
+
+
+
+  <% include ../partials/footer %>
