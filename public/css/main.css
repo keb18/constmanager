@@ -3,7 +3,7 @@
     margin-top: 10px;
   }
 
-  /* Remove top margin border to tables */
+  /* Remove top margin border to tables in nav-tabs*/
   .table td, .table th{
     border-top: none !important;
   }
@@ -12,3 +12,24 @@
   .tablist-views{
     padding-top: 10px;
   }
+
+  input[type=number]::-webkit-inner-spin-button, 
+  input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+  }
+
+.tsCellH {
+  text-align: center;
+  font-size: 0.75rem !important;
+  padding: 0.1rem !important;
+  /* border: 0px !important; */
+  /* transform: rotate(-90deg); */
+}
+
+.tsCell {
+  text-align: center;
+  font-size: 0.5rem !important;
+  padding: 0.1rem !important;
+  margin-bottom: 5px;
+}
