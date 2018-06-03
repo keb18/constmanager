@@ -1,49 +1,63 @@
-<div class="container">
   <h4>Timesheet week starting from: 28.05.2018</h4>
-</div>
+
+<link rel="stylesheet" href="/css/timesheets.css">
+
+
+
 <form class="tablist-views" action="/<%= currentCompany._id %>/user/<%= currentUser._id %>" method="POST">
-  <div style="margin-bottom: 10px">
-    <div class="input-group">
-      <span class="form-control tsCellH">#</span>
-      <span class="form-control tsCellH">Project</span>
-      <span class="form-control tsCellH">Name</span>
-      <span class="form-control tsCellH">Description</span>
-      <span class="form-control tsCellH">Mon</span>
-      <span class="form-control tsCellH">Tue</span>
-      <span class="form-control tsCellH">Wed</span>
-      <span class="form-control tsCellH">Thu</span>
-      <span class="form-control tsCellH">Fri</span>
-      <span class="form-control tsCellH">Sat</span>
-      <span class="form-control tsCellH">Sun</span>
-      <span class="form-control tsCellH">Total</span>
+
+  <table class="table table-bordered table-hover text-center table-sm table-responsive newRow calculateTotal">
+      <thead class="tableHeader">
+          <tr>
+              <th style="width: 5%;">#</th>
+              <th style="width: 10%;">Project</th>
+              <th style="width: 15%;">Name</th>
+              <th style="width: 25%;">Description</th>
+              <th >Mon</th>
+              <th >Tue</th>
+              <th >Wed</th>
+              <th >Thu</th>
+              <th >Fri</th>
+              <th >Sat</th>
+              <th >Sun</th>
+              <th>Total</th>
+          </tr>
+      </thead>
+      <tfoot>
+          <tr>
+            <th class="totalHours" colspan="4">TOTAL HOURS</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+        </tfoot>
+      <tbody>
+              <td>1</td>
+              <td><input type="text" name="timesheet[projectNumber]"></td>
+              <td name="timesheet[projectName]"></td>
+              <td><input type="text" name="timesheet[projectDescription]"></td>
+              <td><input type="number" name="timesheet[mon]" value="7.5"></td>
+              <td><input type="number" name="timesheet[tue]"></td>
+              <td><input type="number" name="timesheet[wed]"></td>
+              <td><input type="number" name="timesheet[thu]"></td>
+              <td><input type="number" name="timesheet[fri]"></td>
+              <td><input type="number" name="timesheet[sat]"></td>
+              <td><input type="number" name="timesheet[sun]"></td>
+              <td type="number" name="timesheet[projectTotal]"></td>
+      </tbody>
+  </table>
+
+    <div class="tableButtons">
+      <a class="btn btn-primary saveSheet" href="#">Save</a>
     </div>
 
-    <div class="input-group">
-      <input type="text" class="form-control tsCell" name="timesheet[projectNumber]">
-      <span type="text" class="form-control tsCell" name="timesheet[projectName]"></span>
-      <input type="text" class="form-control tsCell" name="timesheet[description]">
-      <input type="number" class="form-control tsCell" name="timesheet[mon]">
-      <input type="number" class="form-control tsCell" name="timesheet[tue]">
-      <input type="number" class="form-control tsCell" name="timesheet[wed]">
-      <input type="number" class="form-control tsCell" name="timesheet[thu]">
-      <input type="number" class="form-control tsCell" name="timesheet[fri]">
-      <input type="number" class="form-control tsCell" name="timesheet[sat]">
-      <input type="number" class="form-control tsCell" name="timesheet[sun]">
-      <span type="text" class="form-control tsCell" name="timesheet[total]"></span>
-    </div>
-    <div class="input-group">
-      <input type="text" class="form-control tsCell" name="timesheet[projectNumber]">
-      <span type="text" class="form-control tsCell" name="timesheet[projectName]"></span>
-      <input type="text" class="form-control tsCell" name="timesheet[description]">
-      <input type="number" class="form-control tsCell" name="timesheet[mon]">
-      <input type="number" class="form-control tsCell" name="timesheet[tue]">
-      <input type="number" class="form-control tsCell" name="timesheet[wed]">
-      <input type="number" class="form-control tsCell" name="timesheet[thu]">
-      <input type="number" class="form-control tsCell" name="timesheet[fri]">
-      <input type="number" class="form-control tsCell" name="timesheet[sat]">
-      <input type="number" class="form-control tsCell" name="timesheet[sun]">
-      <span type="text" class="form-control tsCell" name="timesheet[total]"></span>
-    </div>
-  </div>
-  <button type="submit" class="btn btn-primary">Submit!</button>
+  <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+
 </form>
+
+<script src="/js/timesheets.js"></script>
