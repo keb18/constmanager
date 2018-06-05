@@ -21,19 +21,20 @@
               <th >Sat</th>
               <th >Sun</th>
               <th>Total</th>
+              <th>Delete</th>
           </tr>
       </thead>
       <tfoot>
           <tr>
             <th class="totalHours" colspan="4">TOTAL HOURS</th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
+            <th>0</th>
+            <th>0</th>
+            <th>0</th>
+            <th>0</th>
+            <th>0</th>
+            <th>0</th>
+            <th>0</th>
+            <th>0</th>
           </tr>
         </tfoot>
       <tbody>
@@ -41,14 +42,15 @@
               <td><input type="text" name="timesheet[projectNumber]"></td>
               <td name="timesheet[projectName]"></td>
               <td><input type="text" name="timesheet[projectDescription]"></td>
-              <td><input type="number" name="timesheet[mon]" value="7.5"></td>
-              <td><input type="number" name="timesheet[tue]"></td>
-              <td><input type="number" name="timesheet[wed]"></td>
-              <td><input type="number" name="timesheet[thu]"></td>
-              <td><input type="number" name="timesheet[fri]"></td>
-              <td><input type="number" name="timesheet[sat]"></td>
-              <td><input type="number" name="timesheet[sun]"></td>
-              <td type="number" name="timesheet[projectTotal]"></td>
+              <td><input step="0.1" min="0" type="number" name="timesheet[mon]"></td>
+              <td><input step="0.1" min="0" type="number" name="timesheet[tue]"></td>
+              <td><input step="0.1" min="0" type="number" name="timesheet[wed]"></td>
+              <td><input step="0.1" min="0" type="number" name="timesheet[thu]"></td>
+              <td><input step="0.1" min="0" type="number" name="timesheet[fri]"></td>
+              <td><input step="0.1" min="0" type="number" name="timesheet[sat]"></td>
+              <td><input step="0.1" min="0" type="number" name="timesheet[sun]"></td>
+              <td>0</td>
+              <td></td>
       </tbody>
   </table>
 
