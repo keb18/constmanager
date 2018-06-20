@@ -4,9 +4,9 @@
 
 
 
-<form class="tablist-views" action="/<%= currentCompany._id %>/user/<%= currentUser._id %>" method="POST">
+<form class="tablist-views timesheets" action="/<%= currentCompany._id %>/user/<%= currentUser._id %>" method="POST">
 
-  <table class="table table-bordered table-hover text-center table-sm table-responsive newRow calculateTotal">
+  <table class="table table-bordered table-hover text-center table-sm table-responsive timesheetTable">
       <thead class="tableHeader">
           <tr>
               <th style="width: 5%;">#</th>
@@ -40,7 +40,7 @@
       <tbody>
               <td>1</td>
               <td><input type="text" name="timesheet[projectNumber]"></td>
-              <td name="timesheet[projectName]"></td>
+              <td><input type="text" name="timesheet[projectName]" disabled></td>
               <td><input type="text" name="timesheet[projectDescription]"></td>
               <td><input step="0.1" min="0" type="number" name="timesheet[mon]"></td>
               <td><input step="0.1" min="0" type="number" name="timesheet[tue]"></td>

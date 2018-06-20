@@ -1,11 +1,15 @@
-// Add new row
-document.querySelector('.table').addEventListener('click', addNewRow);
-// Calculate the total sum of hours
-document.querySelector('.table').addEventListener('keyup', calculateTime);
-// Delete row
-document.querySelector('.table').addEventListener('click', deleteRow)
+// ========================================
+// Logic for inputing values into the table
+// ========================================
 
-const table = document.querySelector('.table');
+// Add new row
+document.querySelector('.timesheetTable').addEventListener('click', addNewRow);
+// Calculate the total sum of hours
+document.querySelector('.timesheetTable').addEventListener('keyup', calculateTime);
+// Delete row
+document.querySelector('.timesheetTable').addEventListener('click', deleteRow)
+
+const table = document.querySelector('.timesheetTable');
 const tableBody = table.getElementsByTagName('tbody')[0];
 const tableFooter = table.getElementsByTagName('tfoot')[0].rows[0];
 
@@ -24,7 +28,7 @@ function deleteRow(e) {
     rowToDelete = e.path[1].parentElement.rowIndex;
     changeCol = e.path[1].cellIndex;
     if (changeCol === 12 && rowToDelete > 0) {
-        document.querySelector('.table').deleteRow(rowToDelete);
+        document.querySelector('.timesheetTable').deleteRow(rowToDelete);
         for (let currentCol = 4; currentCol < 11; currentCol++) {
             updateDayTime(currentCol);
         }
@@ -40,7 +44,6 @@ function updateProjectTime(changeRow) {
         let cellValue = tableBody.rows[changeRow - 1].cells[cellCol]
             .getElementsByTagName('input')[0].value;
         sumRow += Number(cellValue);
-        console.log(`Selected row: ${cellValue}`);
     }
     const totalProject = tableBody.rows[changeRow - 1].cells[11];
     totalProject.innerHTML = sumRow.toPrecision(3);
@@ -67,7 +70,7 @@ function updateDayTime(changeCol) {
 }
 
 
-// Logic for updating the total time spent this week
+// Update the total time spent this week
 function updateTotalTime() {
     let tableRows = tableBody.rows.length;
     let sumTotal = 0;
@@ -83,7 +86,7 @@ function updateTotalTime() {
 
 // Add new row to table logic
 function addNewRow(e) {
-    const table = document.querySelector('.table').getElementsByTagName('tbody')[0];
+    const table = document.querySelector('.timesheetTable').getElementsByTagName('tbody')[0];
     tableRowNumber = table.childElementCount;
     clickedRow = e.path[1].parentElement.rowIndex;
     clickedColumn = e.path[1].cellIndex;
@@ -96,7 +99,7 @@ function addNewRow(e) {
         let cellsList = [
             `<td>${tableRowNumber + 1}</td>`,
             '<td><input type="text" name="timesheet[projectNumber]"></td>',
-            '<td type="text" name="timesheet[projectName]"></td>',
+            '<td><input type="text" name="timesheet[projectName]" disabled></td>',
             '<td><input type="text" name="timesheet[projectDescription]"></td>',
             '<td><input step="0.1" min="0" type="number" id="hours" name="timesheet[mon]"></td>',
             '<td><input step="0.1" min="0" type="number" name="timesheet[tue]"></td>',
@@ -116,3 +119,38 @@ function addNewRow(e) {
         }
     }
 };
+
+// =================================================
+// Logic for saving/submiting timesheets to database
+// =================================================
+
+// Convert the table values to json
+let rows = table.getElementsByTagName('tbody')[0].rows;
+let timesheetList = {};
+for (let i = 0; i < rows.length - 1; i++) {
+    let projectNo = rows[i].getElementsByTagName('input')[0].value;
+    let projectName = rows[i].getElementsByTagName('input')[1].value;
+    let projectDesc = rows[i].getElementsByTagName('input')[2].value;
+    let projectTime = parseInt(tableBody.rows[i].cells[11].innerText);
+
+    projectArr = {
+        "name": projectName,
+        "description": projectDesc,
+        "time": projectTime
+    };
+
+    timesheetList[projectNo] = projectArr;
+}
+
+
+// Fetch information from the database
+function getUserTimes() {
+    fetch(window.location.href + '/timesheets')//'http://127.0.0.1:3000/5aff2106ee464f54902b0297/user/5aff2106ee464f54902b0296')
+}
+
+// Save to database
+
+function getUserTimes() {
+    fetch(window.location.href + '/timesheets')//'http://127.0.0.1:3000/5aff2106ee464f54902b0297/user/5aff2106ee464f54902b0296')
+}
+
