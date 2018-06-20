@@ -12,7 +12,7 @@ let mid = require("../middleware");
 
 // GET LAST TIMESHEET
 // SHOW MORE INFO ABOUT ONE PROJECT
-router.get('/:companyId/user/:userId',
+router.get('/:companyId/user/:userId/timesheet/save',
   mid.isLoggedIn,
   mid.disableCache,
   mid.getCompany,
