@@ -30,7 +30,6 @@ router.get('/:companyId/user/:userId/timesheet/project',
   mid.getCompany,
   (req, res) => {
     console.log('Get request received')
-    console.log(req.params.userId)
     // find project with provided id and serve it to the template
     User.findById(req.params.userId, (err, foundUser) => {
       if (err) {
