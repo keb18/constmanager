@@ -24,6 +24,24 @@ router.get('/:companyId/user/:userId',
 
 
 // GET LAST TIMESHEET
+router.get('/:companyId/user/:userId/timesheet',
+  mid.isLoggedIn,
+  mid.disableCache,
+  mid.getCompany,
+  (req, res) => {
+    console.log('Get request received')
+    // find project with provided id and serve it to the template
+    User.findById(req.params.userId, (err, foundUser) => {
+      if (err) {
+        mid.errorDb();
+        req.flash("error", "User was not found in the database.");
+        res.redirect('back');
+      }
+      return res.json(foundUser)
+    });
+  });
+
+// GET PROJECT NAME TIMESHEET
 router.get('/:companyId/user/:userId/timesheet/project',
   mid.isLoggedIn,
   mid.disableCache,
@@ -39,9 +57,9 @@ router.get('/:companyId/user/:userId/timesheet/project',
       }
       return res.json(foundUser)
     });
-    // console.log(req);
-    // plm = {'response': 'Here is your data.'};
-    // return res.json(plm)
   });
+
+
+
 
 module.exports = router;

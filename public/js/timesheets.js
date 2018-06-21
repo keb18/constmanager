@@ -136,56 +136,116 @@ function rowRenumber() {
 // =================================================
 
 // Convert the timesheet table values to json
-let rows = table.getElementsByTagName('tbody')[0].rows;
-let timesheetList = {};
-let projectArr = {};
-for (let i = 0; i < rows.length - 1; i++) {
-    let projectNo = rows[i].getElementsByTagName('input')[0].value;
-    let projectName = rows[i].getElementsByTagName('input')[1].value;
-    let projectDesc = rows[i].getElementsByTagName('input')[2].value;
-    let projectTime = parseInt(tableBody.rows[i].cells[11].innerText);
+function currSheet() {
+    let rows = table.getElementsByTagName('tbody')[0].rows;
+    let timesheetList = {};
+    let projectArr = {};
+    for (let i = 0; i < rows.length - 1; i++) {
+        let projectNo = rows[i].getElementsByTagName('input')[0].value;
+        let projectName = rows[i].getElementsByTagName('input')[1].value;
+        let projectDesc = rows[i].getElementsByTagName('input')[2].value;
+        let projectTime = parseInt(tableBody.rows[i].cells[11].innerText);
 
-    projectArr = {
-        "name": projectName,
-        "description": projectDesc,
-        "time": projectTime
-    };
-
-    timesheetList[projectNo] = projectArr;
+        projectArr = {
+            "name": projectName,
+            "description": projectDesc,
+            "time": projectTime
+        };
+        timesheetList[projectNo] = projectArr;
+    }
+    return timesheetList;
 }
 
+// ==============
+// Requests logic
+// ==============
 
-// Find the project name from the project number
-
-
+// Create constructor
 function timesheetReq() {
     this.http = new XMLHttpRequest();
 }
 
-// Find the project name from the project number
-timesheetReq.prototype.get = function(url, e) {
-    this.http.open('GET', url, true);
+// Instantiate timesheetReq
+const http = new timesheetReq;
 
+// GET
+timesheetReq.prototype.get = function (url, callback) {
+    this.http.open('GET', url, true);
+    this.http.withCredentials = true;
     let self = this;
-    this.http.onload = function(){
-        if(self.http.status === 200){
-            console.log(self.http.responseText);
+    this.http.onload = function () {
+        if (self.http.status === 200) {
+            const response = JSON.parse(this.responseText);
+            // console.log(response);
+            callback(null, response); // error is the first parameter sent back
+        } else {
+            callback('Error: ' + self.http.status);
         }
     }
     this.http.send();
+}
+
+
+// =============================================
+// Request the project name being inputted
+function getProjectName(e){
+    http.get(`${window.location.href}/project`, (err, currProject) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(currProject);
+        }
+    });
+    // Add preventDefault to make multiple requests
     e.preventDefault();
 }
-// Save the timesheet to server
 
-// Edit the timesheet and save to server
 
-// Delete the timesheet from server (only if not submitted)
 
-const http = new timesheetReq;
+// Find current clicked cell
+document.querySelector('.timesheetTable').addEventListener('blur', currCell);
 
-document.querySelector('.btn-save').addEventListener('click', function(){
-    http.get(`${window.location.href}/timesheet/project`);
-});
+function currCell(e) {
+    let clickedRow = e.path[1].parentElement.rowIndex;
+    let clickedColumn = e.path[1].cellIndex;
+    clickedCell = [clickedRow, clickedColumn];
+    return clickedCell;
+}
+
+// ===================================================================
+// Request current last saved timesheet when opening the timesheet tab
+document.getElementById('time-sheet-tab').addEventListener('click', getLastSheet);
+function getLastSheet(e) {
+    http.get(`${window.location.href}/timesheet`, (err, lastSheet) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(lastSheet);
+        }
+    });
+    // Add preventDefault to make multiple requests
+    e.preventDefault();
+}
+
+
+// =======================================
+// (GET) Request previous / next timesheet
+
+
+// =========================
+// (POST) Save new timesheet
+timesheetReq.prototype.post = function (url, data, callback) {
+
+}
+
+// ========================================================================
+// (PUT) Update the current timesheet and save to server (if not submitted)
+
+
+// ===========================================================
+// (DELETE) Clear the timesheet from server (if not submitted)
+
+
 
 
 
@@ -242,14 +302,14 @@ document.querySelector('.btn-save').addEventListener('click', function(){
 
 
 
-// Fetch information from the database
-function getUserTimes() {
-    fetch(window.location.href + '/timesheets')//'http://127.0.0.1:3000/5aff2106ee464f54902b0297/user/5aff2106ee464f54902b0296')
-}
+// // Fetch information from the database
+// function getUserTimes() {
+//     fetch(window.location.href + '/timesheets')//'http://127.0.0.1:3000/5aff2106ee464f54902b0297/user/5aff2106ee464f54902b0296')
+// }
 
-// Save to database
+// // Save to database
 
-function getUserTimes() {
-    fetch(window.location.href + '/timesheets')//'http://127.0.0.1:3000/5aff2106ee464f54902b0297/user/5aff2106ee464f54902b0296')
-}
+// function getUserTimes() {
+//     fetch(window.location.href + '/timesheets')//'http://127.0.0.1:3000/5aff2106ee464f54902b0297/user/5aff2106ee464f54902b0296')
+// }
 
