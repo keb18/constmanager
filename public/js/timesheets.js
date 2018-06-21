@@ -33,6 +33,7 @@ function deleteRow(e) {
             updateDayTime(currentCol);
         }
         updateTotalTime();
+        rowRenumber();
     }
 }
 
@@ -98,16 +99,16 @@ function addNewRow(e) {
         // Add cell information:
         let cellsList = [
             `<td>${tableRowNumber + 1}</td>`,
-            '<td><input type="text" name="timesheet[projectNumber]"></td>',
-            '<td><input type="text" name="timesheet[projectName]" disabled></td>',
-            '<td><input type="text" name="timesheet[projectDescription]"></td>',
-            '<td><input step="0.1" min="0" type="number" id="hours" name="timesheet[mon]"></td>',
-            '<td><input step="0.1" min="0" type="number" name="timesheet[tue]"></td>',
-            '<td><input step="0.1" min="0" type="number" name="timesheet[wed]"></td>',
-            '<td><input step="0.1" min="0" type="number" name="timesheet[thu]"></td>',
-            '<td><input step="0.1" min="0" type="number" name="timesheet[fri]"></td>',
-            '<td><input step="0.1" min="0" type="number" name="timesheet[sat]"></td>',
-            '<td><input step="0.1" min="0" type="number" name="timesheet[sun]"></td>',
+            '<td><input type="text" name="timesheet[projectNumber]" autocomplete="nope"></td>',
+            '<td><input type="text" name="timesheet[projectName]" disabled autocomplete="nope"></td>',
+            '<td><input type="text" name="timesheet[projectDescription]" autocomplete="nope"></td>',
+            '<td><input step="0.1" min="0" type="number" id="hours" name="timesheet[mon]" autocomplete="nope"></td>',
+            '<td><input step="0.1" min="0" type="number" name="timesheet[tue]" autocomplete="nope"></td>',
+            '<td><input step="0.1" min="0" type="number" name="timesheet[wed]" autocomplete="nope"></td>',
+            '<td><input step="0.1" min="0" type="number" name="timesheet[thu]" autocomplete="nope"></td>',
+            '<td><input step="0.1" min="0" type="number" name="timesheet[fri]" autocomplete="nope"></td>',
+            '<td><input step="0.1" min="0" type="number" name="timesheet[sat]" autocomplete="nope"></td>',
+            '<td><input step="0.1" min="0" type="number" name="timesheet[sun]" autocomplete="nope"></td>',
             '<td>0</td>',
             '<td><i class="fa fa-fw fa-trash"></i></td>'
         ];
@@ -120,13 +121,24 @@ function addNewRow(e) {
     }
 };
 
+// Renumber the rows after row is deleted
+function rowRenumber() {
+    let tableRows = tableBody.rows.length;
+    let cellRow = 0;
+    for (cellRow; cellRow < tableRows; cellRow++) {
+        cell = tableBody.rows[cellRow].cells[0]
+        cell.innerHTML = cellRow + 1;
+    }
+}
+
 // =================================================
-// Logic for saving/submiting timesheets to database
+// Logic for working with the server database
 // =================================================
 
-// Convert the table values to json
+// Convert the timesheet table values to json
 let rows = table.getElementsByTagName('tbody')[0].rows;
 let timesheetList = {};
+let projectArr = {};
 for (let i = 0; i < rows.length - 1; i++) {
     let projectNo = rows[i].getElementsByTagName('input')[0].value;
     let projectName = rows[i].getElementsByTagName('input')[1].value;
@@ -141,6 +153,93 @@ for (let i = 0; i < rows.length - 1; i++) {
 
     timesheetList[projectNo] = projectArr;
 }
+
+
+// Find the project name from the project number
+
+
+function timesheetReq() {
+    this.http = new XMLHttpRequest();
+}
+
+// Find the project name from the project number
+timesheetReq.prototype.get = function(url, e) {
+    this.http.open('GET', url, true);
+
+    let self = this;
+    this.http.onload = function(){
+        if(self.http.status === 200){
+            console.log(self.http.responseText);
+        }
+    }
+    this.http.send();
+    e.preventDefault();
+}
+// Save the timesheet to server
+
+// Edit the timesheet and save to server
+
+// Delete the timesheet from server (only if not submitted)
+
+const http = new timesheetReq;
+
+document.querySelector('.btn-save').addEventListener('click', function(){
+    http.get(`${window.location.href}/timesheet/project`);
+});
+
+
+
+
+
+// // Find the project name from the project number
+// document.querySelector('.btn-save').addEventListener('click', getProjectName);
+
+// function getProjectName(e) {
+//     const xhr = new XMLHttpRequest();
+
+//     xhr.open('GET', `${window.location.href}/timesheet/project`, true);
+//     xhr.withCredentials = true;
+//     xhr.onload = function() {
+//         if(this.status === 200){
+//             const response = JSON.parse(this.responseText);
+//             console.log(response)
+//         }
+//     }
+//     xhr.send();
+//     e.preventDefault();
+// }
+
+// // Find the project name from the project number
+// document.querySelector('.btn-save').addEventListener('click', getProjectName);
+// function getProjectName() {
+//     fetch(window.location.href + '/timesheet/project', { credentials: 'include' })
+//     .then(res => res.json())
+//     .then(data => console.log(data.response));
+// }
+
+
+// // Find the project name from the project number
+// class Timesheet {
+//     getProject(url) {
+//         return new Promise((resolve, reject) => {
+//             fetch(url, { credentials: 'same-origin' })
+//                 .then(res => res.json())
+//                 .then(data => resolve(data))
+//                 .catch(err => reject(err));
+//         });
+//     }
+// }
+
+// const timesheet = new Timesheet;
+// // Get project name
+// document.querySelector('.btn-save').addEventListener('click', function () {
+//     timesheet.getProject(window.location.href + '/timesheet/project')
+//     .then(data => console.log(data.response))
+//     .catch(err => console.log(err));
+//     // console.log(project);
+// });
+
+
 
 
 // Fetch information from the database

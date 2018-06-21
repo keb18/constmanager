@@ -10,9 +10,8 @@ let Project = require('../models/project'),
 let mid = require("../middleware");
 
 
-// GET LAST TIMESHEET
-// SHOW MORE INFO ABOUT ONE PROJECT
-router.get('/:companyId/user/:userId/timesheet/save',
+// RENDER THE USER PAGE
+router.get('/:companyId/user/:userId',
   mid.isLoggedIn,
   mid.disableCache,
   mid.getCompany,
@@ -23,5 +22,27 @@ router.get('/:companyId/user/:userId/timesheet/save',
     });
   });
 
+
+// GET LAST TIMESHEET
+router.get('/:companyId/user/:userId/timesheet/project',
+  mid.isLoggedIn,
+  mid.disableCache,
+  mid.getCompany,
+  (req, res) => {
+    console.log('Get request received')
+    console.log(req.params.userId)
+    // find project with provided id and serve it to the template
+    User.findById(req.params.userId, (err, foundUser) => {
+      if (err) {
+        mid.errorDb();
+        req.flash("error", "The user was not found in the database.");
+        res.redirect('back');
+      }
+      return res.json(foundUser)
+    });
+    // console.log(req);
+    // plm = {'response': 'Here is your data.'};
+    // return res.json(plm)
+  });
 
 module.exports = router;

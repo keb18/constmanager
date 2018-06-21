@@ -1,65 +1,83 @@
-  <h4>Timesheet week starting from: 28.05.2018</h4>
+<h4>Timesheet week starting from: 28.05.2018</h4>
 
 <link rel="stylesheet" href="/css/timesheets.css">
 
 
+<table class="table table-bordered table-hover text-center table-sm table-responsive timesheetTable">
+  <thead class="tableHeader">
+    <tr>
+      <th style="width: 5%;">#</th>
+      <th style="width: 10%;">Project</th>
+      <th style="width: 15%;">Name</th>
+      <th style="width: 25%;">Description</th>
+      <th style="width: 5%;">Mon</th>
+      <th style="width: 5%;">Tue</th>
+      <th style="width: 5%;">Wed</th>
+      <th style="width: 5%;">Thu</th>
+      <th style="width: 5%;">Fri</th>
+      <th style="width: 5%;">Sat</th>
+      <th style="width: 5%;">Sun</th>
+      <th style="width: 4%;">Total</th>
+      <th style="width: 6%;">Delete</th>
+    </tr>
+  </thead>
+  <tfoot>
+    <tr>
+      <th class="totalHours" colspan="4">TOTAL HOURS</th>
+      <th>0</th>
+      <th>0</th>
+      <th>0</th>
+      <th>0</th>
+      <th>0</th>
+      <th>0</th>
+      <th>0</th>
+      <th>0</th>
+    </tr>
+  </tfoot>
+  <tbody>
+    <td>1</td>
+    <td>
+      <input type="text" name="timesheet[projectNumber]" autocomplete="nope">
+    </td>
+    <td>
+      <input type="text" name="timesheet[projectName]" disabled autocomplete="nope">
+    </td>
+    <td>
+      <input type="text" name="timesheet[projectDescription]" autocomplete="nope">
+    </td>
+    <td>
+      <input step="0.1" min="0" type="number" name="timesheet[mon]" autocomplete="nope">
+    </td>
+    <td>
+      <input step="0.1" min="0" type="number" name="timesheet[tue]" autocomplete="nope">
+    </td>
+    <td>
+      <input step="0.1" min="0" type="number" name="timesheet[wed]" autocomplete="nope">
+    </td>
+    <td>
+      <input step="0.1" min="0" type="number" name="timesheet[thu]" autocomplete="nope">
+    </td>
+    <td>
+      <input step="0.1" min="0" type="number" name="timesheet[fri]" autocomplete="nope">
+    </td>
+    <td>
+      <input step="0.1" min="0" type="number" name="timesheet[sat]" autocomplete="nope">
+    </td>
+    <td>
+      <input step="0.1" min="0" type="number" name="timesheet[sun]" autocomplete="nope">
+    </td>
+    <td>0</td>
+    <td></td>
+  </tbody>
+</table>
 
-<form class="tablist-views timesheets" action="/<%= currentCompany._id %>/user/<%= currentUser._id %>" method="POST">
-
-  <table class="table table-bordered table-hover text-center table-sm table-responsive timesheetTable">
-      <thead class="tableHeader">
-          <tr>
-              <th style="width: 5%;">#</th>
-              <th style="width: 10%;">Project</th>
-              <th style="width: 15%;">Name</th>
-              <th style="width: 25%;">Description</th>
-              <th style="width: 5%;">Mon</th>
-              <th style="width: 5%;">Tue</th>
-              <th style="width: 5%;">Wed</th>
-              <th style="width: 5%;">Thu</th>
-              <th style="width: 5%;">Fri</th>
-              <th style="width: 5%;">Sat</th>
-              <th style="width: 5%;">Sun</th>
-              <th style="width: 4%;">Total</th>
-              <th style="width: 6%;">Delete</th>
-          </tr>
-      </thead>
-      <tfoot>
-          <tr>
-            <th class="totalHours" colspan="4">TOTAL HOURS</th>
-            <th>0</th>
-            <th>0</th>
-            <th>0</th>
-            <th>0</th>
-            <th>0</th>
-            <th>0</th>
-            <th>0</th>
-            <th>0</th>
-          </tr>
-        </tfoot>
-      <tbody>
-              <td>1</td>
-              <td><input type="text" name="timesheet[projectNumber]"></td>
-              <td><input type="text" name="timesheet[projectName]" disabled></td>
-              <td><input type="text" name="timesheet[projectDescription]"></td>
-              <td><input step="0.1" min="0" type="number" name="timesheet[mon]"></td>
-              <td><input step="0.1" min="0" type="number" name="timesheet[tue]"></td>
-              <td><input step="0.1" min="0" type="number" name="timesheet[wed]"></td>
-              <td><input step="0.1" min="0" type="number" name="timesheet[thu]"></td>
-              <td><input step="0.1" min="0" type="number" name="timesheet[fri]"></td>
-              <td><input step="0.1" min="0" type="number" name="timesheet[sat]"></td>
-              <td><input step="0.1" min="0" type="number" name="timesheet[sun]"></td>
-              <td>0</td>
-              <td></td>
-      </tbody>
-  </table>
-
-    <div class="tableButtons">
-      <a class="btn btn-primary saveSheet" href="#">Save</a>
-    </div>
-
-  <button type="submit" name="submit" class="btn btn-primary">Submit</button>
-
-</form>
+<div class="container-fluid">
+  <div class="tableButtons">
+    <a class="btn btn-primary btn-save" href="#">Save</a>
+  </div>
+  <div class="tableButtons">
+    <a class="btn btn-primary btn-submit" href="#">Submit</a>
+  </div>
+</div>
 
 <script src="/js/timesheets.js"></script>
