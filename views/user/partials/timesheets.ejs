@@ -35,39 +35,41 @@
     </tr>
   </tfoot>
   <tbody>
-    <td>1</td>
-    <td>
-      <input type="text" name="timesheet[projectNumber]" autocomplete="nope">
-    </td>
-    <td>
-      <input type="text" name="timesheet[projectName]" disabled autocomplete="nope">
-    </td>
-    <td>
-      <input type="text" name="timesheet[projectDescription]" autocomplete="nope">
-    </td>
-    <td>
-      <input step="0.1" min="0" type="number" name="timesheet[mon]" autocomplete="nope">
-    </td>
-    <td>
-      <input step="0.1" min="0" type="number" name="timesheet[tue]" autocomplete="nope">
-    </td>
-    <td>
-      <input step="0.1" min="0" type="number" name="timesheet[wed]" autocomplete="nope">
-    </td>
-    <td>
-      <input step="0.1" min="0" type="number" name="timesheet[thu]" autocomplete="nope">
-    </td>
-    <td>
-      <input step="0.1" min="0" type="number" name="timesheet[fri]" autocomplete="nope">
-    </td>
-    <td>
-      <input step="0.1" min="0" type="number" name="timesheet[sat]" autocomplete="nope">
-    </td>
-    <td>
-      <input step="0.1" min="0" type="number" name="timesheet[sun]" autocomplete="nope">
-    </td>
-    <td>0</td>
-    <td></td>
+    <tr>
+      <td>1</td>
+      <td>
+        <input id="projectNumber" type="text" name="timesheet[projectNumber]" autocomplete="nope">
+      </td>
+      <td>
+        <input id="projectName" type="text" name="timesheet[projectName]" disabled autocomplete="nope">
+      </td>
+      <td>
+        <input type="text" name="timesheet[projectDescription]" autocomplete="nope">
+      </td>
+      <td>
+        <input step="0.1" min="0" type="number" name="timesheet[mon]" autocomplete="nope">
+      </td>
+      <td>
+        <input step="0.1" min="0" type="number" name="timesheet[tue]" autocomplete="nope">
+      </td>
+      <td>
+        <input step="0.1" min="0" type="number" name="timesheet[wed]" autocomplete="nope">
+      </td>
+      <td>
+        <input step="0.1" min="0" type="number" name="timesheet[thu]" autocomplete="nope">
+      </td>
+      <td>
+        <input step="0.1" min="0" type="number" name="timesheet[fri]" autocomplete="nope">
+      </td>
+      <td>
+        <input step="0.1" min="0" type="number" name="timesheet[sat]" autocomplete="nope">
+      </td>
+      <td>
+        <input step="0.1" min="0" type="number" name="timesheet[sun]" autocomplete="nope">
+      </td>
+      <td>0</td>
+      <td></td>
+    </tr>
   </tbody>
 </table>
 
@@ -80,4 +82,4 @@
   </div>
 </div>
 
-<script src="/js/timesheets.js"></script>
+<script src="/js/timesheets.js" type="module"></script>

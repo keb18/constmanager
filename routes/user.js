@@ -37,7 +37,7 @@ router.get('/:companyId/user/:userId/timesheet',
         req.flash("error", "User was not found in the database.");
         res.redirect('back');
       }
-      return res.json(foundUser)
+      return res.json(foundUser.projects)
     });
   });
 

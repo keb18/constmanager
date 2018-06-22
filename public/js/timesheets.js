@@ -16,8 +16,8 @@ const tableFooter = table.getElementsByTagName('tfoot')[0].rows[0];
 // Update cells for the time spent
 function calculateTime(e) {
     // Find the row/column where changes are made
-    changeRow = e.path[1].parentElement.rowIndex;
-    changeCol = e.path[1].cellIndex;
+    let changeRow = e.path[1].parentElement.rowIndex;
+    let changeCol = e.path[1].cellIndex;
 
     updateProjectTime(changeRow);
     updateDayTime(changeCol);
@@ -25,8 +25,8 @@ function calculateTime(e) {
 }
 
 function deleteRow(e) {
-    rowToDelete = e.path[1].parentElement.rowIndex;
-    changeCol = e.path[1].cellIndex;
+    let rowToDelete = e.path[1].parentElement.rowIndex;
+    let changeCol = e.path[1].cellIndex;
     if (changeCol === 12 && rowToDelete > 0) {
         document.querySelector('.timesheetTable').deleteRow(rowToDelete);
         for (let currentCol = 4; currentCol < 11; currentCol++) {
@@ -88,9 +88,9 @@ function updateTotalTime() {
 // Add new row to table logic
 function addNewRow(e) {
     const table = document.querySelector('.timesheetTable').getElementsByTagName('tbody')[0];
-    tableRowNumber = table.childElementCount;
-    clickedRow = e.path[1].parentElement.rowIndex;
-    clickedColumn = e.path[1].cellIndex;
+    let tableRowNumber = table.childElementCount;
+    let clickedRow = e.path[1].parentElement.rowIndex;
+    let clickedColumn = e.path[1].cellIndex;
 
     if (clickedRow === tableRowNumber && clickedColumn === 1) {
         // Create an empty <tr> element and add it to the last position of the table:
@@ -99,8 +99,8 @@ function addNewRow(e) {
         // Add cell information:
         let cellsList = [
             `<td>${tableRowNumber + 1}</td>`,
-            '<td><input type="text" name="timesheet[projectNumber]" autocomplete="nope"></td>',
-            '<td><input type="text" name="timesheet[projectName]" disabled autocomplete="nope"></td>',
+            '<td><input id="projectNumber" type="text" name="timesheet[projectNumber]" autocomplete="nope"></td>',
+            '<td><input id="projectName" type="text" name="timesheet[projectName]" disabled autocomplete="nope"></td>',
             '<td><input type="text" name="timesheet[projectDescription]" autocomplete="nope"></td>',
             '<td><input step="0.1" min="0" type="number" id="hours" name="timesheet[mon]" autocomplete="nope"></td>',
             '<td><input step="0.1" min="0" type="number" name="timesheet[tue]" autocomplete="nope"></td>',
@@ -114,10 +114,11 @@ function addNewRow(e) {
         ];
 
         // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
-        for (i = 0; i < 13; i++) {
+        for (let i = 0; i < 13; i++) {
             let cell = row.insertCell(i);
             cell.innerHTML = cellsList[i];
         }
+        getProjectName();
     }
 };
 
@@ -126,7 +127,7 @@ function rowRenumber() {
     let tableRows = tableBody.rows.length;
     let cellRow = 0;
     for (cellRow; cellRow < tableRows; cellRow++) {
-        cell = tableBody.rows[cellRow].cells[0]
+        let cell = tableBody.rows[cellRow].cells[0]
         cell.innerHTML = cellRow + 1;
     }
 }
@@ -156,76 +157,52 @@ function currSheet() {
     return timesheetList;
 }
 
+
 // ==============
-// Requests logic
+// Logic for server requests
 // ==============
 
-// Create constructor
-function timesheetReq() {
-    this.http = new XMLHttpRequest();
-}
+import { ServerRequest } from './main.js';
+const http = new ServerRequest;
 
-// Instantiate timesheetReq
-const http = new timesheetReq;
-
-// GET
-timesheetReq.prototype.get = function (url, callback) {
-    this.http.open('GET', url, true);
-    this.http.withCredentials = true;
-    let self = this;
-    this.http.onload = function () {
-        if (self.http.status === 200) {
-            const response = JSON.parse(this.responseText);
-            // console.log(response);
-            callback(null, response); // error is the first parameter sent back
-        } else {
-            callback('Error: ' + self.http.status);
-        }
+// Get project name after user finishes entering the project number
+function getProjectName(){
+    console.log('getProjectName called');
+    let tableRows = table.getElementsByTagName('tbody')[0].children;
+    for (let i = 0; i < tableRows.length; i++) {
+        tableRows[i].getElementsByTagName('input')[0].addEventListener('blur', (e) => {
+            let clickedRow = e.path[1].parentElement.rowIndex - 1;
+            http.get(`${window.location.href}/timesheet`)
+                .then(data => {
+                    tableRows[clickedRow].getElementsByTagName('input')[1].value = data[0];
+                })
+                .catch(err => console.log(err));
+            e.preventDefault();
+        });
     }
-    this.http.send();
 }
 
 
-// =============================================
-// Request the project name being inputted
-function getProjectName(e){
-    http.get(`${window.location.href}/project`, (err, currProject) => {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log(currProject);
-        }
-    });
-    // Add preventDefault to make multiple requests
+
+// function getProjectName(e) {
+//     const table = document.querySelector('.timesheetTable').getElementsByTagName('tbody')[0];
+//     let tableRowNumber = table.childElementCount;
+//     let clickedRow = e.path[1].parentElement.rowIndex;
+//     let clickedColumn = e.path[1].cellIndex;
+
+//     if (clickedRow === tableRowNumber && clickedColumn === 1) {
+//         // Create an empty <tr> element and add it to the last position of the table:
+//         let row = table.insertRow();
+
+
+// Get user
+document.querySelector('.btn-save').addEventListener('click', (e) => {
+    http.get(`${window.location.href}/timesheet`)
+        .then(data => console.log(data))
+        .catch(err => console.log(err));
     e.preventDefault();
-}
+});
 
-
-
-// Find current clicked cell
-document.querySelector('.timesheetTable').addEventListener('blur', currCell);
-
-function currCell(e) {
-    let clickedRow = e.path[1].parentElement.rowIndex;
-    let clickedColumn = e.path[1].cellIndex;
-    clickedCell = [clickedRow, clickedColumn];
-    return clickedCell;
-}
-
-// ===================================================================
-// Request current last saved timesheet when opening the timesheet tab
-document.getElementById('time-sheet-tab').addEventListener('click', getLastSheet);
-function getLastSheet(e) {
-    http.get(`${window.location.href}/timesheet`, (err, lastSheet) => {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log(lastSheet);
-        }
-    });
-    // Add preventDefault to make multiple requests
-    e.preventDefault();
-}
 
 
 // =======================================
@@ -234,9 +211,7 @@ function getLastSheet(e) {
 
 // =========================
 // (POST) Save new timesheet
-timesheetReq.prototype.post = function (url, data, callback) {
 
-}
 
 // ========================================================================
 // (PUT) Update the current timesheet and save to server (if not submitted)
@@ -244,72 +219,4 @@ timesheetReq.prototype.post = function (url, data, callback) {
 
 // ===========================================================
 // (DELETE) Clear the timesheet from server (if not submitted)
-
-
-
-
-
-
-
-// // Find the project name from the project number
-// document.querySelector('.btn-save').addEventListener('click', getProjectName);
-
-// function getProjectName(e) {
-//     const xhr = new XMLHttpRequest();
-
-//     xhr.open('GET', `${window.location.href}/timesheet/project`, true);
-//     xhr.withCredentials = true;
-//     xhr.onload = function() {
-//         if(this.status === 200){
-//             const response = JSON.parse(this.responseText);
-//             console.log(response)
-//         }
-//     }
-//     xhr.send();
-//     e.preventDefault();
-// }
-
-// // Find the project name from the project number
-// document.querySelector('.btn-save').addEventListener('click', getProjectName);
-// function getProjectName() {
-//     fetch(window.location.href + '/timesheet/project', { credentials: 'include' })
-//     .then(res => res.json())
-//     .then(data => console.log(data.response));
-// }
-
-
-// // Find the project name from the project number
-// class Timesheet {
-//     getProject(url) {
-//         return new Promise((resolve, reject) => {
-//             fetch(url, { credentials: 'same-origin' })
-//                 .then(res => res.json())
-//                 .then(data => resolve(data))
-//                 .catch(err => reject(err));
-//         });
-//     }
-// }
-
-// const timesheet = new Timesheet;
-// // Get project name
-// document.querySelector('.btn-save').addEventListener('click', function () {
-//     timesheet.getProject(window.location.href + '/timesheet/project')
-//     .then(data => console.log(data.response))
-//     .catch(err => console.log(err));
-//     // console.log(project);
-// });
-
-
-
-
-// // Fetch information from the database
-// function getUserTimes() {
-//     fetch(window.location.href + '/timesheets')//'http://127.0.0.1:3000/5aff2106ee464f54902b0297/user/5aff2106ee464f54902b0296')
-// }
-
-// // Save to database
-
-// function getUserTimes() {
-//     fetch(window.location.href + '/timesheets')//'http://127.0.0.1:3000/5aff2106ee464f54902b0297/user/5aff2106ee464f54902b0296')
-// }
 
