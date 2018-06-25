@@ -62,7 +62,7 @@ router.post('/:companyId/project',
     });
   });
 
-
+  
 // SHOW MORE INFO ABOUT ONE PROJECT
 router.get('/:companyId/project/:projectId',
   mid.isLoggedIn,
@@ -79,8 +79,7 @@ router.get('/:companyId/project/:projectId',
       // render the project template for the specified projectid
       res.render('project/showProject', {
         project: foundProject,
-        // currentCompany from middleware
-        currentCompany: req.currentCompany
+        currentCompany: req.currentCompany // currentCompany comes from middleware
       });
     });
   });

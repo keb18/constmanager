@@ -172,7 +172,7 @@ function getProjectName(){
     for (let i = 0; i < tableRows.length; i++) {
         tableRows[i].getElementsByTagName('input')[0].addEventListener('blur', (e) => {
             let clickedRow = e.path[1].parentElement.rowIndex - 1;
-            http.get(`${window.location.href}/timesheet`)
+            http.get(`${window.location.href}/timesheet/project`)
                 .then(data => {
                     tableRows[clickedRow].getElementsByTagName('input')[1].value = data[0];
                 })

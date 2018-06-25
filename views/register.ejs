@@ -31,36 +31,36 @@
               <div class="form-row">
                 <div class="col-md-6">
                   <label for="registerInputFirstName">First name</label>
-                  <input class="form-control" id="registerInputFirstName" type="text" name="firstName" placeholder="John" required
+                  <input class="form-control" id="registerInputFirstName" type="text" name="user[firstName]" placeholder="John" required
                     oninvalid="this.setCustomValidity('Please enter first name.')" oninput="setCustomValidity('')">
                 </div>
                 <div class="col-md-6">
                   <label for="registerInputLastName">Last name</label>
-                  <input class="form-control" id="registerInputLastName" type="text" aria-describedby="nameHelp" name="lastName" placeholder="Doe"
+                  <input class="form-control" id="registerInputLastName" type="text" aria-describedby="nameHelp" name="user[lastName]" placeholder="Doe"
                     required oninvalid="this.setCustomValidity('Please enter last name.')" oninput="setCustomValidity('')">
                 </div>
               </div>
             </div>
             <div class="form-group">
               <label for="registerInputEmail">Email address</label>
-              <input class="form-control" id="registerInputEmail" type="email" aria-describedby="emailHelp" name="email" placeholder="you@example.org"
+              <input class="form-control" id="registerInputEmail" type="email" aria-describedby="emailHelp" name="user[email]" placeholder="you@example.org"
                 required oninvalid="this.setCustomValidity('Please enter email')" oninput="setCustomValidity('')">
             </div>
             <div class="form-group">
               <label for="registerInputUserName">Username</label>
-              <input class="form-control" id="registerInputUserName" type="text" aria-describedby="usernameHelp" name="username" placeholder="Enter username"
+              <input class="form-control" id="registerInputUserName" type="text" aria-describedby="usernameHelp" name="user[username]" placeholder="Enter username"
                 required oninvalid="this.setCustomValidity('Please enter username')" oninput="setCustomValidity('')">
             </div>
             <div class="form-group">
               <div class="form-row">
                 <div class="col-md-6">
                   <label for="registerInputPassword1">Password</label>
-                  <input class="form-control" id="registerInputPassword" type="password" name="password" placeholder="*******" required oninvalid="this.setCustomValidity('Please enter password')"
+                  <input class="form-control" id="registerInputPassword" type="password" name="user[password]" placeholder="*******" required oninvalid="this.setCustomValidity('Please enter password')"
                     oninput="setCustomValidity('')">
                 </div>
                 <div class="col-md-6">
                   <label for="registerConfirmPassword">Confirm password</label>
-                  <input class="form-control" id="registerConfirmPassword" type="password" name="confirmPassword" placeholder="*******" required
+                  <input class="form-control" id="registerConfirmPassword" type="password" name="user[confirmPassword]" placeholder="*******" required
                     oninvalid="this.setCustomValidity('Please confirm password')" oninput="setCustomValidity('')">
                 </div>
               </div>

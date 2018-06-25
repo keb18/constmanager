@@ -104,6 +104,9 @@
                     <input type="text" class="form-control" name="project[projectDescription]" placeholder="description">
                 </div>
 
+                <input type="hidden" name="project[company]" value="<%= currentCompany._id %>">
+                <input type="hidden" name="project[user]" value="<%= currentUser._id %>">
+
                 <button type="submit" class="btn btn-primary">Submit!</button>
             </form>
         </div>

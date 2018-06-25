@@ -41,15 +41,14 @@ router.get('/:companyId/user/:userId/timesheet',
     });
   });
 
-// GET PROJECT NAME TIMESHEET
-router.get('/:companyId/user/:userId/timesheet/project',
+// GET PROJECT NAME
+router.get('/:companyId/user/:userId/timesheet/:projectName',
   mid.isLoggedIn,
   mid.disableCache,
   mid.getCompany,
   (req, res) => {
-    console.log('Get request received')
     // find project with provided id and serve it to the template
-    User.findById(req.params.userId, (err, foundUser) => {
+    Project.findById(req.params.userId, (err, foundUser) => {
       if (err) {
         mid.errorDb();
         req.flash("error", "The user was not found in the database.");

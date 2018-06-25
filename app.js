@@ -7,12 +7,12 @@ const express = require('express'),
     flash = require('connect-flash');
 
 // Set-up module imports for the mongoose schemas
-let Project = require('./models/project'),
+const Project = require('./models/project'),
     Company = require('./models/company'),
     User = require('./models/user');
 
 // Require the external routes
-let companyRoutes = require('./routes/company'),
+const companyRoutes = require('./routes/company'),
     adminRoutes = require('./routes/admin'),
     employeesRoutes = require('./routes/employees'),
     indexRoutes = require('./routes/index'),
@@ -22,12 +22,13 @@ let companyRoutes = require('./routes/company'),
 // Setup moment for use
 app.locals.moment = require("moment");
 
-// Passport configuration
+// Express-session configuration
 app.use(require('express-session')({
     secret: "put the keyboard on your head",
     resave: false,
     saveUninitialized: false
 }));
+// Passport configuration
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -38,9 +39,10 @@ passport.deserializeUser(User.deserializeUser());
 
 
 // Connect to the mongodb company server
-mongoose.connect('mongodb://localhost/main_database')
-    .then(() => { console.log('Successfully connected to the MongoDB database.') })
-    .catch(() => { console.log('Error connecting to the MongoDB database') });
+// mongoose.connect('mongodb://localhost/main_database')
+mongoose.connect('mongodb://admin:Noiembrie11@ds161740.mlab.com:61740/constmanager')
+    .then(() => console.log('Successfully connected to the MongoDB database.'))
+    .catch(err => console.log(err));
 
 // Make public folder accessible by default
 app.use(express.static(__dirname + '/public'));
@@ -54,10 +56,8 @@ app.use(flash());
 // use routes without the *.ejs extension
 app.set('view engine', 'ejs');
 
-// pass currentUser to all routes to be able to
-// use it in the header for example. This is actually
-// a middleware that will run for every route
-app.use(function (req, res, next) {
+// Global variables
+app.use((req, res, next) => {
     // Pass current logged user to all routes
     res.locals.currentUser = req.user;
     // Pass the message in any route
@@ -82,6 +82,6 @@ app.use(userRoutes);
 const hostname = '127.0.0.1';
 const port = 3000;
 
-app.listen(port, hostname, function () {
+app.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
 });
