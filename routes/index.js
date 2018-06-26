@@ -3,8 +3,7 @@ const express = require('express'),
   router = express.Router();
 
 // Set-up module imports for the mongoose schemas
-const Project = require('../models/project'),
-  Company = require('../models/company'),
+const Company = require('../models/company'),
   User = require('../models/user');
 
 // Require the middleware
@@ -23,13 +22,14 @@ router.get('/register', (req, res) => {
   res.render('register');
 });
 
+
 // Handle register logic
 router.post('/register',
   mid.checkRegisterInput,
   mid.checkExistingCompany,
   mid.checkExistingEmail,
   (req, res) => {
-    // Start registering the User using passport
+    // Create a new user
     const newUser = new User({
       username: req.body.user.username,
       firstName: req.body.user.firstName,
@@ -38,27 +38,27 @@ router.post('/register',
       accountType: "owner",
       position: "manager"
     });
-
+    // Register user
     User.register(newUser, req.body.user.password)
-      .then((user) => {
-        // Create a new company and add to the db
-        Company.create({ companyName: req.body.companyName })
-          .then(newlyCreatedCompany => {
-
-            // Associate company with new user
-            newlyCreatedCompany.users.push(user)
-            newlyCreatedCompany.save();
-
-            // Associate new user with the company
-            user.company.push(newlyCreatedCompany)
-            user.save();
-            return res.render('login');
-          })
-          .catch(err => {
-            req.flash('error', "Something went wrong when creating the company.");
-            mid.errorDb(err);
-            return res.redirect('back');
-          });
+      .then(user => {
+        return Promise.all(
+          [
+            // Create new company
+            Company.create({ companyName: req.body.companyName }),
+            user // Serve user to next promises
+          ]
+        );
+      })
+      .then(results => Promise.all(
+        [
+          results, // Serve the new company and user to use in the response 
+          pushUser(results[0], results[1]), // Push user to the company db
+          pushCompany(results[0], results[1]) // Push company to the user db
+        ]
+      ))
+      .then(resArr => {
+        req.flash("success", `${resArr[0][1].firstName} ${resArr[0][1].lastName} has been successfully registered. Please check your email to `);
+        return res.redirect(`login`); // Eventually redirect to a confirmation page
       })
       .catch(err => {
         req.flash('error', err.message);
@@ -67,75 +67,24 @@ router.post('/register',
       });
   });
 
-// // Create a new company and add to the db
-// Company.create({ companyName: req.body.companyName }, (err, newlyCreatedCompany) => {
-//   if (err) {
-//     req.flash('error', "Something went wrong when creating the company.");
-//     mid.errorDb(err);
-//     return res.redirect('back');
-//   }
-//   // Associate company with new user
-//   newlyCreatedCompany.users.push(user);
-//   newlyCreatedCompany.save();
-//   // Associate new user with the company
-//   user.company.push(newlyCreatedCompany);
-//   user.save()
-//     .then(newlyCreatedCompany => {
-//       passport.authenticate('local')(req, res, () => {
-//         res.redirect('/' + newlyCreatedCompany._id);
-//       });
-//     })
-// });
+// Associate company with new user
+function pushUser(company, user) {
+  company.users.push(user)
+  company.save()
+}
 
-// });
+// Associate new user with the company
+function pushCompany(company, user) {
+  user.company.push(company)
+  user.save()
+}
 
-
-
-
-//   let checkCompany = Company.findOne({ companyName: req.body.companyName });
-//   if (!(checkCompany.length > 0)) {
-//     req.flash('error', `Company with the name "${req.body.companyName}" already exists.`);
-//     return res.redirect('back');
-//   }
-//   // Start registering the User using passport
-//   const newUser = new User({ username: req.body.username });
-//   User.register(newUser, req.body.password, (err, user) => {
-//     if (err) {
-//       req.flash('error', err.message);
-//       mid.errorDb(err);
-//       return res.redirect('back');
-//     }
-//     // Populate the user fields
-//     user.firstName = req.body.firstName;
-//     user.lastName = req.body.lastName;
-//     user.email = req.body.email;
-//     user.accountType = "owner";
-//     user.position = "manager";
-
-//     // Create a new company and add to the db
-//     Company.create({ companyName: req.body.companyName }, (err, newlyCreatedCompany) => {
-//       if (err) {
-//         req.flash('error', "Something went wrong when creating the company.");
-//         mid.errorDb(err);
-//         return res.redirect('back');
-//       }
-//       // Associate company with new user
-//       newlyCreatedCompany.users.push(user);
-//       newlyCreatedCompany.save();
-//       // Associate new user with the company
-//       user.company.push(newlyCreatedCompany);
-//       user.save();
-//       passport.authenticate('local')(req, res, () => {
-//         res.redirect('/' + newlyCreatedCompany._id);
-//       });
-//     });
-//   });
-// });
 
 // Show the login form
 router.get('/login', (req, res) => {
   res.render('login');
 });
+
 
 // Handle login logic
 router.post('/login', (req, res, next) => {
@@ -157,6 +106,7 @@ router.post('/login', (req, res, next) => {
     });
   })(req, res, next);
 });
+
 
 // Handle logout logic
 router.get('/logout', (req, res) => {
