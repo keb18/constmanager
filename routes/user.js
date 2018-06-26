@@ -42,19 +42,32 @@ router.get('/:companyId/user/:userId/timesheet',
   });
 
 // GET PROJECT NAME
-router.get('/:companyId/user/:userId/timesheet/:projectName',
+router.get('/:companyId/user/:userId/timesheet/findName/:projectName',
   mid.isLoggedIn,
   mid.disableCache,
   mid.getCompany,
   (req, res) => {
-    // find project with provided id and serve it to the template
-    Project.findById(req.params.userId, (err, foundUser) => {
+
+    User.findById(req.params.userId).populate('projects')
+    .exec((err, user) => {
       if (err) {
-        mid.errorDb();
-        req.flash("error", "The user was not found in the database.");
+        mid.errorDb(err);
+        req.flash("error", "There was a problem fetching the projects from the database.");
         res.redirect('back');
       }
+      console.log()
+    });
+    // find project with provided id and serve it to the template
+    Project.findById(req.params.userId, (err, foundUser) => {
+      if(foundUser === null){
+        return res.json(["Not found"])
+      }
       return res.json(foundUser)
+      // if (err) {
+      //   mid.errorDb();
+      //   req.flash("error", "The user was not found in the database.");
+      //   res.redirect('back');
+      // }
     });
   });
 
