@@ -167,14 +167,14 @@ const http = new ServerRequest;
 
 // Get project name after user finishes entering the project number
 function getProjectName(){
-    console.log('getProjectName called');
     let tableRows = table.getElementsByTagName('tbody')[0].children;
     for (let i = 0; i < tableRows.length; i++) {
         tableRows[i].getElementsByTagName('input')[0].addEventListener('blur', (e) => {
             let clickedRow = e.path[1].parentElement.rowIndex - 1;
-            http.get(`${window.location.href}/timesheet/findName/Project 2`)
+            let inputValue = tableRows[clickedRow].getElementsByTagName('input')[0].value;
+            http.get(`${window.location.href}/timesheet/findName/${inputValue}`)
                 .then(data => {
-                    tableRows[clickedRow].getElementsByTagName('input')[1].value = data[0];
+                    tableRows[clickedRow].getElementsByTagName('input')[1].value = data;
                 })
                 .catch(err => console.log(err));
             e.preventDefault();

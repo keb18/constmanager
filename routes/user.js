@@ -42,33 +42,76 @@ router.get('/:companyId/user/:userId/timesheet',
   });
 
 // GET PROJECT NAME
-router.get('/:companyId/user/:userId/timesheet/findName/:projectName',
+router.get('/:companyId/user/:userId/timesheet/findName/:projectNumber*?',
   mid.isLoggedIn,
   mid.disableCache,
   mid.getCompany,
   (req, res) => {
-
-    User.findById(req.params.userId).populate('projects')
-    .exec((err, user) => {
-      if (err) {
+    console.log(req.params.projectNumber);
+    Company.findById(req.params.companyId)
+      .populate('projects', 'projectNumber projectName')
+      .exec()
+      .then(company => {
+        let projects = company.projects;
+        for (let i = 0, k = false; i < projects.length; i++) {
+          if (projects[i].projectNumber === req.params.projectNumber) {
+            k = true;
+            return res.json(projects[i].projectName);
+          } else if (i === projects.length-1 && !k) {
+            return res.json(['n/a']);
+          }
+        }
+        // projects.forEach(project => {
+        //   if (project.projectNumber === req.params.projectNumber) {
+        //     return res.json(project.projectName);
+        //   }
+        //   return res.json(["n/a"]);
+        // });
+      })
+      .catch(err => {
         mid.errorDb(err);
         req.flash("error", "There was a problem fetching the projects from the database.");
         res.redirect('back');
-      }
-      console.log()
-    });
-    // find project with provided id and serve it to the template
-    Project.findById(req.params.userId, (err, foundUser) => {
-      if(foundUser === null){
-        return res.json(["Not found"])
-      }
-      return res.json(foundUser)
-      // if (err) {
-      //   mid.errorDb();
-      //   req.flash("error", "The user was not found in the database.");
-      //   res.redirect('back');
-      // }
-    });
+      });
+
+
+
+    // User.findById(req.params.userId).populate('projects').exec()
+    //   .then(Project.findById(req.params.userId)
+    //     .then(foundUser => {
+    //       if (foundUser === null) {
+    //         return res.json(["n/a"])
+    //       }
+    //       return res.json(foundUser)
+    //     })
+    //   )
+    //   .catch( err => {
+    //     mid.errorDb(err);
+    //     req.flash("error", "There was a problem fetching the projects from the database.");
+    //     res.redirect('back');
+    //   });
+
+    // User.findById(req.params.userId).populate('projects')
+    // .exec((err, user) => {
+    //   if (err) {
+    //     mid.errorDb(err);
+    //     req.flash("error", "There was a problem fetching the projects from the database.");
+    //     res.redirect('back');
+    //   }
+    //   console.log()
+    // });
+    // // find project with provided id and serve it to the template
+    // Project.findById(req.params.userId, (err, foundUser) => {
+    //   if(foundUser === null){
+    //     return res.json(["Not found"])
+    //   }
+    //   return res.json(foundUser)
+    //   // if (err) {
+    //   //   mid.errorDb();
+    //   //   req.flash("error", "The user was not found in the database.");
+    //   //   res.redirect('back');
+    //   // }
+    // });
   });
 
 
