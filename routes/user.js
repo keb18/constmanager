@@ -23,7 +23,7 @@ router.get('/:companyId/user/:userId',
   });
 
 
-// GET LAST TIMESHEET
+// GET TIMESHEET
 router.get('/:companyId/user/:userId/timesheet',
   mid.isLoggedIn,
   mid.disableCache,
@@ -69,7 +69,13 @@ router.get('/:companyId/user/:userId/timesheet/findName/:projectNumber(*)',
       });
   });
 
-
+  // POST TIMESHEETS
+router.post('/:companyId/user/:userId/timesheet/save',
+mid.isLoggedIn,
+mid.disableCache,
+mid.getCompany, (req, res) => {
+  
+});
 // 
 
 module.exports = router;
