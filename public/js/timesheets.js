@@ -1,3 +1,6 @@
+// Dependencies
+import { ServerRequest, flashMessage } from './main.js';
+
 // ========================================
 // Logic for inputing values into the table
 // ========================================
@@ -137,23 +140,47 @@ function rowRenumber() {
 // =================================================
 
 // Convert the timesheet table values to json
+document.querySelector('.btn-save').addEventListener('click', e => {
+    currSheet();
+    e.preventDefault();
+});
 function currSheet() {
+    // Remove error message
+    document.querySelector('.flashMessage').innerHTML = ""
+    
     let rows = table.getElementsByTagName('tbody')[0].rows;
-    let timesheetList = {};
+    let timesheetList = [];
     let projectArr = {};
+    let status = { "status": "open" }
     for (let i = 0; i < rows.length - 1; i++) {
         let projectNo = rows[i].getElementsByTagName('input')[0].value;
         let projectName = rows[i].getElementsByTagName('input')[1].value;
         let projectDesc = rows[i].getElementsByTagName('input')[2].value;
         let projectTime = parseInt(tableBody.rows[i].cells[11].innerText);
 
-        projectArr = {
-            "name": projectName,
-            "description": projectDesc,
-            "time": projectTime
-        };
-        timesheetList[projectNo] = projectArr;
+        if (projectName === 'n/a') {
+            let message = {
+                "state": "error",
+                "message": `${projectNo} doesn't exist. Please check your input.`
+            };
+            return flashMessage(message);
+        } else {
+            projectArr = {
+                "projectNumber": projectNo,
+                "projectName": projectName,
+                "description": projectDesc,
+                "time": projectTime
+            };
+            timesheetList.push(projectArr);
+        }
     }
+    let message = {
+        "state": "ok",
+        "message": `Timesheet has been saved.`
+    };
+    flashMessage(message);
+    timesheetList.push(status);
+    console.log(timesheetList);
     return timesheetList;
 }
 
@@ -162,11 +189,11 @@ function currSheet() {
 // Logic for server requests
 // ==============
 
-import { ServerRequest } from './main.js';
+
 const http = new ServerRequest;
 
 // Get project name after user finishes entering the project number
-function getProjectName(){
+function getProjectName() {
     let tableRows = table.getElementsByTagName('tbody')[0].children;
     for (let i = 0; i < tableRows.length; i++) {
         tableRows[i].getElementsByTagName('input')[0].addEventListener('blur', (e) => {
@@ -180,6 +207,12 @@ function getProjectName(){
             e.preventDefault();
         });
     }
+}
+
+// Save the timesheet to the server
+// document.querySelector('.btn-save').addEventListener('click', saveTimesheet);
+function saveTimesheet() {
+
 }
 
 
@@ -196,12 +229,12 @@ function getProjectName(){
 
 
 // Get user
-document.querySelector('.btn-save').addEventListener('click', (e) => {
-    http.get(`${window.location.href}/timesheet`)
-        .then(data => console.log(data))
-        .catch(err => console.log(err));
-    e.preventDefault();
-});
+// document.querySelector('.btn-save').addEventListener('click', (e) => {
+//     http.get(`${window.location.href}/timesheet`)
+//         .then(data => console.log(data))
+//         .catch(err => console.log(err));
+//     e.preventDefault();
+// });
 
 
 
