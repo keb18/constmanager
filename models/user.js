@@ -14,12 +14,7 @@ let userSchema = new mongoose.Schema({
     userJoined: { type: Date, default: Date.now },
     company: [{ type: mongoose.Schema.Types.ObjectId, ref: "Company" }],
     projects: [{ type: mongoose.Schema.Types.ObjectId, ref: "Project" }],
-    timesheets: {
-        date: { type: Date },
-        project: String,
-        description: String,
-        hours: Number
-    }
+    timesheets: {}
 });
 
 userSchema.plugin(passportLocalMongoose);

@@ -47,6 +47,7 @@ app.use(express.static(__dirname + '/public'));
 
 // Setup Body Parser
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // Setup connect flash
 app.use(flash());

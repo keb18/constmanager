@@ -113,7 +113,7 @@ function addNewRow(e) {
             '<td><input step="0.1" min="0" type="number" name="timesheet[sat]" autocomplete="nope"></td>',
             '<td><input step="0.1" min="0" type="number" name="timesheet[sun]" autocomplete="nope"></td>',
             '<td>0</td>',
-            '<td><i class="fa fa-fw fa-trash"></i></td>'
+            '<td><i class="fa fa-fw fa-trash"></i></td>',
         ];
 
         // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
@@ -140,19 +140,21 @@ function rowRenumber() {
 // =================================================
 
 // Convert the timesheet table values to json
-document.querySelector('.btn-save').addEventListener('click', e => {
-    currSheet();
-    e.preventDefault();
-});
 function currSheet() {
     // Remove error message
     document.querySelector('.flashMessage').innerHTML = ""
-    
+
+    let timesheetDate = document.getElementById('timesheetDate').textContent
     let rows = table.getElementsByTagName('tbody')[0].rows;
-    let timesheetList = [];
+
+    let timesheetList = {
+        [timesheetDate]: []
+    };
+
     let projectArr = {};
     let status = { "status": "open" }
     for (let i = 0; i < rows.length - 1; i++) {
+        let projectId = rows[i].getElementsByTagName('td')[0].id
         let projectNo = rows[i].getElementsByTagName('input')[0].value;
         let projectName = rows[i].getElementsByTagName('input')[1].value;
         let projectDesc = rows[i].getElementsByTagName('input')[2].value;
@@ -166,12 +168,13 @@ function currSheet() {
             return flashMessage(message);
         } else {
             projectArr = {
+                "projectId": projectId,
                 "projectNumber": projectNo,
                 "projectName": projectName,
                 "description": projectDesc,
                 "time": projectTime
             };
-            timesheetList.push(projectArr);
+            timesheetList[timesheetDate].push(projectArr);
         }
     }
     let message = {
@@ -179,8 +182,7 @@ function currSheet() {
         "message": `Timesheet has been saved.`
     };
     flashMessage(message);
-    timesheetList.push(status);
-    console.log(timesheetList);
+    timesheetList[timesheetDate].push(status);
     return timesheetList;
 }
 
@@ -192,6 +194,9 @@ function currSheet() {
 
 const http = new ServerRequest;
 
+// Get previous timesheet
+
+
 // Get project name after user finishes entering the project number
 function getProjectName() {
     let tableRows = table.getElementsByTagName('tbody')[0].children;
@@ -201,7 +206,8 @@ function getProjectName() {
             let inputValue = tableRows[clickedRow].getElementsByTagName('input')[0].value;
             http.get(`${window.location.href}/timesheet/findName/${inputValue}`)
                 .then(data => {
-                    tableRows[clickedRow].getElementsByTagName('input')[1].value = data;
+                    tableRows[clickedRow].getElementsByTagName('input')[1].value = data.projectName;
+                    tableRows[clickedRow].getElementsByTagName('td')[0].id = data._id;
                 })
                 .catch(err => console.log(err));
             e.preventDefault();
@@ -210,9 +216,20 @@ function getProjectName() {
 }
 
 // Save the timesheet to the server
-// document.querySelector('.btn-save').addEventListener('click', saveTimesheet);
+document.querySelector('.btn-save').addEventListener('click', e => {
+    saveTimesheet();
+});
 function saveTimesheet() {
-
+    let timesheetList = currSheet();
+    // console.log(timesheetList)
+    http.post(`${window.location.href}/timesheet/save`, timesheetList)
+        .then(response => console.log(response))
+        .catch(err => console.log(err))
+    // /:companyId/user/:userId/timesheet/save
+    // document.querySelector('.btn-save').addEventListener('click', e => {
+    //     currSheet();
+    //     e.preventDefault();
+    // });
 }
 
 

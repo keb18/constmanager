@@ -5,10 +5,7 @@ function goBack() {
 
 export function flashMessage(state) {
     let message = document.querySelector('.flashMessage')
-    // if(message.innerHTML !== ''){
-    //     message.innerHTML = '';
-    // }
-    if(state.state === 'error'){
+    if (state.state === 'error') {
         message.innerHTML = `
         <div class="container">
             <div class="alert alert-danger" role="alert">
@@ -16,7 +13,7 @@ export function flashMessage(state) {
             </div>
         </div>
         `
-    } else if(state.state !== 'error') {
+    } else if (state.state === 'ok') {
         message.innerHTML = `
         <div class="container">
             <div class="alert alert-success" role="alert">

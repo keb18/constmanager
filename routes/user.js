@@ -47,7 +47,6 @@ router.get('/:companyId/user/:userId/timesheet/findName/:projectNumber(*)',
   mid.disableCache,
   mid.getCompany,
   (req, res) => {
-    console.log(req.params.projectNumber);
     Company.findById(req.params.companyId)
       .populate('projects', 'projectNumber projectName')
       .exec()
@@ -56,9 +55,18 @@ router.get('/:companyId/user/:userId/timesheet/findName/:projectNumber(*)',
         for (let i = 0, k = false; i < projects.length; i++) {
           if (projects[i].projectNumber === req.params.projectNumber) {
             k = true;
-            return res.json(projects[i].projectName);
+            foundProject = {
+              "projectName": projects[i].projectName,
+              "_id": projects[i]._id
+            }
+            console.log(foundProject)
+            return res.json(foundProject);
           } else if (i === projects.length-1 && !k) {
-            return res.json(['n/a']);
+            foundProject = {
+              "projectName": "n/a",
+              "_id": "n/a"
+            }
+            return res.json(foundProject);
           }
         }
       })
@@ -74,7 +82,10 @@ router.post('/:companyId/user/:userId/timesheet/save',
 mid.isLoggedIn,
 mid.disableCache,
 mid.getCompany, (req, res) => {
-  
+  timesheet = req.body;
+  // timesheet["28.05.2018"][1].projectId
+  console.log(req.body);
+  return res.json('Saved');
 });
 // 
 

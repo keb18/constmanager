@@ -1,5 +1,6 @@
 const express = require('express'),
   passport = require('passport'),
+  moment = require('moment'),
   router = express.Router();
 
 // Set-up module imports for the mongoose schemas
@@ -12,6 +13,11 @@ const mid = require('../middleware');
 // Landing page
 router.get('/', (req, res) => {
   res.render('landing');
+  let a = moment();
+  let day = a.get('day');
+  let month = a.get('month');
+  let year = a.get('year');
+  console.log(moment().year(year).month(month).date(day));
 });
 
 
@@ -36,8 +42,10 @@ router.post('/register',
       lastName: req.body.user.lastName,
       email: req.body.user.email,
       accountType: "owner",
-      position: "manager"
+      position: "manager",
+      timesheets: {}
     });
+
     // Register user
     User.register(newUser, req.body.user.password)
       .then(user => {
@@ -58,7 +66,7 @@ router.post('/register',
       ))
       .then(resArr => {
         req.flash("success", `${resArr[0][1].firstName} ${resArr[0][1].lastName} has been successfully registered. Please check your email to `);
-        return res.redirect(`login`); // Eventually redirect to a confirmation page
+        return res.redirect(`login`); // Redirect to a confirmation page
       })
       .catch(err => {
         req.flash('error', err.message);
