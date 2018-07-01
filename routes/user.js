@@ -104,11 +104,16 @@ router.put('/:companyId/user/:userId/timesheet/save',
   (req, res) => {
     timesheet = req.body;
     console.log(timesheet);
-    User.findByIdAndUpdate(req.params.userId, {
-      timesheets: timesheet
-    })
-    .then(() => res.json('Updated'))
-    .catch(err => res.json(err))
+    let foundKey;
+    for(let key in timesheet){
+      foundKey = key;
+    }
+    console.log(foundKey);
+    // User.findByIdAndUpdate(req.params.userId, {
+    //   timesheets: timesheet
+    // })
+    // .then(() => res.json('Updated'))
+    // .catch(err => res.json(err))
   });
 
 // Update the timesheet in user
