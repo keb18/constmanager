@@ -146,13 +146,14 @@ function currSheet() {
 
     let timesheetDate = document.getElementById('timesheetDate').textContent
     let rows = table.getElementsByTagName('tbody')[0].rows;
+    // let status = { "status": "open" }
 
-    let timesheetList = {
-        [timesheetDate]: []
+    let timesheet = {
+        "timesheetDate": timesheetDate,
+        "status": "open"
     };
+    let projectArr = [];
 
-    let projectArr = {};
-    let status = { "status": "open" }
     for (let i = 0; i < rows.length; i++) {
         let projectId = rows[i].getElementsByTagName('td')[0].id
         let projectNo = rows[i].getElementsByTagName('input')[0].value;
@@ -179,19 +180,19 @@ function currSheet() {
             };
             return flashMessage(message);
         } else {
-            projectArr = {
+            projectArr.push({
                 "projectId": projectId,
                 "projectNumber": projectNo,
                 "projectName": projectName,
                 "description": projectDesc,
                 "time": projectTime
-            };
-            timesheetList[timesheetDate].push(projectArr);
+            });
         }
     }
-    timesheetList[timesheetDate].push(status);
-    console.log(timesheetList)
-    return timesheetList;
+    // console.log(projectArr);
+    timesheet.timesheet = projectArr;
+    console.log(timesheet)
+    return timesheet;
 }
 
 
@@ -229,6 +230,7 @@ function getProjectName() {
 // (PUT) Update the current timesheet and save to server (if not submitted)
 document.querySelector('.btn-save').addEventListener('click', e => {
     saveTimesheet();
+    // currSheet();
     e.preventDefault();
 });
 function saveTimesheet() {
@@ -256,11 +258,10 @@ document.querySelector('.btn-submit').addEventListener('click', e => {
 function submitTimesheet() {
     let timesheetList = currSheet();
     http.post(`${window.location.href}/timesheet/submit`, timesheetList)
-        .then(() => {
-            // change the status of the timesheet {status: closed}
+        .then(res => {
             let message = {
                 "state": "ok",
-                "message": `Timesheet has been saved.`
+                "message": res
             };
             flashMessage(message);
         })

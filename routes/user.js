@@ -71,31 +71,32 @@ router.get('/:companyId/user/:userId/timesheet/findName/:projectNumber(*)',
   });
 
 // POST timesheet (save current timesheet)
-// router.post('/:companyId/user/:userId/timesheet/save',
-//   mid.isLoggedIn,
-//   mid.disableCache,
-//   (req, res) => {
-//     timesheet = req.body;
-//     console.log(timesheet);
-//     User.findById(req.params.userId)
-//       .then(foundUser => {
-//         // console.log(foundUser);
-//         pushTimesheet(timesheet, foundUser)
-//       })
-//       .then(() => { return res.json('Saved'); })
-//       .catch(err => {
-//         mid.errorDb(err);
-//         req.flash("error", "User was not found in the database.");
-//         res.redirect('back');
-//       })
-//     // timesheet["28.05.2018"][1].projectId
-//   });
+router.post('/:companyId/user/:userId/timesheet/submit',
+  mid.isLoggedIn,
+  mid.disableCache,
+  (req, res) => {
+    console.log("POST route.")
+    timesheet = req.body;
+    timesheet.status = "closed";
+    User.findById(req.params.userId)
+      .then(foundUser => {
+        // console.log(foundUser);
+        // change the status of the timesheet {status: closed}
+        pushTimesheet(timesheet, foundUser)
+      })
+      .then(() => { return res.json('Timesheet has been submitted.'); })
+      .catch(err => {
+        mid.errorDb(err);
+        req.flash("error", "User was not found in the database.");
+        return res.redirect('back');
+      })
+  });
 
-// // Push timesheet to user
-// function pushTimesheet(timesheet, user) {
-//   user.timesheets.push(timesheet)
-//   user.save()
-// }
+// Push timesheet to user
+function pushTimesheet(timesheet, user) {
+  user.timesheets.push(timesheet)
+  user.save()
+}
 
 // PUT TIMESHEETS (save current timesheet)
 router.put('/:companyId/user/:userId/timesheet/save',
@@ -104,13 +105,16 @@ router.put('/:companyId/user/:userId/timesheet/save',
   (req, res) => {
     timesheet = req.body;
     console.log(timesheet);
-    let foundKey;
-    for(let key in timesheet){
-      foundKey = key;
-    }
-    console.log(foundKey);
+    User.findOne({timesheetDate: timesheet.timesheetDate})
+    .exec()
+    .then(result => console.log(result))
+    // let foundKey;
+    // for(let key in timesheet){
+    //   foundKey = key;
+    // }
+    // console.log(foundKey);
     // User.findByIdAndUpdate(req.params.userId, {
-    //   timesheets: timesheet
+    //   $set: {'timesheets.$.foundKey': timesheet}
     // })
     // .then(() => res.json('Updated'))
     // .catch(err => res.json(err))
