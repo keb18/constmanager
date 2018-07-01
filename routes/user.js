@@ -23,29 +23,26 @@ router.get('/:companyId/user/:userId',
   });
 
 
-// GET TIMESHEET
+// GET last timesheet when first opening the timesheet page
 router.get('/:companyId/user/:userId/timesheet',
   mid.isLoggedIn,
   mid.disableCache,
-  mid.getCompany,
   (req, res) => {
-    console.log('Get request received')
     // find project with provided id and serve it to the template
     User.findById(req.params.userId, (err, foundUser) => {
       if (err) {
-        mid.errorDb();
+        mid.errorDb(err);
         req.flash("error", "User was not found in the database.");
         res.redirect('back');
       }
-      return res.json(foundUser.projects)
+      return res.json(foundUser.timesheets)
     });
   });
 
-// GET PROJECT NAME
+// GET project name when inputting the project number
 router.get('/:companyId/user/:userId/timesheet/findName/:projectNumber(*)',
   mid.isLoggedIn,
   mid.disableCache,
-  mid.getCompany,
   (req, res) => {
     Company.findById(req.params.companyId)
       .populate('projects', 'projectNumber projectName')
@@ -59,13 +56,9 @@ router.get('/:companyId/user/:userId/timesheet/findName/:projectNumber(*)',
               "projectName": projects[i].projectName,
               "_id": projects[i]._id
             }
-            console.log(foundProject)
             return res.json(foundProject);
-          } else if (i === projects.length-1 && !k) {
-            foundProject = {
-              "projectName": "n/a",
-              "_id": "n/a"
-            }
+          } else if (i === projects.length - 1 && !k) {
+            foundProject = { "projectName": "n/a", "_id": "n/a" }
             return res.json(foundProject);
           }
         }
@@ -77,16 +70,51 @@ router.get('/:companyId/user/:userId/timesheet/findName/:projectNumber(*)',
       });
   });
 
-  // POST TIMESHEETS
-router.post('/:companyId/user/:userId/timesheet/save',
-mid.isLoggedIn,
-mid.disableCache,
-mid.getCompany, (req, res) => {
-  timesheet = req.body;
-  // timesheet["28.05.2018"][1].projectId
-  console.log(req.body);
-  return res.json('Saved');
-});
-// 
+// POST timesheet (save current timesheet)
+// router.post('/:companyId/user/:userId/timesheet/save',
+//   mid.isLoggedIn,
+//   mid.disableCache,
+//   (req, res) => {
+//     timesheet = req.body;
+//     console.log(timesheet);
+//     User.findById(req.params.userId)
+//       .then(foundUser => {
+//         // console.log(foundUser);
+//         pushTimesheet(timesheet, foundUser)
+//       })
+//       .then(() => { return res.json('Saved'); })
+//       .catch(err => {
+//         mid.errorDb(err);
+//         req.flash("error", "User was not found in the database.");
+//         res.redirect('back');
+//       })
+//     // timesheet["28.05.2018"][1].projectId
+//   });
+
+// // Push timesheet to user
+// function pushTimesheet(timesheet, user) {
+//   user.timesheets.push(timesheet)
+//   user.save()
+// }
+
+// PUT TIMESHEETS (save current timesheet)
+router.put('/:companyId/user/:userId/timesheet/save',
+  mid.isLoggedIn,
+  mid.disableCache,
+  (req, res) => {
+    timesheet = req.body;
+    console.log(timesheet);
+    User.findByIdAndUpdate(req.params.userId, {
+      timesheets: timesheet
+    })
+    .then(() => res.json('Updated'))
+    .catch(err => res.json(err))
+  });
+
+// Update the timesheet in user
+function pushTimesheet(timesheet, user) {
+  user.timesheets.push(timesheet)
+  user.save()
+}
 
 module.exports = router;

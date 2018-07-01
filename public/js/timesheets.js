@@ -153,17 +153,29 @@ function currSheet() {
 
     let projectArr = {};
     let status = { "status": "open" }
-    for (let i = 0; i < rows.length - 1; i++) {
+    for (let i = 0; i < rows.length; i++) {
         let projectId = rows[i].getElementsByTagName('td')[0].id
         let projectNo = rows[i].getElementsByTagName('input')[0].value;
         let projectName = rows[i].getElementsByTagName('input')[1].value;
         let projectDesc = rows[i].getElementsByTagName('input')[2].value;
         let projectTime = parseInt(tableBody.rows[i].cells[11].innerText);
 
-        if (projectName === 'n/a') {
+        if (projectNo === "") {
+            let message = {
+                "state": "error",
+                "message": `Empty project numbers are not acceptable. Please check your input.`
+            };
+            return flashMessage(message);
+        } else if (projectName === 'n/a') {
             let message = {
                 "state": "error",
                 "message": `${projectNo} doesn't exist. Please check your input.`
+            };
+            return flashMessage(message);
+        } else if (projectName === "") {
+            let message = {
+                "state": "error",
+                "message": `Please remove the empty rows.`
             };
             return flashMessage(message);
         } else {
@@ -177,12 +189,8 @@ function currSheet() {
             timesheetList[timesheetDate].push(projectArr);
         }
     }
-    let message = {
-        "state": "ok",
-        "message": `Timesheet has been saved.`
-    };
-    flashMessage(message);
     timesheetList[timesheetDate].push(status);
+    console.log(timesheetList)
     return timesheetList;
 }
 
@@ -193,9 +201,6 @@ function currSheet() {
 
 
 const http = new ServerRequest;
-
-// Get previous timesheet
-
 
 // Get project name after user finishes entering the project number
 function getProjectName() {
@@ -215,58 +220,49 @@ function getProjectName() {
     }
 }
 
-// Save the timesheet to the server
-document.querySelector('.btn-save').addEventListener('click', e => {
-    saveTimesheet();
-});
-function saveTimesheet() {
-    let timesheetList = currSheet();
-    // console.log(timesheetList)
-    http.post(`${window.location.href}/timesheet/save`, timesheetList)
-        .then(response => console.log(response))
-        .catch(err => console.log(err))
-    // /:companyId/user/:userId/timesheet/save
-    // document.querySelector('.btn-save').addEventListener('click', e => {
-    //     currSheet();
-    //     e.preventDefault();
-    // });
-}
-
-
-
-// function getProjectName(e) {
-//     const table = document.querySelector('.timesheetTable').getElementsByTagName('tbody')[0];
-//     let tableRowNumber = table.childElementCount;
-//     let clickedRow = e.path[1].parentElement.rowIndex;
-//     let clickedColumn = e.path[1].cellIndex;
-
-//     if (clickedRow === tableRowNumber && clickedColumn === 1) {
-//         // Create an empty <tr> element and add it to the last position of the table:
-//         let row = table.insertRow();
-
-
-// Get user
-// document.querySelector('.btn-save').addEventListener('click', (e) => {
-//     http.get(`${window.location.href}/timesheet`)
-//         .then(data => console.log(data))
-//         .catch(err => console.log(err));
-//     e.preventDefault();
-// });
-
-
 
 // =======================================
 // (GET) Request previous / next timesheet
 
 
-// =========================
-// (POST) Save new timesheet
-
-
 // ========================================================================
 // (PUT) Update the current timesheet and save to server (if not submitted)
+document.querySelector('.btn-save').addEventListener('click', e => {
+    saveTimesheet();
+    e.preventDefault();
+});
+function saveTimesheet() {
+    let timesheetList = currSheet();
+    if (timesheetList) {
+        http.put(`${window.location.href}/timesheet/save`, timesheetList)
+            .then(() => {
+                let message = {
+                    "state": "ok",
+                    "message": `Timesheet has been saved.`
+                };
+                flashMessage(message);
+            })
+            .catch(err => console.log(err))
+    }
+}
 
 
-// ===========================================================
-// (DELETE) Clear the timesheet from server (if not submitted)
-
+// =========================
+// (POST) Submit new timesheet
+document.querySelector('.btn-submit').addEventListener('click', e => {
+    submitTimesheet();
+    e.preventDefault();
+});
+function submitTimesheet() {
+    let timesheetList = currSheet();
+    http.post(`${window.location.href}/timesheet/submit`, timesheetList)
+        .then(() => {
+            // change the status of the timesheet {status: closed}
+            let message = {
+                "state": "ok",
+                "message": `Timesheet has been saved.`
+            };
+            flashMessage(message);
+        })
+        .catch(err => console.log(err))
+}
