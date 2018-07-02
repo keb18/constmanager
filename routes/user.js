@@ -70,7 +70,7 @@ router.get('/:companyId/user/:userId/timesheet/findName/:projectNumber(*)',
       });
   });
 
-// POST timesheet (save current timesheet)
+// POST timesheet (submit current timesheet - cannot be edited after code runs)
 router.post('/:companyId/user/:userId/timesheet/submit',
   mid.isLoggedIn,
   mid.disableCache,
@@ -104,26 +104,48 @@ router.put('/:companyId/user/:userId/timesheet/save',
   mid.disableCache,
   (req, res) => {
     timesheet = req.body;
-    console.log(timesheet);
-    User.findOne({timesheetDate: timesheet.timesheetDate})
-    .exec()
-    .then(result => console.log(result))
-    // let foundKey;
-    // for(let key in timesheet){
-    //   foundKey = key;
-    // }
-    // console.log(foundKey);
-    // User.findByIdAndUpdate(req.params.userId, {
-    //   $set: {'timesheets.$.foundKey': timesheet}
-    // })
-    // .then(() => res.json('Updated'))
-    // .catch(err => res.json(err))
-  });
+    timesheetLookup = timesheet.timesheetDate;
 
-// Update the timesheet in user
-function pushTimesheet(timesheet, user) {
-  user.timesheets.push(timesheet)
-  user.save()
-}
+    User.findById(req.params.userId)
+      .then(foundUser => {
+        let foundTimesheets = foundUser.timesheets;
+        const timeSpent = foundTimesheets.find(function (dateToFind) {
+          return dateToFind.timesheetDate === timesheetLookup;
+        });
+        console.log(timeSpent);
+        if (timeSpent.status === 'open') {
+          // Delete the exisiting times
+          timeSpent["timesheet"].splice(0, timeSpent["timesheet"].length);
+          console.log(timeSpent);
+          // Push the new times into timesheet
+          console.log(timesheet.timesheet);
+          // Use a foreach to push the timesheets
+          timeSpent["timesheet"].push(timesheet.timesheet);
+          console.log(timeSpent);
+          
+          return res.json({
+            "state": "ok",
+            "message": "Timesheet has been saved"
+          });
+        } else if (timeSpent.status === 'closed') {
+          return res.json({
+            "state": "error",
+            "message": "Timesheet has already been submitted. Cannot be edited."
+          });
+        } else {
+          return res.json({
+            "state": "error",
+            "message": "There was an error in saving the timesheet. Please try again or contact us."
+          })
+        }
+
+
+      })
+      .catch(err => {
+        mid.errorDb(err);
+        req.flash("error", "User was not found in the database.");
+        return res.redirect('back');
+      })
+  });
 
 module.exports = router;

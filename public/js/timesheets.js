@@ -237,14 +237,13 @@ function saveTimesheet() {
     let timesheetList = currSheet();
     if (timesheetList) {
         http.put(`${window.location.href}/timesheet/save`, timesheetList)
-            .then(() => {
-                let message = {
-                    "state": "ok",
-                    "message": `Timesheet has been saved.`
-                };
+            .then(res => {
+                flashMessage(res);
+            })
+            .catch(err => {
+                const message = { "state": "error", "message": err };
                 flashMessage(message);
             })
-            .catch(err => console.log(err))
     }
 }
 
