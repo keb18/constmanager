@@ -103,26 +103,38 @@ router.put('/:companyId/user/:userId/timesheet/save',
   mid.isLoggedIn,
   mid.disableCache,
   (req, res) => {
-    timesheet = req.body;
-    timesheetLookup = timesheet.timesheetDate;
+    timesheetBody = req.body;
+    console.log(timesheetBody);
+    timesheetLookup = timesheetBody.timesheetDate;
 
     User.findById(req.params.userId)
       .then(foundUser => {
+        // Get only the user's timesheet
         let foundTimesheets = foundUser.timesheets;
-        const timeSpent = foundTimesheets.find(function (dateToFind) {
-          return dateToFind.timesheetDate === timesheetLookup;
-        });
-        console.log(timeSpent);
+        // Find the index of the current date to updated
+        const indexOfTimesheet = foundTimesheets.findIndex(dateToFind => dateToFind.timesheetDate === timesheetLookup)
+        // Find the length of the array containing all the time spent
+        const lengthOfSpentTime = foundUser.timesheets[indexOfTimesheet].timesheet.length;
+
+        // Determine the status of the array currently in the database
+        const timeSpent = foundTimesheets.find(dateToFind => dateToFind.timesheetDate === timesheetLookup);
         if (timeSpent.status === 'open') {
           // Delete the exisiting times
-          timeSpent["timesheet"].splice(0, timeSpent["timesheet"].length);
-          console.log(timeSpent);
-          // Push the new times into timesheet
-          console.log(timesheet.timesheet);
-          // Use a foreach to push the timesheets
-          timeSpent["timesheet"].push(timesheet.timesheet);
-          console.log(timeSpent);
-          
+          foundUser.timesheets[indexOfTimesheet].timesheet.splice(0, lengthOfSpentTime);
+          console.log(foundUser.timesheets[indexOfTimesheet])
+
+          // Push the new times
+          times = timesheetBody.timesheet
+          times.forEach(element => {
+            foundUser.timesheets[indexOfTimesheet].timesheet.push(element);
+          })
+
+          // Mark the array for changes
+          foundUser.markModified('timesheets');
+
+          // Save to the database
+          foundUser.save()
+
           return res.json({
             "state": "ok",
             "message": "Timesheet has been saved"
@@ -138,8 +150,6 @@ router.put('/:companyId/user/:userId/timesheet/save',
             "message": "There was an error in saving the timesheet. Please try again or contact us."
           })
         }
-
-
       })
       .catch(err => {
         mid.errorDb(err);
