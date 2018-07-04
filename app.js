@@ -81,6 +81,12 @@ app.use(userRoutes);
 const hostname = '127.0.0.1';
 const port = 3000;
 
+const moment = require('moment')
 app.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
+
+    let checkDate = "2018-07-02 23:36:28.262"
+    // let date = moment().startOf('isoWeek').format("DD.MM.YYYY")
+    let date = moment(checkDate).format("DD.MM.YYYY")
+    console.log(date)
 });
