@@ -80,7 +80,6 @@ router.post('/:companyId/user/:userId/timesheet/submit',
     timesheet.status = "closed";
     User.findById(req.params.userId)
       .then(foundUser => {
-        // console.log(foundUser);
         // change the status of the timesheet {status: closed}
         pushTimesheet(timesheet, foundUser)
       })
@@ -104,7 +103,6 @@ router.put('/:companyId/user/:userId/timesheet/save',
   mid.disableCache,
   (req, res) => {
     timesheetBody = req.body;
-    console.log(timesheetBody);
     timesheetLookup = timesheetBody.timesheetDate;
 
     User.findById(req.params.userId)
@@ -121,7 +119,6 @@ router.put('/:companyId/user/:userId/timesheet/save',
         if (timeSpent.status === 'open') {
           // Delete the exisiting times
           foundUser.timesheets[indexOfTimesheet].timesheet.splice(0, lengthOfSpentTime);
-          console.log(foundUser.timesheets[indexOfTimesheet])
 
           // Push the new times
           times = timesheetBody.timesheet
