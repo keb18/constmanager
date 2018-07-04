@@ -28,7 +28,6 @@ router.get('/register', (req, res) => {
   res.render('register');
 });
 
-
 // Handle register logic
 router.post('/register',
   mid.checkRegisterInput,
@@ -43,7 +42,18 @@ router.post('/register',
       email: req.body.user.email,
       accountType: "owner",
       position: "manager",
-      timesheets: {}
+      timesheets: {
+        timesheetDate: moment().startOf('isoWeek').format("DD.MM.YYYY"),
+        status: "open",
+        timesheet:
+          [{
+            projectId: "",
+            projectNumber: "",
+            projectName: "",
+            description: "",
+            time: 0
+          }]
+      }
     });
 
     // Register user
