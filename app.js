@@ -87,6 +87,6 @@ app.listen(port, hostname, () => {
 
     let checkDate = "2018-07-02 23:36:28.262"
     // let date = moment().startOf('isoWeek').format("DD.MM.YYYY")
-    let date = moment(checkDate).format("DD.MM.YYYY")
-    console.log(date)
+    // let date = moment(checkDate).format("DD.MM.YYYY")
+    // console.log(date)
 });

@@ -3,3 +3,32 @@
   background-size:100% auto;
   height: 400px;
 } */
+
+.landing-input{
+  padding-left: 0px;
+  padding: 0px;
+  width: 100%;
+  margin-bottom: 1rem;
+  background-color: #678cb1 !important;
+}
+
+#j-style{
+  text-align: center;
+  background-color: #6e8dad;
+}
+
+#j-text{
+  text-decoration-color: aliceblue;
+  font-weight: 600;
+  padding: 0% 8% 0% 8%
+}
+
+#sign-style{
+  text-align: left;
+}
+
+
+
+#landing-reg{
+  padding-top: 2rem;
+}
