@@ -4,7 +4,8 @@ const express = require('express'),
     mongoose = require('mongoose'),
     passport = require('passport'),
     LocalStrategy = require('passport-local'),
-    flash = require('connect-flash');
+    flash = require('connect-flash'),
+    favicon = require('serve-favicon');
 
 // Set-up module imports for the mongoose schemas
 const User = require('./models/user');
@@ -16,6 +17,9 @@ const companyRoutes = require('./routes/company'),
     indexRoutes = require('./routes/index'),
     projectsRoutes = require('./routes/projects'),
     userRoutes = require('./routes/user');
+
+// use favicon
+app.use(favicon(__dirname + '/public/images/favicon.ico'));
 
 // Setup moment for use
 app.locals.moment = require("moment");

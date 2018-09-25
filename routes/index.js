@@ -10,6 +10,7 @@ const Company = require('../models/company'),
 // Require the middleware
 const mid = require('../middleware');
 
+
 // Landing page
 router.get('/', (req, res) => {
   res.render('landing');

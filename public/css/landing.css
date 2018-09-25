@@ -15,6 +15,8 @@
 #j-style{
   text-align: center;
   background-color: #6e8dad;
+  margin-bottom: 0px;
+  color: whitesmoke;
 }
 
 #j-text{
@@ -28,7 +30,8 @@
 }
 
 
-
 #landing-reg{
-  padding-top: 2rem;
+  background-color: #6e8dad;
+  color: whitesmoke;
+  padding-bottom: 2%;
 }
