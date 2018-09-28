@@ -62,11 +62,6 @@
           <a class="nav-link" href="/login">
             <i class="fa fa-fw fa-sign-out-alt"></i>Log-In</a>
         </li>
-        <!-- Modal for future use -->
-        <!-- <li class="nav-item">
-                    <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
-                        <i class="fa fa-fw fa-sign-out-alt"></i>Log-In</a>
-                </li> -->
       </ul>
     </div>
   </nav>
@@ -93,7 +88,9 @@
 
               <div class="custom-control custom-checkbox mr-sm-2">
                 <input type="checkbox" class="custom-control-input" id="customControlAutosizing">
-                <label class="custom-control-label" for="customControlAutosizing">I agree to ConstManager’s Terms of Service</label>
+                <label class="custom-control-label" for="customControlAutosizing">I agree to ConstManager’s
+                  <a data-toggle="modal" data-target="#terms" href="https://www.w3schools.com">Terms of Service</a>
+                </label>
               </div>
               <br>
 
@@ -104,18 +101,82 @@
       </div>
     </div>
 
-    <div class="container-fluid">
+    <div class="container-fluid whatis">
       <div class="container">
         <h3>What is ConstManager?</h3>
-       <p> ConstManager is a complete tool for managing small to medium sized companies from the construction industry. 
-        Whether the company is a construction, design, architecture or quantity surveying ConstManager has the right tool ready.</p>
         <br>
-        <i class="fa fa-fw fa-th-list"></i>
+        <p> ConstManager is a complete tool for managing small to medium sized companies from the construction industry.</p>
+        <p>Whether you own a construction, design, architecture or quantity surveying company, ConstManager has the right tool
+          ready for you to manage your business.
+        </p>
+        <br>
+        <h3>Why ConstManager?</h3>
+        <br>
+        <div class="row justify-content-center">
+          <div class="col-md-4">
+            <i class="fa fa-fw fa-chart-pie fa-4x"></i>
+            <br>
+            <br>
+            <p>
+              <strong>Manage Company Finances</strong>
+            </p>
+            <p>Manage company income and expenses over time periods, all shown in easy to read graphs or print P&L statements.
+              Invoicing can be done directly from the app.</p>
+          </div>
+
+          <div class="col-md-4">
+            <i class="fa fa-fw fa-euro-sign fa-4x"></i>
+            <br>
+            <br>
+            <p>
+              <strong>Easy Fee Proposals</strong>
+            </p>
+            <p>Set-up rates and client databases and together with personalised forms and gantt charts for estimating time costs,
+              tendering was never easier.</p>
+          </div>
+
+          <div class="col-md-4">
+            <i class="fa fa-fw fa-sitemap fa-4x"></i>
+            <br>
+            <br>
+            <p>
+              <strong>Project Monitoring</strong>
+            </p>
+            <p>Follow project fees, employees time expenses and project progression. Automatic reminders for key dates will
+              allow you to always stay on top of things.</p>
+          </div>
+        </div>
+        <br>
+        <div class="row justify-content-center">
+          <div class="col-md-4">
+            <i class="fa fa-fw fa-server fa-4x"></i>
+            <br>
+            <br>
+            <p>
+              <strong>Information In One Place</strong>
+            </p>
+            <p>Go paperless and manage all files in just one place. With daily server back-ups you can rest assured that the
+              information required is always available.</p>
+          </div>
+
+          <div class="col-md-4">
+            <i class="fa fa-fw fa-user-friends fa-4x"></i>
+            <br>
+            <br>
+            <p>
+              <strong>Empoloyees Management</strong>
+            </p>
+            <p>Quality assurance through company procedures means personalized workflows and time-keeping. Monitor employees
+              training records and skills development.</p>
+          </div>
+        </div>
       </div>
-
-
     </div>
+    <div class="container-fluid ">
+      <div class="container">
 
+      </div>
+    </div>
   </div>
 
 
@@ -179,19 +240,18 @@
     <!-- Scroll to Top Button end -->
 
     <!-- Modal-->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="terms" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Sign-In below.</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Terms and Conditions</h5>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
           </div>
-          <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+          <div class="modal-body">Terms and conditions go here!</div>
           <div class="modal-footer">
-            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <a class="btn btn-primary" href="/logout">Logout</a>
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>

@@ -19,7 +19,7 @@ const companyRoutes = require('./routes/company'),
     userRoutes = require('./routes/user');
 
 // use favicon
-app.use(favicon(__dirname + '/public/images/favicon.ico'));
+app.use(favicon(__dirname + '/public/images/favicons/favicon.ico'));
 
 // Setup moment for use
 app.locals.moment = require("moment");
