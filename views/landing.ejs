@@ -8,10 +8,11 @@
   <meta name="description" content="">
   <meta name="author" content="">
   <title>ConstManager: Construction Software & Management</title>
-  <link rel="stylesheet" href="/css/landing.css">
+
   <link rel="stylesheet" href="/vendor/css/fontawesome-all.css">
   <link rel="stylesheet" href="/vendor/css/bootstrap.css">
   <link rel="stylesheet" href="/vendor/css/sb-admin.css">
+  <link rel="stylesheet" href="/css/landing.css">
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -32,8 +33,8 @@
           </a>
         </li>
         <li class="nav-item dropdown" data-placement="right">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
             Products
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -67,161 +68,154 @@
   </nav>
   <!-- Navbar end -->
 
+  <!-- Content -->
   <div class="content-wrapper" style="padding-top: 0">
     <div class="jumbotron jumbotron-fluid" id="j-style">
       <h1 class="display-6" id="j-text">Start improving your construction business.</h1>
+      <h4 class="font-weight-light">Get the best tools for managing your business right now.</h4>
     </div>
 
 
 
     <div class="container-fluid" id="landing-reg">
       <div class="row justify-content-center">
-        <div class="col-lg-2"></div>
         <div class="col-md-auto">
           <h4 id="sign-style">Sign up now for free</h3>
             <p id="sign-style">Let's start with your e-mail and company name.</p>
 
             <form>
-              <input type="email" class="form-control landing-input" id="registerEmail" placeholder="e-mail">
+              <div class="input-group input-group-lg landing-input">
+                <input type="email" class="form-control landing-input" id="registerEmail" placeholder="e-mail">
+              </div>
 
-              <input type="text" class="form-control landing-input" id="companyName" placeholder="Company Name">
+              <div class="input-group input-group-lg landing-input">
+                <input type="text" class="form-control " id="companyName" placeholder="Company Name">
+              </div>
+
+              <button type="submit" class="btn btn-lg btn-light btn-block next-button">Next</button>
 
               <div class="custom-control custom-checkbox mr-sm-2">
                 <input type="checkbox" class="custom-control-input" id="customControlAutosizing">
                 <label class="custom-control-label" for="customControlAutosizing">I agree to ConstManager’s
-                  <a data-toggle="modal" data-target="#terms" href="https://www.w3schools.com">Terms of Service</a>
+                  <a data-toggle="modal" data-target="#terms" href="https://www.w3schools.com">Terms of Service</a>.
                 </label>
               </div>
-              <br>
-
-              <button type="submit" class="btn btn-lg btn-light btn-block">Next</button>
+              
+              
             </form>
         </div>
-        <div class="col-lg-2"></div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-12 secondary-text ">
+          <p class="font-weight-light">Or scroll down to find out more.</p>
+        </div>
       </div>
     </div>
 
     <div class="container-fluid whatis">
       <div class="container">
-        <h3>What is ConstManager?</h3>
-        <br>
-        <p> ConstManager is a complete tool for managing small to medium sized companies from the construction industry.</p>
-        <p>Whether you own a construction, design, architecture or quantity surveying company, ConstManager has the right tool
+        <h3 class="titles">What is ConstManager?</h3>
+        <p> ConstManager is a complete tool for managing small to medium sized companies active in the construction
+          industry.</p>
+        <p>Whether you own a construction, structural design, architecture or quantity surveying company, ConstManager
+          has the
+          right tool
           ready for you to manage your business.
         </p>
-        <br>
-        <h3>Why ConstManager?</h3>
-        <br>
-        <div class="row justify-content-center">
-          <div class="col-md-4">
+
+        <h3 class="titles">Why ConstManager?</h3>
+
+        <div class="row description">
+          <div class="col-sm-12 ">
             <i class="fa fa-fw fa-chart-pie fa-4x"></i>
             <br>
-            <br>
-            <p>
+            <h4>
               <strong>Manage Company Finances</strong>
-            </p>
-            <p>Manage company income and expenses over time periods, all shown in easy to read graphs or print P&L statements.
-              Invoicing can be done directly from the app.</p>
+            </h4>
+            <p>Manage company income and expenses over time periods, all shown in easy to read graphs or print P&L
+              statements.
+              Invoicing can be done automatically from the app at prearranged dates.</p>
           </div>
+        </div>
 
-          <div class="col-md-4">
+        <div class="row description">
+          <div class="col-md-12">
             <i class="fa fa-fw fa-euro-sign fa-4x"></i>
             <br>
-            <br>
-            <p>
+            <h4>
               <strong>Easy Fee Proposals</strong>
-            </p>
-            <p>Set-up rates and client databases and together with personalised forms and gantt charts for estimating time costs,
+            </h4>
+            <p>Set-up rates and client databases and together with personalised forms and gantt charts for estimating
+              time costs,
               tendering was never easier.</p>
           </div>
+        </div>
 
-          <div class="col-md-4">
+        <div class="row description">
+          <div class="col-md-12">
             <i class="fa fa-fw fa-sitemap fa-4x"></i>
             <br>
-            <br>
-            <p>
+            <h4>
               <strong>Project Monitoring</strong>
-            </p>
-            <p>Follow project fees, employees time expenses and project progression. Automatic reminders for key dates will
-              allow you to always stay on top of things.</p>
+            </h4>
+            <p>Monitor project fees, employees time expenses and project progression. Automatic reminders for key dates
+              will allow you to always stay on top of any challanges.</p>
           </div>
         </div>
-        <br>
-        <div class="row justify-content-center">
-          <div class="col-md-4">
-            <i class="fa fa-fw fa-server fa-4x"></i>
-            <br>
-            <br>
-            <p>
-              <strong>Information In One Place</strong>
-            </p>
-            <p>Go paperless and manage all files in just one place. With daily server back-ups you can rest assured that the
-              information required is always available.</p>
-          </div>
 
-          <div class="col-md-4">
+        <div class="row description">
+          <div class="col-md-12">
+            <i class="fa fa-fw fa-database fa-4x"></i>
+            <br>
+            <h4>
+              <strong>Information In One Place</strong>
+            </h4>
+            <p>Go paperless and manage all files in just one place. With constant server back-ups you can rest assured
+              that the information required is always available.</p>
+          </div>
+        </div>
+
+        <div class="row description">
+          <div class="col-md-12">
+            <i class="fa fa-fw fa-address-book fa-4x"></i>
+            <br>
+            <h4>
+              <strong>Customer focus</strong>
+            </h4>
+            <p>Manage marketing and further develop customer relationships and set goals for customer expectations.</p>
+          </div>
+        </div>
+
+        <div class="row description">
+          <div class="col-md-12">
             <i class="fa fa-fw fa-user-friends fa-4x"></i>
             <br>
-            <br>
-            <p>
-              <strong>Empoloyees Management</strong>
-            </p>
-            <p>Quality assurance through company procedures means personalized workflows and time-keeping. Monitor employees
-              training records and skills development.</p>
+            <h4>
+              <strong>ISO 9000</strong>
+            </h4>
+            <p>Quality management principles can be ensured through ConstManager's personalized workflows and
+              activities. Maintain people training
+              records and skills development and assess individual performance.</p>
           </div>
         </div>
       </div>
-    </div>
-    <div class="container-fluid ">
-      <div class="container">
 
+    </div>
+
+    <div class="container-fluid content">
+      <div class="container ">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse nostrum nulla blanditiis ipsum id velit molestias
+        minima est, amet quibusdam asperiores ea beatae, commodi autem voluptatem similique in at officia?
       </div>
     </div>
+
   </div>
+  <!-- Content -->
 
 
-  <!-- <div>
-    <img src="../images/arch-curv.jpg" class="img-fluid img-responsive" alt="Responsive image"> Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias ipsum officiibackground image fluids nihil dolore, libero
-    atque dolorem labore doloribus, voluptate quas consequatur deserunt reprehenderit explicabo eveniet ab amet velit aperiam
-    architecto.
-  </div> -->
   <div class="container-fluid">
 
-    <!-- Content -->
-    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Mollitia saepe, eum placeat dicta sit ab incidunt a error natus
-      doloribus esse assumenda ipsa voluptatum commodi ipsum. Exercitationem magni dolorem nam.</p>
-    <p>Quod facere, molestias porro necessitatibus cupiditate vitae officia reiciendis expedita possimus omnis pariatur tempora
-      accusantium fugit eaque maxime inventore placeat unde tenetur. Ab magni molestias blanditiis sunt officia unde nobis.</p>
-    <p>Voluptate odit molestias cupiditate saepe veniam numquam voluptatem natus eveniet, quaerat suscipit voluptatibus eum
-      facere dolor officiis eos quod explicabo inventore quia corrupti voluptates illo deleniti totam? Asperiores, facilis
-      dolorem.
-    </p>
-    <p>Ex alias accusantium natus quidem similique molestias dignissimos vel optio tempora voluptates facilis saepe quis unde
-      illum corrupti eaque, esse tempore doloribus pariatur blanditiis? Facere ex dolor velit vero rerum!</p>
-    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni vero impedit quam, soluta corporis recusandae iure quidem
-      cumque voluptates eos ducimus placeat inventore similique sed ullam tempora. Itaque, eum? Consectetur!</p>
-    <p>Nihil, obcaecati minima facilis beatae repudiandae quisquam in quas explicabo voluptate. Harum doloremque vel autem nisi
-      modi. Hic blanditiis nostrum, asperiores doloremque maxime maiores modi veritatis, ad, consequatur minima mollitia.</p>
-    <p>Quo, laborum. Fuga mollitia sunt, odio dignissimos impedit laborum, ipsam ipsum accusamus esse iure, distinctio libero
-      neque quam aliquid tempore numquam magni rem quas dolores illo? Impedit iure consequuntur voluptatem.</p>
-    <p>Culpa cum quaerat similique sit facere velit atque mollitia distinctio ullam dignissimos eius officia officiis minus,
-      eligendi maiores enim magnam consequuntur. Odit expedita eveniet quasi ratione. Voluptatum, consequuntur. Et, delectus?</p>
-    <p>Nobis reprehenderit excepturi labore ut iste placeat ullam itaque recusandae nihil dolore animi, libero assumenda quo
-      numquam ex, minima officia laudantium tenetur! Iure dolor eveniet magni temporibus modi alias velit.</p>
-    <p>Maxime quis beatae rem obcaecati minus eaque dignissimos sit ipsa facere, consectetur voluptate nemo blanditiis. Tenetur
-      molestiae animi, exercitationem quis provident, nihil dolore perspiciatis cum vero, quisquam amet! Libero, numquam.</p>
-    <p>Accusamus deserunt consectetur facere aut reiciendis dolor, molestias obcaecati soluta nostrum sequi magni. Impedit dolorem,
-      inventore laboriosam architecto corrupti officiis placeat tempore ratione a, aliquam quae consequatur? Inventore, asperiores
-      reprehenderit?
-    </p>
-    <p>Nam, tenetur sunt placeat consequuntur veritatis similique quos perspiciatis fugiat fugit dolor adipisci. Nihil numquam
-      magni molestias, eveniet magnam aliquid voluptate deleniti sequi autem. Vel harum odit soluta eum aut.
-    </p>
-    <p>Doloremque, excepturi quibusdam adipisci, dolores, ut qui eaque molestias porro ea enim pariatur architecto nemo minus
-      ducimus odio nobis explicabo? Minima debitis dolores repellendus vitae praesentium laudantium, illum esse corporis?</p>
-    <p>Corrupti sunt non, dicta illo totam similique necessitatibus vitae consectetur expedita. Amet itaque, reprehenderit corporis,
-      consequatur reiciendis natus quisquam ad odio accusantium temporibus ducimus vitae tenetur vero voluptatibus at error?</p>
-    <!-- Content -->
+
 
     <!-- footer -->
     <footer class="sticky-footer">
