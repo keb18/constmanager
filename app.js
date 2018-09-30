@@ -83,7 +83,8 @@ app.use(userRoutes);
 
 // Express to listen for requests (start server)
 const hostname = '127.0.0.1';
-const port = 3000;
+// const port = 3000;
+const port = 5000; // to make it work on heroku
 
 const moment = require('moment')
 app.listen(port, hostname, () => {
