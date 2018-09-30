@@ -10,8 +10,11 @@
   <title>ConstManager: Construction Software & Management</title>
 
   <link rel="stylesheet" href="/vendor/css/fontawesome-all.css">
+  <!-- <link rel="stylesheet" href="/vendor/css/fontawesome-all.min.css"> -->
   <link rel="stylesheet" href="/vendor/css/bootstrap.css">
+  <!-- <link rel="stylesheet" href="/vendor/css/bootstrap.min.css"> -->
   <link rel="stylesheet" href="/vendor/css/sb-admin.css">
+  <!-- <link rel="stylesheet" href="/vendor/css/sb-admin.min.css"> -->
   <link rel="stylesheet" href="/css/landing.css">
 </head>
 
@@ -19,7 +22,7 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
     <a class="navbar-brand" href="#">
-      ConstManager
+      <img src="/images/logo/constmanager_small.svg" alt="">
     </a>
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive"
       aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -97,11 +100,11 @@
               <div class="custom-control custom-checkbox mr-sm-2">
                 <input type="checkbox" class="custom-control-input" id="customControlAutosizing">
                 <label class="custom-control-label" for="customControlAutosizing">I agree to ConstManager’s
-                  <a data-toggle="modal" data-target="#terms" href="https://www.w3schools.com">Terms of Service</a>.
+                  <a data-toggle="modal" data-target="#terms" href="#"><u>Terms of Service</u></a>.
                 </label>
               </div>
-              
-              
+
+
             </form>
         </div>
       </div>
@@ -130,7 +133,7 @@
             <i class="fa fa-fw fa-chart-pie fa-4x"></i>
             <br>
             <h4>
-              <strong>Manage Company Finances</strong>
+              <strong>Company Finances</strong>
             </h4>
             <p>Manage company income and expenses over time periods, all shown in easy to read graphs or print P&L
               statements.
@@ -145,9 +148,9 @@
             <h4>
               <strong>Easy Fee Proposals</strong>
             </h4>
-            <p>Set-up rates and client databases and together with personalised forms and gantt charts for estimating
+            <p>Set-up rates and client databases and together with personalised forms and tools for estimating
               time costs,
-              tendering was never easier.</p>
+              tendering was never easier. Send fee proposals directly from the app.</p>
           </div>
         </div>
 
@@ -159,7 +162,7 @@
               <strong>Project Monitoring</strong>
             </h4>
             <p>Monitor project fees, employees time expenses and project progression. Automatic reminders for key dates
-              will allow you to always stay on top of any challanges.</p>
+              will allow you to always stay on top of any deadlines.</p>
           </div>
         </div>
 
@@ -170,19 +173,9 @@
             <h4>
               <strong>Information In One Place</strong>
             </h4>
-            <p>Go paperless and manage all files in just one place. With constant server back-ups you can rest assured
+            <p>Go paperless and manage all files and documents in one place. With constant server back-ups you can rest
+              assured
               that the information required is always available.</p>
-          </div>
-        </div>
-
-        <div class="row description">
-          <div class="col-md-12">
-            <i class="fa fa-fw fa-address-book fa-4x"></i>
-            <br>
-            <h4>
-              <strong>Customer focus</strong>
-            </h4>
-            <p>Manage marketing and further develop customer relationships and set goals for customer expectations.</p>
           </div>
         </div>
 
@@ -191,10 +184,22 @@
             <i class="fa fa-fw fa-user-friends fa-4x"></i>
             <br>
             <h4>
+              <strong>Customer focus</strong>
+            </h4>
+            <p>Manage marketing and further develop customer relationships and set goals for customer expectations.
+              Send automatic email cards and invites to events from your organisation.</p>
+          </div>
+        </div>
+
+        <div class="row description">
+          <div class="col-md-12">
+            <i class="fa fa-fw fa-share-alt fa-4x"></i>
+            <br>
+            <h4>
               <strong>ISO 9000</strong>
             </h4>
             <p>Quality management principles can be ensured through ConstManager's personalized workflows and
-              activities. Maintain people training
+              activities. Alos maintain people training
               records and skills development and assess individual performance.</p>
           </div>
         </div>
@@ -204,8 +209,59 @@
 
     <div class="container-fluid content">
       <div class="container ">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse nostrum nulla blanditiis ipsum id velit molestias
-        minima est, amet quibusdam asperiores ea beatae, commodi autem voluptatem similique in at officia?
+        <h3>Looking for more information?</h3>
+        <p> Get in thouch with us and we'll contact you. We can arrange a demonstration and discuss any specific
+          requirements for your own organisation.</p>
+        <p> Use the form below to give us some information and also describe your company in a few words and we'll get back to you as soon as possible.</p>
+
+        <div class="container contactForm">
+          <form>
+            <div class="form-group">
+              <label for="contactFormEmail">Email address</label>
+              <input type="email" class="form-control" id="contactFormEmail" placeholder="name@example.com">
+            </div>
+
+            <div class="form-group">
+              <label for="contactFormCmpanyName">Company Name</label>
+              <input type="text" class="form-control" id="contactFormCmpanyName">
+            </div>
+
+            <div class="form-group">
+              <label for="contactFormCompanyType">Example select</label>
+              <select class="form-control" id="contactFormCompanyType">
+                <option>Property Developer</option>
+                <option>Contractor</option>
+                <option>Architect</option>
+                <option>Engineer</option>
+                <option>Other, please state in the description.</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="contactFormMessage">Company description</label>
+              <textarea class="form-control" id="contactFormMessage" rows="3"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-lg btn-light btn-block next-button">Send</button>
+          </form>
+        </div>
+        <div class="container" id="social-media">
+          <hr>
+          <div class="row description">
+            <div class="col-md-4">
+                <a class="nav-link" href="https://www.twitter.com/constmanager">
+                  <i class="fab fa-fw fa-twitter fa-2x"></i></a>
+            </div>
+            <div class="col-md-4">
+                <a class="nav-link" href="https://www.facebook.com/constmanager">
+              <i class="fab fa-fw fa-facebook fa-2x"></i></a>
+            </div>
+            <div class="col-md-4">
+              <a class="nav-link" href="https://www.linkedin.com/company/constmanager">
+              <i class="fab fa-fw fa-linkedin-in fa-2x"></i></a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -219,10 +275,8 @@
 
     <!-- footer -->
     <footer class="sticky-footer">
-      <div class="container">
-        <div class="text-center">
-          <small>Copyright © ConstManager 2018</small>
-        </div>
+      <div class="text-center">
+        <small>Copyright © ConstManager 2018</small>
       </div>
     </footer>
     <!-- footer end -->
