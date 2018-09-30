@@ -42,7 +42,7 @@ passport.deserializeUser(User.deserializeUser());
 
 // Connect to the mongodb company server
 // mongoose.connect('mongodb://localhost/main_database')
-mongoose.connect('mongodb://admin:Noiembrie11@ds161740.mlab.com:61740/constmanager')
+mongoose.connect('mongodb://abuaishi:Noiembrie11@ds161740.mlab.com:61740/constmanager')
     .then(() => console.log('Successfully connected to the MongoDB database.'))
     .catch(err => console.log(err));
 
