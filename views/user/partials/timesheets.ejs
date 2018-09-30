@@ -1,81 +1,91 @@
-<h4>
-  <a class="fa fa-fw fa-chevron-left" id="previousSheet" href="#" style="text-decoration: none;"></a>
-  Week starting from: <i id="timesheetDate">28.05.2018</i>
-  <a class="fa fa-fw fa-chevron-right" id="nextSheet" href="#" style="text-decoration: none;"></a>
-</h4>
+<div class="container-fluid">
+  <h4>
+    <i class="fa fa-fw fa-calendar-alt"></i>Timesheets
+  </h4>
+  <h4>
+    <a class="fa fa-fw fa-chevron-left" id="previousSheet" href="#" style="text-decoration: none;"></a>
+    Week starting from: <i id="timesheetDate">28.05.2018</i>
+    <a class="fa fa-fw fa-chevron-right" id="nextSheet" href="#" style="text-decoration: none;"></a>
+  </h4>
+</div>
+
+
 
 <link rel="stylesheet" href="/css/timesheets.css">
 
+<div class="container-fluid">
 
-<table class="table table-bordered table-hover text-center table-sm table-responsive timesheetTable">
-  <thead class="tableHeader">
-    <tr>
-      <th style="width: 5%;">#</th>
-      <th style="width: 10%;">Project</th>
-      <th style="width: 15%;">Name</th>
-      <th style="width: 25%;">Description</th>
-      <th style="width: 5%;">Mon</th>
-      <th style="width: 5%;">Tue</th>
-      <th style="width: 5%;">Wed</th>
-      <th style="width: 5%;">Thu</th>
-      <th style="width: 5%;">Fri</th>
-      <th style="width: 5%;">Sat</th>
-      <th style="width: 5%;">Sun</th>
-      <th style="width: 4%;">Total</th>
-      <th style="width: 6%;">Delete</th>
-    </tr>
-  </thead>
-  <tfoot>
-    <tr>
-      <th class="totalHours" colspan="4">TOTAL HOURS</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </tfoot>
-  <tbody>
-    <tr>
-      <td>1</td>
-      <td>
-        <input id="projectNumber" type="text" name="timesheet[projectNumber]" autocomplete="nope">
-      </td>
-      <td>
-        <input id="projectName" type="text" name="timesheet[projectName]" disabled autocomplete="nope">
-      </td>
-      <td>
-        <input type="text" name="timesheet[projectDescription]" autocomplete="nope">
-      </td>
-      <td>
-        <input step="0.1" min="0" type="number" name="timesheet[mon]" autocomplete="nope">
-      </td>
-      <td>
-        <input step="0.1" min="0" type="number" name="timesheet[tue]" autocomplete="nope">
-      </td>
-      <td>
-        <input step="0.1" min="0" type="number" name="timesheet[wed]" autocomplete="nope">
-      </td>
-      <td>
-        <input step="0.1" min="0" type="number" name="timesheet[thu]" autocomplete="nope">
-      </td>
-      <td>
-        <input step="0.1" min="0" type="number" name="timesheet[fri]" autocomplete="nope">
-      </td>
-      <td>
-        <input step="0.1" min="0" type="number" name="timesheet[sat]" autocomplete="nope">
-      </td>
-      <td>
-        <input step="0.1" min="0" type="number" name="timesheet[sun]" autocomplete="nope">
-      </td>
-      <td></td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
+
+  <table class="table table-bordered table-hover text-center table-sm table-responsive timesheetTable">
+    <thead class="tableHeader">
+      <tr>
+        <th style="width: 5%;">#</th>
+        <th style="width: 10%;">Project</th>
+        <th style="width: 15%;">Name</th>
+        <th style="width: 25%;">Description</th>
+        <th style="width: 5%;">Mon</th>
+        <th style="width: 5%;">Tue</th>
+        <th style="width: 5%;">Wed</th>
+        <th style="width: 5%;">Thu</th>
+        <th style="width: 5%;">Fri</th>
+        <th style="width: 5%;">Sat</th>
+        <th style="width: 5%;">Sun</th>
+        <th style="width: 4%;">Total</th>
+        <th style="width: 6%;">Delete</th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <th class="totalHours" colspan="4">TOTAL HOURS</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </tfoot>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>
+          <input id="projectNumber" type="text" name="timesheet[projectNumber]" autocomplete="nope">
+        </td>
+        <td>
+          <input id="projectName" type="text" name="timesheet[projectName]" disabled autocomplete="nope">
+        </td>
+        <td>
+          <input type="text" name="timesheet[projectDescription]" autocomplete="nope">
+        </td>
+        <td>
+          <input step="0.1" min="0" type="number" name="timesheet[mon]" autocomplete="nope">
+        </td>
+        <td>
+          <input step="0.1" min="0" type="number" name="timesheet[tue]" autocomplete="nope">
+        </td>
+        <td>
+          <input step="0.1" min="0" type="number" name="timesheet[wed]" autocomplete="nope">
+        </td>
+        <td>
+          <input step="0.1" min="0" type="number" name="timesheet[thu]" autocomplete="nope">
+        </td>
+        <td>
+          <input step="0.1" min="0" type="number" name="timesheet[fri]" autocomplete="nope">
+        </td>
+        <td>
+          <input step="0.1" min="0" type="number" name="timesheet[sat]" autocomplete="nope">
+        </td>
+        <td>
+          <input step="0.1" min="0" type="number" name="timesheet[sun]" autocomplete="nope">
+        </td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 <div class="container-fluid">
   <div class="tableButtons">

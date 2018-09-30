@@ -1,0 +1,49 @@
+<div class="container-fluid">
+  <h4>
+    <i class="fa fa-fw fa-user-cog" style="text-decoration: none;"></i>
+    User Settings
+  </h4>
+</div>
+
+<div class="container">
+  <form>
+
+    <div class="container border topMargin">
+      <div class="container">
+        <h5>Personal information</h5>
+      </div>
+
+      <div class="form-group">
+        <label for="exampleFormControlInput1">Email address</label>
+        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+      </div>
+    </div>
+
+    <div class="container border topMargin">
+      <div class="input-group mb-3">
+
+        <div class="container">
+          <h5>Display settings</h5>
+        </div>
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="inputGroupSelect01">Theme color</label>
+        </div>
+        <select class="custom-select" id="inputGroupSelect01">
+          <option selected>
+            <%= currentUser.theme.charAt(0).toUpperCase() + currentUser.theme.slice(1) %>
+          </option>
+          <% if (currentUser.theme === "dark") { %>
+          <option value="1">Light</option>
+          <% } else if (currentUser.theme === "light") { %>
+          <option value="1">Dark</option>
+          <% } %>
+        </select>
+      </div>
+    </div>
+
+    <div class="container topMargin">
+        <a class="btn btn-primary btn-save" href="#">Save</a>
+    </div>
+  </form>
+
+</div>

@@ -14,9 +14,9 @@
   <link rel="stylesheet" href="/vendor/css/sb-admin.min.css">
 </head>
 
-<body class="fixed-nav sticky-footer bg-dark" id="page-top">
+<body class="fixed-nav sticky-footer bg-<%= currentUser.theme %>" id="page-top">
   <!-- Navigation-->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+  <nav class="navbar navbar-expand-lg navbar-<%= currentUser.theme %> bg-<%= currentUser.theme %> fixed-top" id="mainNav">
     <a class="navbar-brand" href="/<%= currentCompany._id %>/dashboard">
       <%= currentCompany.companyName %>
     </a>

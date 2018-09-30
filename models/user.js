@@ -14,7 +14,9 @@ let userSchema = new mongoose.Schema({
     userJoined: { type: Date, default: Date.now },
     company: [{ type: mongoose.Schema.Types.ObjectId, ref: "Company" }],
     projects: [{ type: mongoose.Schema.Types.ObjectId, ref: "Project" }],
-    timesheets: { type : Array , "default" : [] }
+    timesheets: { type : Array , "default" : [] },
+    // Settings
+    theme: {type: String, enum:["dark", "light"], default: "dark"}
 });
 
 userSchema.plugin(passportLocalMongoose);

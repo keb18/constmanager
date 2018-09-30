@@ -40,9 +40,12 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
+// Connect to remote mongodb (deploy)
+// mongoose.connect('mongodb://admin:Noiembrie11@ds161740.mlab.com:61740/constmanager')
+
 // Connect to the mongodb company server
-// mongoose.connect('mongodb://localhost/main_database')
-mongoose.connect('mongodb://admin:Noiembrie11@ds161740.mlab.com:61740/constmanager')
+mongoose.connect('mongodb://localhost/main_database')
+
     .then(() => console.log('Successfully connected to the MongoDB database.'))
     .catch(err => console.log(err));
 
@@ -83,18 +86,18 @@ app.use(userRoutes);
 
 // Express to listen for requests (start server)
 const hostname = '127.0.0.1';
-// const port = 3000;
-const port = 5000; // to make it work on heroku
+const port = 3000;
 
-// const moment = require('moment') // just for testing here
-// app.listen(port, hostname, () => {
-//     console.log(`Server running at http://${hostname}:${port}/`);
+const moment = require('moment') // just for testing here
+app.listen(port, hostname, () => {
+    console.log(`Server running at http://${hostname}:${port}/`);
 
-//     // for testing moment.js
-//     let checkDate = "2018-07-02 23:36:28.262"
-//     // let date = moment().startOf('isoWeek').format("DD.MM.YYYY")
-//     // let date = moment(checkDate).format("DD.MM.YYYY")
-//     // console.log(date)
-// });
+    // for testing moment.js
+    let checkDate = "2018-07-02 23:36:28.262"
+    // let date = moment().startOf('isoWeek').format("DD.MM.YYYY")
+    // let date = moment(checkDate).format("DD.MM.YYYY")
+    // console.log(date)
+});
 
-app.listen(process.env.PORT, '0.0.0.0');
+// for deploying to Heroku
+// app.listen(process.env.PORT, '0.0.0.0');
