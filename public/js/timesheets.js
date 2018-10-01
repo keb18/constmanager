@@ -191,7 +191,7 @@ function currSheet() {
     }
     // console.log(projectArr);
     timesheet.timesheet = projectArr;
-    console.log(timesheet)
+    // console.log(timesheet)
     return timesheet;
 }
 
@@ -228,13 +228,17 @@ function getProjectName() {
 
 // ========================================================================
 // (PUT) Update the current timesheet and save to server (if not submitted)
-document.querySelector('.btn-save').addEventListener('click', e => {
+
+
+document.querySelector('.btn-save-timesheet').addEventListener('click', e => {
+    console.log('Save button');
     saveTimesheet();
     // currSheet();
     e.preventDefault();
 });
 function saveTimesheet() {
     let timesheetList = currSheet();
+    console.log(timesheetList);
     if (timesheetList) {
         http.put(`${window.location.href}/timesheet/save`, timesheetList)
             .then(res => {
@@ -250,7 +254,7 @@ function saveTimesheet() {
 
 // =========================
 // (POST) Submit new timesheet
-document.querySelector('.btn-submit').addEventListener('click', e => {
+document.querySelector('.btn-submit-timesheet').addEventListener('click', e => {
     submitTimesheet();
     e.preventDefault();
 });

@@ -4,7 +4,7 @@
   </h4>
   <h4>
     <a class="fa fa-fw fa-chevron-left" id="previousSheet" href="#" style="text-decoration: none;"></a>
-    Week starting from: <i id="timesheetDate">28.05.2018</i>
+    Week starting from: <i id="timesheetDate"><%= currentUser.timesheets[0].timesheetDate %></i>
     <a class="fa fa-fw fa-chevron-right" id="nextSheet" href="#" style="text-decoration: none;"></a>
   </h4>
 </div>
@@ -89,10 +89,10 @@
 
 <div class="container-fluid">
   <div class="tableButtons">
-    <a class="btn btn-primary btn-save" href="#">Save</a>
+    <a class="btn btn-primary btn-save-timesheet" href="#">Save</a>
   </div>
   <div class="tableButtons">
-    <a class="btn btn-primary btn-submit" href="#">Submit</a>
+    <a class="btn btn-primary btn-submit-timesheet" href="#">Submit</a>
   </div>
 </div>
 

@@ -44,6 +44,7 @@ router.post('/register',
       accountType: "owner",
       position: "manager",
       timesheets: {
+        timesheetNumber: 0,
         timesheetDate: moment().startOf('isoWeek').format("DD.MM.YYYY"),
         status: "open",
         timesheet:

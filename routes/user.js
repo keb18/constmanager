@@ -23,6 +23,8 @@ router.get('/:companyId/user/:userId',
   });
 
 
+// ===================== TIMESHEETS LOGIC ========================
+// ===============================================================
 // GET last timesheet when first opening the timesheet page
 router.get('/:companyId/user/:userId/timesheet',
   mid.isLoggedIn,
@@ -103,12 +105,16 @@ router.put('/:companyId/user/:userId/timesheet/save',
   mid.disableCache,
   (req, res) => {
     timesheetBody = req.body;
+    // console.log(timesheetBody);
     timesheetLookup = timesheetBody.timesheetDate;
+    // console.log(timesheetLookup);
 
     User.findById(req.params.userId)
       .then(foundUser => {
+        // console.log(foundUser.timesheets[0].timesheetDate);
         // Get only the user's timesheet
         let foundTimesheets = foundUser.timesheets;
+        // console.log(foundTimesheets)
         // Find the index of the current date to updated
         const indexOfTimesheet = foundTimesheets.findIndex(dateToFind => dateToFind.timesheetDate === timesheetLookup)
         // Find the length of the array containing all the time spent
