@@ -5,16 +5,19 @@ import { ServerRequest, flashMessage } from './main.js';
 // Logic for inputing values into the table
 // ========================================
 
-// Add new row
-document.querySelector('.timesheetTable').addEventListener('click', addNewRow);
-// Calculate the total sum of hours
-document.querySelector('.timesheetTable').addEventListener('keyup', calculateTime);
-// Delete row
-document.querySelector('.timesheetTable').addEventListener('click', deleteRow)
-
 const table = document.querySelector('.timesheetTable');
 const tableBody = table.getElementsByTagName('tbody')[0];
 const tableFooter = table.getElementsByTagName('tfoot')[0].rows[0];
+
+// Add new row
+document.querySelector('.add-row').addEventListener('click', addNewRow);
+// Calculate the total sum of hours
+table.addEventListener('keyup', calculateTime);
+// Delete row
+table.addEventListener('click', deleteRow)
+// Add event listener to the first row
+let tableRows = tableBody.children;
+tableRows[0].getElementsByTagName('input')[0].addEventListener('blur', getProjectName);
 
 // Update cells for the time spent
 function calculateTime(e) {
@@ -68,7 +71,7 @@ function updateDayTime(changeCol) {
                 .getElementsByTagName('input')[0].value;
             sumCol += Number(cellValue);
         }
-        const totalDays = tableFooter.cells[changeCol - 3];
+        const totalDays = tableFooter.cells[changeCol - 2];
         totalDays.innerHTML = sumCol.toPrecision(3);
     }
 }
@@ -83,19 +86,18 @@ function updateTotalTime() {
         let cellValue = tableBody.rows[cellRow].cells[11].innerHTML;
         sumTotal += Number(cellValue);
     }
-    const totalWeek = tableFooter.cells[8];
+    const totalWeek = tableFooter.cells[9];
     totalWeek.innerHTML = sumTotal.toPrecision(3);
 }
 
-
 // Add new row to table logic
-function addNewRow(e) {
+function addNewRow() {
     const table = document.querySelector('.timesheetTable').getElementsByTagName('tbody')[0];
     let tableRowNumber = table.childElementCount;
-    let clickedRow = e.path[1].parentElement.rowIndex;
-    let clickedColumn = e.path[1].cellIndex;
+    // let clickedRow = e.path[1].parentElement.rowIndex;
+    // let clickedColumn = e.path[1].cellIndex;
 
-    if (clickedRow === tableRowNumber && clickedColumn === 1) {
+    if (tableRowNumber > 0) {
         // Create an empty <tr> element and add it to the last position of the table:
         let row = table.insertRow();
 
@@ -121,7 +123,10 @@ function addNewRow(e) {
             let cell = row.insertCell(i);
             cell.innerHTML = cellsList[i];
         }
-        getProjectName();
+        // getProjectName();
+        let newTableRowNumber = table.childElementCount;
+        console.log(newTableRowNumber);
+        tableRows[newTableRowNumber - 1].getElementsByTagName('input')[0].addEventListener('blur', getProjectName);
     }
 };
 
@@ -204,23 +209,20 @@ function currSheet() {
 const http = new ServerRequest;
 
 // Get project name after user finishes entering the project number
-function getProjectName() {
-    let tableRows = table.getElementsByTagName('tbody')[0].children;
-    for (let i = 0; i < tableRows.length; i++) {
-        tableRows[i].getElementsByTagName('input')[0].addEventListener('blur', (e) => {
-            let clickedRow = e.path[1].parentElement.rowIndex - 1;
-            let inputValue = tableRows[clickedRow].getElementsByTagName('input')[0].value;
-            http.get(`${window.location.href}/timesheet/findName/${inputValue}`)
-                .then(data => {
-                    tableRows[clickedRow].getElementsByTagName('input')[1].value = data.projectName;
-                    tableRows[clickedRow].getElementsByTagName('td')[0].id = data._id;
-                })
-                .catch(err => console.log(err));
-            e.preventDefault();
+function getProjectName(e) {
+    let clickedRow = e.path[1].parentElement.rowIndex - 1;
+    let inputValue = tableRows[clickedRow].getElementsByTagName('input')[0].value;
+    http.get(`${window.location.href}/timesheet/findName/${inputValue}`)
+        .then(data => {
+            tableRows[clickedRow].getElementsByTagName('input')[1].value = data.projectName;
+            tableRows[clickedRow].getElementsByTagName('td')[0].id = data._id;
+        })
+        .catch(err => {
+            const message = { "state": "error", "message": err };
+            flashMessage(message);
         });
-    }
+    e.preventDefault();
 }
-
 
 // =======================================
 // (GET) Request previous / next timesheet
@@ -228,8 +230,6 @@ function getProjectName() {
 
 // ========================================================================
 // (PUT) Update the current timesheet and save to server (if not submitted)
-
-
 document.querySelector('.btn-save-timesheet').addEventListener('click', e => {
     console.log('Save button');
     saveTimesheet();
@@ -250,7 +250,6 @@ function saveTimesheet() {
             })
     }
 }
-
 
 // =========================
 // (POST) Submit new timesheet

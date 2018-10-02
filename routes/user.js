@@ -104,18 +104,16 @@ router.put('/:companyId/user/:userId/timesheet/save',
   mid.isLoggedIn,
   mid.disableCache,
   (req, res) => {
+    
     timesheetBody = req.body;
-    // console.log(timesheetBody);
     timesheetLookup = timesheetBody.timesheetDate;
-    // console.log(timesheetLookup);
 
     User.findById(req.params.userId)
       .then(foundUser => {
-        // console.log(foundUser.timesheets[0].timesheetDate);
         // Get only the user's timesheet
         let foundTimesheets = foundUser.timesheets;
         // console.log(foundTimesheets)
-        // Find the index of the current date to updated
+        // Find the index of the current date to be updated
         const indexOfTimesheet = foundTimesheets.findIndex(dateToFind => dateToFind.timesheetDate === timesheetLookup)
         // Find the length of the array containing all the time spent
         const lengthOfSpentTime = foundUser.timesheets[indexOfTimesheet].timesheet.length;
