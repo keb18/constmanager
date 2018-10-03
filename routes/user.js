@@ -26,11 +26,11 @@ router.get('/:companyId/user/:userId',
 // ===================== TIMESHEETS LOGIC ========================
 // ===============================================================
 // GET last timesheet when first opening the timesheet page
-router.get('/:companyId/user/:userId/timesheet',
+router.get('/:companyId/user/:userId/timesheet/last',
   mid.isLoggedIn,
   mid.disableCache,
   (req, res) => {
-    // find project with provided id and serve it to the template
+    // find user with provided id in db and serve the timesheet to the template
     User.findById(req.params.userId, (err, foundUser) => {
       if (err) {
         mid.errorDb(err);

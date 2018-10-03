@@ -63,9 +63,6 @@ function updateDayTime(changeCol) {
     let sumCol = 0;
     let cellRow = 0
     if (changeCol > 3) {
-        // if(tableRows === 1){
-        //     sumCol = tableBody.rows[0].cells[4].getElementsByTagName('input')[0].value;
-        // }
         for (cellRow; cellRow < tableRows; cellRow++) {
             let cellValue = tableBody.rows[cellRow].cells[changeCol]
                 .getElementsByTagName('input')[0].value;
@@ -107,13 +104,13 @@ function addNewRow() {
             '<td><input id="projectNumber" type="text" name="timesheet[projectNumber]" autocomplete="nope"></td>',
             '<td><input id="projectName" type="text" name="timesheet[projectName]" disabled autocomplete="nope"></td>',
             '<td><input type="text" name="timesheet[projectDescription]" autocomplete="nope"></td>',
-            '<td><input step="0.1" min="0" type="number" id="hours" name="timesheet[mon]" autocomplete="nope"></td>',
-            '<td><input step="0.1" min="0" type="number" name="timesheet[tue]" autocomplete="nope"></td>',
-            '<td><input step="0.1" min="0" type="number" name="timesheet[wed]" autocomplete="nope"></td>',
-            '<td><input step="0.1" min="0" type="number" name="timesheet[thu]" autocomplete="nope"></td>',
-            '<td><input step="0.1" min="0" type="number" name="timesheet[fri]" autocomplete="nope"></td>',
-            '<td><input step="0.1" min="0" type="number" name="timesheet[sat]" autocomplete="nope"></td>',
-            '<td><input step="0.1" min="0" type="number" name="timesheet[sun]" autocomplete="nope"></td>',
+            '<td><input step="0.1" min="0" type="number" id="hours" name="timesheet[mon]" autocomplete="nope" value="0"></td>',
+            '<td><input step="0.1" min="0" type="number" name="timesheet[tue]" autocomplete="nope" value="0"></td>',
+            '<td><input step="0.1" min="0" type="number" name="timesheet[wed]" autocomplete="nope" value="0"></td>',
+            '<td><input step="0.1" min="0" type="number" name="timesheet[thu]" autocomplete="nope" value="0"></td>',
+            '<td><input step="0.1" min="0" type="number" name="timesheet[fri]" autocomplete="nope" value="0"></td>',
+            '<td><input step="0.1" min="0" type="number" name="timesheet[sat]" autocomplete="nope" value="0"></td>',
+            '<td><input step="0.1" min="0" type="number" name="timesheet[sun]" autocomplete="nope" value="0"></td>',
             '<td>0</td>',
             '<td><i class="fa fa-fw fa-trash"></i></td>',
         ];
@@ -125,7 +122,7 @@ function addNewRow() {
         }
         // getProjectName();
         let newTableRowNumber = table.childElementCount;
-        console.log(newTableRowNumber);
+        // console.log(newTableRowNumber);
         tableRows[newTableRowNumber - 1].getElementsByTagName('input')[0].addEventListener('blur', getProjectName);
     }
 };
@@ -165,6 +162,13 @@ function currSheet() {
         let projectName = rows[i].getElementsByTagName('input')[1].value;
         let projectDesc = rows[i].getElementsByTagName('input')[2].value;
         let projectTime = parseInt(tableBody.rows[i].cells[11].innerText);
+        let mon = parseInt(rows[i].getElementsByTagName('input')[3].value)
+        let tue = parseInt(rows[i].getElementsByTagName('input')[4].value)
+        let wed = parseInt(rows[i].getElementsByTagName('input')[5].value)
+        let thu = parseInt(rows[i].getElementsByTagName('input')[6].value)
+        let fri = parseInt(rows[i].getElementsByTagName('input')[7].value)
+        let sat = parseInt(rows[i].getElementsByTagName('input')[8].value)
+        let sun = parseInt(rows[i].getElementsByTagName('input')[9].value)
 
         if (projectNo === "") {
             let message = {
@@ -190,7 +194,16 @@ function currSheet() {
                 "projectNumber": projectNo,
                 "projectName": projectName,
                 "description": projectDesc,
-                "time": projectTime
+                "time": projectTime,
+                "dayHours": {
+                    "mon": mon,
+                    "tue": tue,
+                    "wed": wed,
+                    "thu": thu,
+                    "fri": fri,
+                    "sat": sat,
+                    "sun": sun
+                }
             });
         }
     }
@@ -201,14 +214,15 @@ function currSheet() {
 }
 
 
-// ==============
+// =========================
 // Logic for server requests
-// ==============
+// =========================
 
 
 const http = new ServerRequest;
 
-// Get project name after user finishes entering the project number
+//===================================================================
+// (GET) project name after user finishes entering the project number
 function getProjectName(e) {
     let clickedRow = e.path[1].parentElement.rowIndex - 1;
     let inputValue = tableRows[clickedRow].getElementsByTagName('input')[0].value;
@@ -224,34 +238,69 @@ function getProjectName(e) {
     e.preventDefault();
 }
 
+// ====================
+// (GET) Last timesheet and populate the fields
+document.querySelector('.timesheet-btn').addEventListener('click', e => {
+    http.get(`${window.location.href}/timesheet/last`)
+        .then(res => populateTimesheet(res))
+        .catch(err => {
+            const message = { "state": "error", "message": err };
+            flashMessage(message);
+        });
+    e.preventDefault();
+});
+
 // =======================================
 // (GET) Request previous / next timesheet
+
+
+function populateTimesheet(timesheet) {
+    let currTime = timesheet[0];
+    let timesheetLength = currTime.timesheet.length;
+    let rows = table.getElementsByTagName('tbody')[0].rows;
+
+    for (let i = 0; i < timesheetLength; i++) {
+        if (i > 0) { addNewRow() };
+        rows[i].getElementsByTagName('input')[0].value = currTime.timesheet[i].projectNumber;
+        rows[i].getElementsByTagName('input')[1].value = currTime.timesheet[i].projectName;
+        rows[i].getElementsByTagName('input')[2].value = currTime.timesheet[i].description;
+
+        let weekDays = { 1: "mon", 2: "tue", 3: "wed", 4: "thu", 5: "fri", 6: "sat", 7: "sun" }
+
+        for (let j = 3; j < 10; j++) {
+            let cell = rows[i].getElementsByTagName('input')[j]
+            cell.value = parseInt(currTime.timesheet[i].dayHours[weekDays[j - 2]]);
+            updateDayTime(j + 1);
+        }
+        updateProjectTime(i + 1);
+    }
+    updateTotalTime();
+}
+
+
 
 
 // ========================================================================
 // (PUT) Update the current timesheet and save to server (if not submitted)
 document.querySelector('.btn-save-timesheet').addEventListener('click', e => {
-    console.log('Save button');
     saveTimesheet();
-    // currSheet();
     e.preventDefault();
 });
 function saveTimesheet() {
     let timesheetList = currSheet();
-    console.log(timesheetList);
     if (timesheetList) {
         http.put(`${window.location.href}/timesheet/save`, timesheetList)
             .then(res => {
                 flashMessage(res);
             })
             .catch(err => {
-                const message = { "state": "error", "message": err };
+                let message = { "state": "error", "message": err };
                 flashMessage(message);
             })
     }
 }
 
-// =========================
+// ===========================
 // (POST) Submit new timesheet
 document.querySelector('.btn-submit-timesheet').addEventListener('click', e => {
     submitTimesheet();
@@ -261,10 +310,7 @@ function submitTimesheet() {
     let timesheetList = currSheet();
     http.post(`${window.location.href}/timesheet/submit`, timesheetList)
         .then(res => {
-            let message = {
-                "state": "ok",
-                "message": res
-            };
+            let message = { "state": "ok", "message": res };
             flashMessage(message);
         })
         .catch(err => console.log(err))
