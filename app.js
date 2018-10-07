@@ -92,7 +92,12 @@ app.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
 
     // for testing moment.js
-    let checkDate = "2018-07-02 23:36:28.262"
+    let checkDate = "26.11.2018";
+    console.log(checkDate);
+    let newDate = moment(checkDate, "DD.MM.YYYY").add(7, 'days').format("DD.MM.YYYY");
+    console.log(newDate);
+    // let plmDate = moment(checkDate).format("DD.MM.YYYY");
+    // console.log(plmDate);
     // let date = moment().startOf('isoWeek').format("DD.MM.YYYY")
     // let date = moment(checkDate).format("DD.MM.YYYY")
     // console.log(date)

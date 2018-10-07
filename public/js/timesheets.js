@@ -217,8 +217,6 @@ function currSheet() {
 // =========================
 // Logic for server requests
 // =========================
-
-
 const http = new ServerRequest;
 
 //===================================================================
@@ -238,21 +236,32 @@ function getProjectName(e) {
     e.preventDefault();
 }
 
+
 // ====================
 // (GET) Last timesheet and populate the fields
 document.querySelector('.timesheet-btn').addEventListener('click', e => {
+    getLastTimesheet();
+    e.preventDefault();
+});
+
+function getLastTimesheet(){
     http.get(`${window.location.href}/timesheet/last`)
         .then(res => populateTimesheet(res))
         .catch(err => {
             const message = { "state": "error", "message": err };
             flashMessage(message);
         });
-    e.preventDefault();
-});
+}
 
-// =======================================
 // (GET) Request previous / next timesheet
-
+document.querySelector('.nextSheet').addEventListener('click', e => {
+    console.log("Next timesheet clicked");
+    // currDate = document.getElementById('timesheetDate').innerHTML
+});
+document.querySelector('.nextSheet').addEventListener('click', e => {
+    console.log("Next timesheet clicked");
+    // currDate = document.getElementById('timesheetDate').innerHTML
+});
 
 function populateTimesheet(timesheet) {
     let currTime = timesheet[0];
@@ -278,8 +287,6 @@ function populateTimesheet(timesheet) {
 }
 
 
-
-
 // ========================================================================
 // (PUT) Update the current timesheet and save to server (if not submitted)
 document.querySelector('.btn-save-timesheet').addEventListener('click', e => {
@@ -300,6 +307,7 @@ function saveTimesheet() {
     }
 }
 
+
 // ===========================
 // (POST) Submit new timesheet
 document.querySelector('.btn-submit-timesheet').addEventListener('click', e => {
@@ -314,4 +322,27 @@ function submitTimesheet() {
             flashMessage(message);
         })
         .catch(err => console.log(err))
+}
+
+// ===================================
+// (POST) Create a new empty timesheet
+document.querySelector('.btn-new-timesheet').addEventListener('click', e => {
+    newTimesheet();
+    e.preventDefault();
+});
+
+function newTimesheet() {
+    http.post(`${window.location.href}/timesheet/new`)
+        .then(res => {
+            flashMessage(res.msg);
+            document.getElementById('timesheetDate').innerHTML = res.date;
+        })
+        .catch(err => {
+            let message = { "state": "error", "message": err };
+            flashMessage(message);
+        })
+}
+
+function updateDate(){
+
 }
