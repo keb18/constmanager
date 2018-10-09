@@ -23,10 +23,12 @@ router.get('/:companyId/user/:userId',
     });
   });
 
-
+// ===============================================================
 // ===================== TIMESHEETS LOGIC ========================
 // ===============================================================
-// GET project name when inputting the project number
+
+// ==================================================
+// GET PROJECT NAME when inputting the project number
 router.get('/:companyId/user/:userId/timesheet/findName/:projectNumber(*)',
   mid.isLoggedIn,
   mid.disableCache,
@@ -57,8 +59,8 @@ router.get('/:companyId/user/:userId/timesheet/findName/:projectNumber(*)',
       });
   });
 
-
-// GET last timesheet when first opening the timesheet page
+// =======================================================
+// GET LAST timesheet when first opening the timesheet page
 router.get('/:companyId/user/:userId/timesheet/last',
   mid.isLoggedIn,
   mid.disableCache,
@@ -84,8 +86,45 @@ router.get('/:companyId/user/:userId/timesheet/last',
       });
   });
 
-// GET previous timesheet when first opening the timesheet page
+// ============================================================
+// GET PREVIOUS timesheet when first opening the timesheet page
 router.post('/:companyId/user/:userId/timesheet/previous',
+  mid.isLoggedIn,
+  mid.disableCache,
+  (req, res) => {
+    // Save to variable the current timesheet
+    let timesheet = req.body;
+    // find user with provided id in db and serve the timesheet to the template
+    User.findById(req.params.userId)
+      .then(foundUser => {
+        // Get only the user's timesheet
+        let foundTimesheets = foundUser.timesheets;
+        // Find the current date
+        let currDate = timesheet.timesheetDate;
+
+        // Find index of current date in all timesheets
+        let timesheetIndex = foundTimesheets.findIndex(obj => obj.timesheetDate == currDate);
+
+        // Check if the first timesheet has been reached
+        if (timesheetIndex === 0) {
+          message = { "state": "error", "message": "First timesheet has been reached." };
+          return res.json(message);
+        } else {
+          // If not the first timesheet, find the next timesheet
+          let previousTimesheet = foundTimesheets[timesheetIndex - 1];
+          return res.json(previousTimesheet);
+        }
+      })
+      .catch(err => {
+        mid.errorDb(err);
+        req.flash("error", "User was not found in the database.");
+        res.redirect('back');
+      });
+  });
+
+// ============================================================
+// GET NEXT timesheet when first opening the timesheet page
+router.post('/:companyId/user/:userId/timesheet/next',
   mid.isLoggedIn,
   mid.disableCache,
   (req, res) => {
@@ -104,14 +143,13 @@ router.post('/:companyId/user/:userId/timesheet/previous',
         let timesheetIndex = foundTimesheets.findIndex(obj => obj.timesheetDate == currDate);
 
         // Check if the first timesheet has been reached
-        if (timesheetIndex === 0) {
-          message = { "state": "error", "message": "First timesheet has been reached." };
+        if (timesheetIndex === foundTimesheets.length - 1) {
+          message = { "state": "error", "message": "Last timesheet has been reached. Create a new timesheet for the next week." };
           return res.json(message);
         } else {
-          // If not the first timesheet, find the next timesheet
-          let previousTimesheet = foundTimesheets[timesheetIndex - 1];
-          console.log(previousTimesheet)
-          return res.json(previousTimesheet);
+          // If not the last timesheet, find the next timesheet
+          let nextTimesheet = foundTimesheets[timesheetIndex + 1];
+          return res.json(nextTimesheet);
         }
       })
       .catch(err => {

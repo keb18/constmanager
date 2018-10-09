@@ -241,13 +241,32 @@ function getLastTimesheet() {
 // ============================
 // (GET) Request next timesheet
 document.querySelector('.nextSheet').addEventListener('click', e => {
-    console.log("Next timesheet clicked");
-    // currDate = document.getElementById('timesheetDate').innerHTML
+    enableNavButton(".previousSheet")
+    getNextTimesheet();
+    e.preventDefault();
 });
 
+function getNextTimesheet() {
+    let timesheet = currSheet();
+    http.post(`${window.location.href}/timesheet/next`, timesheet)
+        .then(res => {
+            if (res.status) {
+                deleteAllRows();
+                populateTimesheet(res)
+            } else {
+                disableNavButton(".nextSheet");
+                flashMessage(res);
+            }
+        })
+        .catch(err => {
+            // Log the err separately to user error log - future implementation
+            let message = { "state": "error", "message": "There was a problem with the server." };
+            flashMessage(message);
+        })
+}
+// =================================
 // (POST) Request previous timesheet
 document.querySelector('.previousSheet').addEventListener('click', e => {
-    // deleteAllRows();
     enableNavButton(".nextSheet")
     getPreviousTimesheet();
     e.preventDefault();
@@ -258,6 +277,7 @@ function getPreviousTimesheet() {
     http.post(`${window.location.href}/timesheet/previous`, timesheet)
         .then(res => {
             if (res.status) {
+                deleteAllRows();
                 populateTimesheet(res)
             } else {
                 disableNavButton(".previousSheet");
@@ -405,3 +425,16 @@ function newTimesheet() {
         })
 }
 
+// ===========
+// DATE PICKER
+$('.datepicker').datepicker();
+
+$('.plm').datepicker({
+  format: "dd/mm/yyyy",
+  weekStart: 1,
+  orientation: "bottom auto",
+  keyboardNavigation: false,
+  daysOfWeekHighlighted: "0,6",
+  autoclose: true,
+  todayHighlight: true
+});
