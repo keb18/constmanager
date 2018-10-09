@@ -148,6 +148,7 @@ function currSheet() {
 
     let timesheetDate = document.getElementById('timesheetDate').textContent
     let rows = table.getElementsByTagName('tbody')[0].rows;
+    // console.log(rows)
     // let status = { "status": "open" }
 
     let timesheet = {
@@ -170,42 +171,22 @@ function currSheet() {
         let sat = parseInt(rows[i].getElementsByTagName('input')[8].value)
         let sun = parseInt(rows[i].getElementsByTagName('input')[9].value)
 
-        if (projectNo === "") {
-            let message = {
-                "state": "error",
-                "message": `Empty project numbers are not acceptable. Please check your input.`
-            };
-            return flashMessage(message);
-        } else if (projectName === 'n/a') {
-            let message = {
-                "state": "error",
-                "message": `${projectNo} doesn't exist. Please check your input.`
-            };
-            return flashMessage(message);
-        } else if (projectName === "") {
-            let message = {
-                "state": "error",
-                "message": `Please remove the empty rows.`
-            };
-            return flashMessage(message);
-        } else {
-            projectArr.push({
-                "projectId": projectId,
-                "projectNumber": projectNo,
-                "projectName": projectName,
-                "description": projectDesc,
-                "time": projectTime,
-                "dayHours": {
-                    "mon": mon,
-                    "tue": tue,
-                    "wed": wed,
-                    "thu": thu,
-                    "fri": fri,
-                    "sat": sat,
-                    "sun": sun
-                }
-            });
-        }
+        projectArr.push({
+            "projectId": projectId,
+            "projectNumber": projectNo,
+            "projectName": projectName,
+            "description": projectDesc,
+            "time": projectTime,
+            "dayHours": {
+                "mon": mon,
+                "tue": tue,
+                "wed": wed,
+                "thu": thu,
+                "fri": fri,
+                "sat": sat,
+                "sun": sun
+            }
+        });
     }
     // console.log(projectArr);
     timesheet.timesheet = projectArr;
@@ -240,11 +221,14 @@ function getProjectName(e) {
 // ====================
 // (GET) Last timesheet and populate the fields
 document.querySelector('.timesheet-btn').addEventListener('click', e => {
+    deleteAllRows();
+    disableNavButton(".nextSheet");
+    enableNavButton(".previousSheet")
     getLastTimesheet();
     e.preventDefault();
 });
 
-function getLastTimesheet(){
+function getLastTimesheet() {
     http.get(`${window.location.href}/timesheet/last`)
         .then(res => populateTimesheet(res))
         .catch(err => {
@@ -253,32 +237,74 @@ function getLastTimesheet(){
         });
 }
 
-// (GET) Request previous / next timesheet
-document.querySelector('.nextSheet').addEventListener('click', e => {
-    console.log("Next timesheet clicked");
-    // currDate = document.getElementById('timesheetDate').innerHTML
-});
+
+// ============================
+// (GET) Request next timesheet
 document.querySelector('.nextSheet').addEventListener('click', e => {
     console.log("Next timesheet clicked");
     // currDate = document.getElementById('timesheetDate').innerHTML
 });
 
+// (POST) Request previous timesheet
+document.querySelector('.previousSheet').addEventListener('click', e => {
+    // deleteAllRows();
+    enableNavButton(".nextSheet")
+    getPreviousTimesheet();
+    e.preventDefault();
+});
+
+function getPreviousTimesheet() {
+    let timesheet = currSheet();
+    http.post(`${window.location.href}/timesheet/previous`, timesheet)
+        .then(res => {
+            if (res.status) {
+                populateTimesheet(res)
+            } else {
+                disableNavButton(".previousSheet");
+                flashMessage(res);
+            }
+        })
+        .catch(err => {
+            // Log the err separately to user error log - future implementation
+            let message = { "state": "error", "message": "There was a problem with the server." };
+            flashMessage(message);
+        })
+}
+
+// Activate the nav button
+const enableNavButton = (selector) => document.querySelector(selector).classList.remove('disabled');
+// Deactivate nav button when reaching one end
+const disableNavButton = (selector) => document.querySelector(selector).classList.add('disabled');
+
+// Delete rows if more than 1 row available
+function deleteAllRows() {
+    let rowsToDelete = tableBody.children.length;
+    if (rowsToDelete > 1) {
+        for (let i = 1; i < rowsToDelete; i++) {
+            tableBody.deleteRow(1);
+        }
+    }
+}
+
+
+
 function populateTimesheet(timesheet) {
-    let currTime = timesheet[0];
-    let timesheetLength = currTime.timesheet.length;
+    let timesheetLength = timesheet.timesheet.length;
     let rows = table.getElementsByTagName('tbody')[0].rows;
+
+    document.getElementById('timesheetDate').innerHTML = timesheet.timesheetDate;
 
     for (let i = 0; i < timesheetLength; i++) {
         if (i > 0) { addNewRow() };
-        rows[i].getElementsByTagName('input')[0].value = currTime.timesheet[i].projectNumber;
-        rows[i].getElementsByTagName('input')[1].value = currTime.timesheet[i].projectName;
-        rows[i].getElementsByTagName('input')[2].value = currTime.timesheet[i].description;
+        rows[i].getElementsByTagName('input')[0].value = timesheet.timesheet[i].projectNumber;
+        rows[i].getElementsByTagName('input')[1].value = timesheet.timesheet[i].projectName;
+        rows[i].getElementsByTagName('input')[2].value = timesheet.timesheet[i].description;
 
         let weekDays = { 1: "mon", 2: "tue", 3: "wed", 4: "thu", 5: "fri", 6: "sat", 7: "sun" }
 
         for (let j = 3; j < 10; j++) {
             let cell = rows[i].getElementsByTagName('input')[j]
-            cell.value = parseInt(currTime.timesheet[i].dayHours[weekDays[j - 2]]);
+            cell.value = parseInt(timesheet.timesheet[i].dayHours[weekDays[j - 2]]);
             updateDayTime(j + 1);
         }
         updateProjectTime(i + 1);
@@ -295,7 +321,39 @@ document.querySelector('.btn-save-timesheet').addEventListener('click', e => {
 });
 function saveTimesheet() {
     let timesheetList = currSheet();
-    if (timesheetList) {
+    console.log(timesheetList)
+    let listLength = timesheetList.timesheet.length;
+    let timesheet = timesheetList.timesheet;
+    let check = "false";
+
+    for (let i = 0; i < listLength; i++) {
+        if (timesheet.projectId === "") {
+            check = "false";
+            let message = {
+                "state": "error",
+                "message": `Empty project numbers are not acceptable. Please check your input.`
+            };
+            return flashMessage(message);
+        } else if (timesheet.projectName === 'n/a') {
+            check = "false";
+            let message = {
+                "state": "error",
+                "message": `${projectNo} doesn't exist. Please check your input.`
+            };
+            return flashMessage(message);
+        } else if (timesheet.projectName === "") {
+            check = "false";
+            let message = {
+                "state": "error",
+                "message": `Please remove the empty rows.`
+            };
+            return flashMessage(message);
+        } else {
+            check = "true";
+        }
+    }
+
+    if (timesheetList && check === "true") {
         http.put(`${window.location.href}/timesheet/save`, timesheetList)
             .then(res => {
                 flashMessage(res);
@@ -321,7 +379,10 @@ function submitTimesheet() {
             let message = { "state": "ok", "message": res };
             flashMessage(message);
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+            let message = { "state": "error", "message": err };
+            flashMessage(message);
+        })
 }
 
 // ===================================
@@ -334,8 +395,9 @@ document.querySelector('.btn-new-timesheet').addEventListener('click', e => {
 function newTimesheet() {
     http.post(`${window.location.href}/timesheet/new`)
         .then(res => {
+            populateTimesheet(res.timesheet);
             flashMessage(res.msg);
-            document.getElementById('timesheetDate').innerHTML = res.date;
+            // document.getElementById('timesheetDate').innerHTML = res.date;
         })
         .catch(err => {
             let message = { "state": "error", "message": err };
@@ -343,6 +405,3 @@ function newTimesheet() {
         })
 }
 
-function updateDate(){
-
-}

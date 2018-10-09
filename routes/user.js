@@ -64,17 +64,64 @@ router.get('/:companyId/user/:userId/timesheet/last',
   mid.disableCache,
   (req, res) => {
     // find user with provided id in db and serve the timesheet to the template
-    User.findById(req.params.userId, (err, foundUser) => {
-      if (err) {
+    User.findById(req.params.userId)
+      .then(foundUser => {
+        // Get only the user's timesheet
+        let foundTimesheets = foundUser.timesheets;
+
+        // Get the total timesheet entries
+        let numberOfEntries = foundTimesheets.length;
+
+        // Find the last timesheet
+        let lastTimesheet = foundTimesheets[numberOfEntries - 1];
+
+        return res.json(lastTimesheet)
+      })
+      .catch(err => {
         mid.errorDb(err);
         req.flash("error", "User was not found in the database.");
         res.redirect('back');
-      }
-      // console.log(foundUser.timesheets)
-      return res.json(foundUser.timesheets)
-    });
+      });
   });
 
+// GET previous timesheet when first opening the timesheet page
+router.post('/:companyId/user/:userId/timesheet/previous',
+  mid.isLoggedIn,
+  mid.disableCache,
+  (req, res) => {
+    // Save to variable the current timesheet
+    let timesheet = req.body;
+    // find user with provided id in db and serve the timesheet to the template
+    User.findById(req.params.userId)
+      .then(foundUser => {
+        // Get only the user's timesheet
+        let foundTimesheets = foundUser.timesheets;
+
+        // Find the current date
+        let currDate = timesheet.timesheetDate;
+
+        // Find index of current date in all timesheets
+        let timesheetIndex = foundTimesheets.findIndex(obj => obj.timesheetDate == currDate);
+
+        // Check if the first timesheet has been reached
+        if (timesheetIndex === 0) {
+          message = { "state": "error", "message": "First timesheet has been reached." };
+          return res.json(message);
+        } else {
+          // If not the first timesheet, find the next timesheet
+          let previousTimesheet = foundTimesheets[timesheetIndex - 1];
+          console.log(previousTimesheet)
+          return res.json(previousTimesheet);
+        }
+      })
+      .catch(err => {
+        mid.errorDb(err);
+        req.flash("error", "User was not found in the database.");
+        res.redirect('back');
+      });
+  });
+
+// ========================
 // POST new empty timesheet
 router.post('/:companyId/user/:userId/timesheet/new',
   mid.isLoggedIn,
@@ -84,19 +131,15 @@ router.post('/:companyId/user/:userId/timesheet/new',
       .then(foundUser => {
         // Get only the user's timesheet
         let foundTimesheets = foundUser.timesheets;
-        console.log(foundTimesheets);
 
         // Get the total timesheet entries
         let numberOfEntries = foundTimesheets.length;
-        console.log(numberOfEntries);
 
         // Find the date of the last timesheet
         let lastDate = foundTimesheets[numberOfEntries - 1].timesheetDate;
-        console.log(lastDate);
 
         // Number of the timesheet
         let lastNumber = foundTimesheets[numberOfEntries - 1].timesheetNumber;
-        console.log(lastNumber);
 
         // Add 7 days to the last timesheet
         let newDate = moment(lastDate, "DD.MM.YYYY").add(7, 'days').format("DD.MM.YYYY");
@@ -111,7 +154,16 @@ router.post('/:companyId/user/:userId/timesheet/new',
               projectNumber: "",
               projectName: "",
               description: "",
-              time: 0
+              time: 0,
+              "dayHours": {
+                "mon": 0,
+                "tue": 0,
+                "wed": 0,
+                "thu": 0,
+                "fri": 0,
+                "sat": 0,
+                "sun": 0
+              }
             }]
         }
 
@@ -122,11 +174,9 @@ router.post('/:companyId/user/:userId/timesheet/new',
         foundUser.save();
 
         return res.json({
-          date: newTimesheet.timesheetDate,
-          msg: {"state": "ok",
-          "message": "New timesheet created."}
+          timesheet: newTimesheet,
+          msg: { "state": "ok", "message": "New timesheet created." }
         });
-
       })
       .catch(err => {
         mid.errorDb(err);
