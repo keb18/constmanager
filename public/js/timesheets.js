@@ -8,6 +8,7 @@ import { ServerRequest, flashMessage } from './main.js';
 const table = document.querySelector('.timesheetTable');
 const tableBody = table.getElementsByTagName('tbody')[0];
 const tableFooter = table.getElementsByTagName('tfoot')[0].rows[0];
+const timesheetDateValue = document.getElementById('timesheetDate');
 
 // Add new row
 document.querySelector('.add-row').addEventListener('click', addNewRow);
@@ -144,9 +145,9 @@ function rowRenumber() {
 // Convert the timesheet table values to json
 function currSheet() {
     // Remove error message
-    document.querySelector('.flashMessage').innerHTML = ""
+    document.querySelector('.flashMessage').innerHTML = "";
 
-    let timesheetDate = document.getElementById('timesheetDate').textContent
+    let timesheetDate = timesheetDateValue.value;
     let rows = table.getElementsByTagName('tbody')[0].rows;
     // console.log(rows)
     // let status = { "status": "open" }
@@ -218,13 +219,14 @@ function getProjectName(e) {
 }
 
 
-// ====================
+// ============================================
 // (GET) Last timesheet and populate the fields
 document.querySelector('.timesheet-btn').addEventListener('click', e => {
     deleteAllRows();
     disableNavButton(".nextSheet");
     enableNavButton(".previousSheet")
     getLastTimesheet();
+    firstDate();
     e.preventDefault();
 });
 
@@ -264,6 +266,33 @@ function getNextTimesheet() {
             flashMessage(message);
         })
 }
+
+// // ======================================================
+// // (GET) Request timesheet from user choice at datepicker
+// timesheetDateValue.addEventListener('change', () => {
+//     getTimesheetSelectDate()
+// });
+
+// function getTimesheetSelectDate(){
+//     let timesheet = timesheetDateValue.value;
+//     http.post(`${window.location.href}/timesheet/date`, timesheet)
+//         .then(res => {
+//             if (res.status) {
+//                 deleteAllRows();
+//                 populateTimesheet(res)
+//             } else {
+//                 disableNavButton(".previousSheet");
+//                 flashMessage(res);
+//             }
+//         })
+//         .catch(err => {
+//             // Log the err separately to user error log - future implementation
+//             let message = { "state": "error", "message": "There was a problem with the server." };
+//             flashMessage(message);
+//         })
+// }
+
+
 // =================================
 // (POST) Request previous timesheet
 document.querySelector('.previousSheet').addEventListener('click', e => {
@@ -312,7 +341,7 @@ function populateTimesheet(timesheet) {
     let timesheetLength = timesheet.timesheet.length;
     let rows = table.getElementsByTagName('tbody')[0].rows;
 
-    document.getElementById('timesheetDate').innerHTML = timesheet.timesheetDate;
+    timesheetDateValue.value = timesheet.timesheetDate;
 
     for (let i = 0; i < timesheetLength; i++) {
         if (i > 0) { addNewRow() };
@@ -427,14 +456,24 @@ function newTimesheet() {
 
 // ===========
 // DATE PICKER
-$('.datepicker').datepicker();
+// function to assign date picker to date input field when user
+// clicks on the timesheet button
+function firstDate() {
+    http.get(`${window.location.href}/timesheet/first`)
+        .then(res => {
+            // Next line not really the best way to do it but date comes in
+            // GB format dd/mm/yyyy but the date picker requires mm/dd/yyyy
+            // all is needed here is to swap days with months 
+            let newDate = new Date(res).toLocaleDateString("en-GB");
 
-$('.plm').datepicker({
-  format: "dd/mm/yyyy",
-  weekStart: 1,
-  orientation: "bottom auto",
-  keyboardNavigation: false,
-  daysOfWeekHighlighted: "0,6",
-  autoclose: true,
-  todayHighlight: true
-});
+            timesheetDateValue.DatePickerX.init({
+                mondayFirst: true,
+                format: 'dd.mm.yyyy',
+                minDate: newDate
+            });
+        })
+        .catch(err => {
+            const message = { "state": "error", "message": err };
+            flashMessage(message);
+        });
+}

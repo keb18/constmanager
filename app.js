@@ -94,6 +94,11 @@ app.listen(port, hostname, () => {
     // for testing moment.js
     // let checkDate = "26.11.2018";
     // console.log(checkDate);
+    // let changed = moment(checkDate, "DD.MM.YYYY").format("MM.DD.YYYY");
+    // console.log(changed)
+    // let utc = new Date(changed)
+    // console.log(utc)
+
     // let newDate = moment(checkDate, "DD.MM.YYYY").add(7, 'days').format("DD.MM.YYYY");
     // console.log(newDate);
     // let plmDate = moment(checkDate).format("DD.MM.YYYY");

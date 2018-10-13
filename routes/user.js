@@ -86,8 +86,58 @@ router.get('/:companyId/user/:userId/timesheet/last',
       });
   });
 
-// ============================================================
-// GET PREVIOUS timesheet when first opening the timesheet page
+// ===========================================
+// GET FIRST timesheet for the calendar choice
+router.get('/:companyId/user/:userId/timesheet/first',
+  mid.isLoggedIn,
+  mid.disableCache,
+  (req, res) => {
+    // find user with provided id in db and serve the timesheet to the template
+    User.findById(req.params.userId)
+      .then(foundUser => {
+        // Get only the user's timesheet
+        let foundTimesheets = foundUser.timesheets;
+
+        // Find the last timesheet
+        let firstTimesheetDate = foundTimesheets[0].timesheetDate;
+      
+        return res.json(firstTimesheetDate)
+      })
+      .catch(err => {
+        mid.errorDb(err);
+        req.flash("error", "User was not found in the database.");
+        res.redirect('back');
+      });
+  });
+
+// // ===========================================
+// // GET SELECTED timesheet for the calendar choice
+// router.get('/:companyId/user/:userId/timesheet/date',
+//   mid.isLoggedIn,
+//   mid.disableCache,
+//   (req, res) => {
+//     let currDate = req.body;
+//     console.log("Datepicker route")
+//     // find user with provided id in db and serve the timesheet to the template
+//     User.findById(req.params.userId)
+//       .then(foundUser => {
+//         // Get only the user's timesheet
+//         let foundTimesheets = foundUser.timesheets;
+
+//         // Find index of current date in all timesheets
+//         let timesheetIndex = foundTimesheets.findIndex(obj => obj.timesheetDate == currDate.findDate);
+      
+//         return res.json(firstTimesheetDate[timesheetIndex]);
+//       })
+//       .catch(err => {
+//         mid.errorDb(err);
+//         req.flash("error", "User was not found in the database.");
+//         res.redirect('back');
+//       });
+//   });
+
+// ============
+// GET PREVIOUS
 router.post('/:companyId/user/:userId/timesheet/previous',
   mid.isLoggedIn,
   mid.disableCache,
@@ -122,8 +172,8 @@ router.post('/:companyId/user/:userId/timesheet/previous',
       });
   });
 
-// ============================================================
-// GET NEXT timesheet when first opening the timesheet page
+// ==================
+// GET NEXT timesheet
 router.post('/:companyId/user/:userId/timesheet/next',
   mid.isLoggedIn,
   mid.disableCache,
