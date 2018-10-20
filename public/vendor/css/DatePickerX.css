@@ -13,6 +13,7 @@
 
 .date-picker-x-container {
 	position: relative;
+	width: 130px;
 }
 
 .date-picker-x {

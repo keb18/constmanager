@@ -1,4 +1,13 @@
 /* TIMESHEETS TABLE   */
+@media (max-width: 360px) {
+  /* .date-picker-x{
+    zoom: 0.9;
+  } */
+  .sheetPick{
+    zoom: 0.7;
+  }
+}
+
 
 .totalHours {
   text-align: right;
