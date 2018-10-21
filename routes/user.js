@@ -86,8 +86,8 @@ router.get('/:companyId/user/:userId/timesheet/last',
       });
   });
 
-// ===========================================
-// GET FIRST timesheet for the calendar choice
+// ===================================================
+// GET FIRST & LAST timesheet for the calendar choices
 router.get('/:companyId/user/:userId/timesheet/first',
   mid.isLoggedIn,
   mid.disableCache,
@@ -98,10 +98,19 @@ router.get('/:companyId/user/:userId/timesheet/first',
         // Get only the user's timesheet
         let foundTimesheets = foundUser.timesheets;
 
-        // Find the last timesheet
+        // Find the first timesheet
         let firstTimesheetDate = foundTimesheets[0].timesheetDate;
-      
-        return res.json(firstTimesheetDate)
+
+        // Find last timesheet
+        let noTimesshets = foundTimesheets.length;
+        let lastTimesheetDate = foundTimesheets[noTimesshets - 1].timesheetDate;
+
+        let firstLastDate = {
+          firstTimesheetDate: firstTimesheetDate,
+          lastTimesheetDate: lastTimesheetDate
+        }
+
+        return res.json(firstLastDate)
       })
       .catch(err => {
         mid.errorDb(err);
@@ -112,32 +121,39 @@ router.get('/:companyId/user/:userId/timesheet/first',
 
 // // ===========================================
 // // GET SELECTED timesheet for the calendar choice
-// router.get('/:companyId/user/:userId/timesheet/date',
-//   mid.isLoggedIn,
-//   mid.disableCache,
-//   (req, res) => {
-//     let currDate = req.body;
-//     console.log("Datepicker route")
-//     // find user with provided id in db and serve the timesheet to the template
-//     User.findById(req.params.userId)
-//       .then(foundUser => {
-//         // Get only the user's timesheet
-//         let foundTimesheets = foundUser.timesheets;
+router.post('/:companyId/user/:userId/timesheet/date',
+  mid.isLoggedIn,
+  mid.disableCache,
+  (req, res) => {
+    let selectedDate = req.body.selectedDate;
+    // console.log(selectedDate)
+    
+    // let newDate = moment(selectedDate, "DD.MM.YYYY").add(7, 'days').format("DD.MM.YYYY");
 
-//         // Find index of current date in all timesheets
-//         let timesheetIndex = foundTimesheets.findIndex(obj => obj.timesheetDate == currDate.findDate);
-      
-//         return res.json(firstTimesheetDate[timesheetIndex]);
-//       })
-//       .catch(err => {
-//         mid.errorDb(err);
-//         req.flash("error", "User was not found in the database.");
-//         res.redirect('back');
-//       });
-//   });
+    let selectedWeek = moment(selectedDate, "DD.MM.YYYY").startOf('isoWeek').format("DD.MM.YYYY");
+    // console.log(selectedWeek)
+    
+    // find user with provided id in db and search for the selected timesheet
+    User.findById(req.params.userId)
+      .then(foundUser => {
+        // Get only the user's timesheet
+        let foundTimesheets = foundUser.timesheets;
 
-// ============
-// GET PREVIOUS
+        // Find index of current date in all timesheets
+        let timesheetIndex = foundTimesheets.findIndex(obj => obj.timesheetDate == selectedWeek);
+        // console.log(foundTimesheets[timesheetIndex]);
+
+        return res.json(foundTimesheets[timesheetIndex]);
+      })
+      .catch(err => {
+        mid.errorDb(err);
+        req.flash("error", "User was not found in the database.");
+        res.redirect('back');
+      });
+  });
+
+// ======================
+// GET PREVIOUS timesheet
 router.post('/:companyId/user/:userId/timesheet/previous',
   mid.isLoggedIn,
   mid.disableCache,

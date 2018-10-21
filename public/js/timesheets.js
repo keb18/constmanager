@@ -226,7 +226,7 @@ document.querySelector('.timesheet-btn').addEventListener('click', e => {
     disableNavButton(".nextSheet");
     enableNavButton(".previousSheet")
     getLastTimesheet();
-    firstDate();
+    dateLimit();
     e.preventDefault();
 });
 
@@ -269,28 +269,33 @@ function getNextTimesheet() {
 
 // // ======================================================
 // // (GET) Request timesheet from user choice at datepicker
-// timesheetDateValue.addEventListener('change', () => {
-//     getTimesheetSelectDate()
-// });
+timesheetDateValue.addEventListener('change', () => {
+    enableNavButton(".previousSheet")
+    enableNavButton(".nextSheet")
+    getTimesheetSelectDate()
+});
 
-// function getTimesheetSelectDate(){
-//     let timesheet = timesheetDateValue.value;
-//     http.post(`${window.location.href}/timesheet/date`, timesheet)
-//         .then(res => {
-//             if (res.status) {
-//                 deleteAllRows();
-//                 populateTimesheet(res)
-//             } else {
-//                 disableNavButton(".previousSheet");
-//                 flashMessage(res);
-//             }
-//         })
-//         .catch(err => {
-//             // Log the err separately to user error log - future implementation
-//             let message = { "state": "error", "message": "There was a problem with the server." };
-//             flashMessage(message);
-//         })
-// }
+function getTimesheetSelectDate() {
+    let timesheet = { selectedDate: timesheetDateValue.value };
+    // console.log(timesheet)
+
+    http.post(`${window.location.href}/timesheet/date`, timesheet)
+        .then(res => {
+            console.log(res)
+            if (res.status) {
+                deleteAllRows();
+                populateTimesheet(res);
+            } else {
+                disableNavButton(".previousSheet");
+                flashMessage(res);
+            }
+        })
+        .catch(err => {
+            // Log the err separately to user error log - future implementation
+            let message = { "state": "error", "message": "There was a problem with the server." };
+            flashMessage(message);
+        })
+}
 
 
 // =================================
@@ -334,7 +339,6 @@ function deleteAllRows() {
         }
     }
 }
-
 
 
 function populateTimesheet(timesheet) {
@@ -458,18 +462,34 @@ function newTimesheet() {
 // DATE PICKER
 // function to assign date picker to date input field when user
 // clicks on the timesheet button
-function firstDate() {
+function dateLimit() {
     http.get(`${window.location.href}/timesheet/first`)
         .then(res => {
-            // Next line not really the best way to do it but date comes in
-            // GB format dd/mm/yyyy but the date picker requires mm/dd/yyyy
-            // all is needed here is to swap days with months 
-            let newDate = new Date(res).toLocaleDateString("en-GB");
+            // Format dd/mm/yyyy from server but the date picker requires
+            //  mm/dd/yyyy all is needed here is to swap days with months
+            let first = res.firstTimesheetDate;
+            let last = res.lastTimesheetDate;
+
+            let firstDate = new Date(
+                parseInt(first.substr(6, 4)),
+                parseInt(first.substr(3, 2)) - 1,
+                parseInt(first.substr(0, 2))
+            );
+            console.log(firstDate)
+
+            let lastDate = new Date(
+                parseInt(last.substr(6, 4)),
+                parseInt(last.substr(3, 2)) - 1,
+                parseInt(last.substr(0, 2))
+            );
+            console.log(lastDate)
 
             timesheetDateValue.DatePickerX.init({
                 mondayFirst: true,
+                clearButton: false,
                 format: 'dd.mm.yyyy',
-                minDate: newDate
+                minDate: firstDate,
+                maxDate: lastDate
             });
         })
         .catch(err => {
