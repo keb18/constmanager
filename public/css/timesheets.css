@@ -49,3 +49,7 @@ a.disabled {
   cursor: default;
   color: gray;
 }
+
+.add-row {
+  cursor: pointer;
+}

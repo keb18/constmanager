@@ -92,8 +92,6 @@ function updateTotalTime() {
 function addNewRow() {
     const table = document.querySelector('.timesheetTable').getElementsByTagName('tbody')[0];
     let tableRowNumber = table.childElementCount;
-    // let clickedRow = e.path[1].parentElement.rowIndex;
-    // let clickedColumn = e.path[1].cellIndex;
 
     if (tableRowNumber > 0) {
         // Create an empty <tr> element and add it to the last position of the table:
@@ -105,7 +103,7 @@ function addNewRow() {
             '<td><input id="projectNumber" type="text" name="timesheet[projectNumber]" autocomplete="nope"></td>',
             '<td><input id="projectName" type="text" name="timesheet[projectName]" disabled autocomplete="nope"></td>',
             '<td><input type="text" name="timesheet[projectDescription]" autocomplete="nope"></td>',
-            '<td><input step="0.1" min="0" type="number" id="hours" name="timesheet[mon]" autocomplete="nope" value="0"></td>',
+            '<td><input step="0.1" min="0" type="number" name="timesheet[mon]" autocomplete="nope" value="0"></td>',
             '<td><input step="0.1" min="0" type="number" name="timesheet[tue]" autocomplete="nope" value="0"></td>',
             '<td><input step="0.1" min="0" type="number" name="timesheet[wed]" autocomplete="nope" value="0"></td>',
             '<td><input step="0.1" min="0" type="number" name="timesheet[thu]" autocomplete="nope" value="0"></td>',
@@ -149,8 +147,6 @@ function currSheet() {
 
     let timesheetDate = timesheetDateValue.value;
     let rows = table.getElementsByTagName('tbody')[0].rows;
-    // console.log(rows)
-    // let status = { "status": "open" }
 
     let timesheet = {
         "timesheetDate": timesheetDate,
@@ -340,6 +336,7 @@ function deleteAllRows() {
 function populateTimesheet(timesheet) {
     let timesheetLength = timesheet.timesheet.length;
     let rows = table.getElementsByTagName('tbody')[0].rows;
+    console.log(timesheet);
 
     timesheetDateValue.value = timesheet.timesheetDate;
 
@@ -368,6 +365,7 @@ document.querySelector('.btn-save-timesheet').addEventListener('click', e => {
     saveTimesheet();
     e.preventDefault();
 });
+
 function saveTimesheet() {
     let timesheetList = currSheet();
     let listLength = timesheetList.timesheet.length;
@@ -420,12 +418,12 @@ document.querySelector('.btn-submit-timesheet').addEventListener('click', e => {
     submitTimesheet();
     e.preventDefault();
 });
+
 function submitTimesheet() {
     let timesheetList = currSheet();
     http.post(`${window.location.href}/timesheet/submit`, timesheetList)
         .then(res => {
-            let message = { "state": "ok", "message": res };
-            flashMessage(message);
+            flashMessage(res);
         })
         .catch(err => {
             let message = { "state": "error", "message": err };
@@ -451,6 +449,14 @@ function newTimesheet() {
             let message = { "state": "error", "message": err };
             flashMessage(message);
         })
+}
+
+// Disable input in tables !! To be implemented !!
+function disableInput(status){
+    if(status === "closed"){
+        document.getElementById("myText").disabled = true;
+        tableBody.rows[0].cells[1].getElementsByTagName('input')[0].disabled = true
+    }
 }
 
 
@@ -499,3 +505,4 @@ function dateLimit() {
             flashMessage(message);
         });
 }
+
