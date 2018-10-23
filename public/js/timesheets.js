@@ -336,7 +336,6 @@ function deleteAllRows() {
 function populateTimesheet(timesheet) {
     let timesheetLength = timesheet.timesheet.length;
     let rows = table.getElementsByTagName('tbody')[0].rows;
-    console.log(timesheet);
 
     timesheetDateValue.value = timesheet.timesheetDate;
 
