@@ -121,9 +121,9 @@ function addNewRow() {
             let cell = row.insertCell(i);
             cell.innerHTML = cellsList[i];
         }
-        // getProjectName();
+
         let newTableRowNumber = table.childElementCount;
-        // console.log(newTableRowNumber);
+
         tableRows[newTableRowNumber - 1].getElementsByTagName('input')[0].addEventListener('blur', getProjectName);
     }
 };
@@ -189,9 +189,7 @@ function currSheet() {
             }
         });
     }
-    // console.log(projectArr);
     timesheet.timesheet = projectArr;
-    // console.log(timesheet)
     return timesheet;
 }
 
@@ -277,11 +275,9 @@ timesheetDateValue.addEventListener('change', () => {
 
 function getTimesheetSelectDate() {
     let timesheet = { selectedDate: timesheetDateValue.value };
-    // console.log(timesheet)
 
     http.post(`${window.location.href}/timesheet/date`, timesheet)
         .then(res => {
-            console.log(res)
             if (res.status) {
                 deleteAllRows();
                 populateTimesheet(res);
@@ -325,9 +321,9 @@ function getPreviousTimesheet() {
         })
 }
 
-// Activate the nav button
+// Activate the arrow button
 const enableNavButton = (selector) => document.querySelector(selector).classList.remove('disabled');
-// Deactivate nav button when reaching one end
+// Deactivate arrow button when reaching one end
 const disableNavButton = (selector) => document.querySelector(selector).classList.add('disabled');
 
 // Delete rows if more than 1 row available
@@ -374,7 +370,6 @@ document.querySelector('.btn-save-timesheet').addEventListener('click', e => {
 });
 function saveTimesheet() {
     let timesheetList = currSheet();
-    console.log(timesheetList)
     let listLength = timesheetList.timesheet.length;
     let timesheet = timesheetList.timesheet;
     let check = "false";
@@ -442,6 +437,7 @@ function submitTimesheet() {
 // (POST) Create a new empty timesheet
 document.querySelector('.btn-new-timesheet').addEventListener('click', e => {
     newTimesheet();
+    document.getElementById('time-sheet-tab').click();
     e.preventDefault();
 });
 
@@ -450,7 +446,6 @@ function newTimesheet() {
         .then(res => {
             populateTimesheet(res.timesheet);
             flashMessage(res.msg);
-            // document.getElementById('timesheetDate').innerHTML = res.date;
         })
         .catch(err => {
             let message = { "state": "error", "message": err };
@@ -458,10 +453,12 @@ function newTimesheet() {
         })
 }
 
+
 // ===========
 // DATE PICKER
-// function to assign date picker to date input field when user
-// clicks on the timesheet button
+
+// function to assign date picker to date 
+// input field when user clicks on the input 
 function dateLimit() {
     http.get(`${window.location.href}/timesheet/first`)
         .then(res => {
@@ -475,14 +472,19 @@ function dateLimit() {
                 parseInt(first.substr(3, 2)) - 1,
                 parseInt(first.substr(0, 2))
             );
-            console.log(firstDate)
 
             let lastDate = new Date(
                 parseInt(last.substr(6, 4)),
                 parseInt(last.substr(3, 2)) - 1,
                 parseInt(last.substr(0, 2))
             );
-            console.log(lastDate)
+            
+            // Check if DatePickerX is initialised
+            let isDatePickerX = document.getElementById("timesheetDate").classList.contains("date-picker-x-input");
+
+            if (isDatePickerX) {
+                timesheetDateValue.DatePickerX.remove()
+            }
 
             timesheetDateValue.DatePickerX.init({
                 mondayFirst: true,
