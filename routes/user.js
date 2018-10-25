@@ -126,12 +126,8 @@ router.post('/:companyId/user/:userId/timesheet/date',
   mid.disableCache,
   (req, res) => {
     let selectedDate = req.body.selectedDate;
-    // console.log(selectedDate)
-
-    // let newDate = moment(selectedDate, "DD.MM.YYYY").add(7, 'days').format("DD.MM.YYYY");
 
     let selectedWeek = moment(selectedDate, "DD.MM.YYYY").startOf('isoWeek').format("DD.MM.YYYY");
-    // console.log(selectedWeek)
 
     // find user with provided id in db and search for the selected timesheet
     User.findById(req.params.userId)
@@ -141,7 +137,6 @@ router.post('/:companyId/user/:userId/timesheet/date',
 
         // Find index of current date in all timesheets
         let timesheetIndex = foundTimesheets.findIndex(obj => obj.timesheetDate == selectedWeek);
-        // console.log(foundTimesheets[timesheetIndex]);
 
         return res.json(foundTimesheets[timesheetIndex]);
       })
@@ -247,6 +242,12 @@ router.post('/:companyId/user/:userId/timesheet/new',
 
         // Add 7 days to the last timesheet
         let newDate = moment(lastDate, "DD.MM.YYYY").add(7, 'days').format("DD.MM.YYYY");
+        let tue = moment(newDate, "DD.MM.YYYY").add(1, 'days').format("DD.MM.YYYY");
+        let wed = moment(newDate, "DD.MM.YYYY").add(2, 'days').format("DD.MM.YYYY");
+        let thu = moment(newDate, "DD.MM.YYYY").add(3, 'days').format("DD.MM.YYYY");
+        let fri = moment(newDate, "DD.MM.YYYY").add(4, 'days').format("DD.MM.YYYY");
+        let sat = moment(newDate, "DD.MM.YYYY").add(5, 'days').format("DD.MM.YYYY");
+        let sun = moment(newDate, "DD.MM.YYYY").add(6, 'days').format("DD.MM.YYYY");
 
         let newTimesheet = {
           timesheetNumber: lastNumber + 1,
@@ -254,19 +255,19 @@ router.post('/:companyId/user/:userId/timesheet/new',
           status: "open",
           timesheet:
             [{
-              projectId: "",
-              projectNumber: "",
-              projectName: "",
-              description: "",
-              time: 0,
+              "projectId": "",
+              "projectNumber": "",
+              "projectName": "",
+              "description": "",
+              "time": 0,
               "dayHours": {
-                "mon": 0,
-                "tue": 0,
-                "wed": 0,
-                "thu": 0,
-                "fri": 0,
-                "sat": 0,
-                "sun": 0
+                [newDate]: 0,
+                [tue]: 0,
+                [wed]: 0,
+                [thu]: 0,
+                [fri]: 0,
+                [sat]: 0,
+                [sun]: 0
               }
             }]
         }

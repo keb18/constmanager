@@ -96,6 +96,7 @@ function addNewRow() {
     if (tableRowNumber > 0) {
         // Create an empty <tr> element and add it to the last position of the table:
         let row = table.insertRow();
+        let rows = table.rows;
 
         // Add cell information:
         let cellsList = [
@@ -103,13 +104,13 @@ function addNewRow() {
             '<td><input id="projectNumber" type="text" name="timesheet[projectNumber]" autocomplete="nope"></td>',
             '<td><input id="projectName" type="text" name="timesheet[projectName]" disabled autocomplete="nope"></td>',
             '<td><input type="text" name="timesheet[projectDescription]" autocomplete="nope"></td>',
-            '<td><input step="0.1" min="0" type="number" name="timesheet[mon]" autocomplete="nope" value="0"></td>',
-            '<td><input step="0.1" min="0" type="number" name="timesheet[tue]" autocomplete="nope" value="0"></td>',
-            '<td><input step="0.1" min="0" type="number" name="timesheet[wed]" autocomplete="nope" value="0"></td>',
-            '<td><input step="0.1" min="0" type="number" name="timesheet[thu]" autocomplete="nope" value="0"></td>',
-            '<td><input step="0.1" min="0" type="number" name="timesheet[fri]" autocomplete="nope" value="0"></td>',
-            '<td><input step="0.1" min="0" type="number" name="timesheet[sat]" autocomplete="nope" value="0"></td>',
-            '<td><input step="0.1" min="0" type="number" name="timesheet[sun]" autocomplete="nope" value="0"></td>',
+            `<td><input step="0.1" min="0" type="number" id="${rows[0].getElementsByTagName('input')[3].id}" autocomplete="nope" value="0"></td>`,
+            `<td><input step="0.1" min="0" type="number" id="${rows[0].getElementsByTagName('input')[4].id}" autocomplete="nope" value="0"></td>`,
+            `<td><input step="0.1" min="0" type="number" id="${rows[0].getElementsByTagName('input')[5].id}" autocomplete="nope" value="0"></td>`,
+            `<td><input step="0.1" min="0" type="number" id="${rows[0].getElementsByTagName('input')[6].id}" autocomplete="nope" value="0"></td>`,
+            `<td><input step="0.1" min="0" type="number" id="${rows[0].getElementsByTagName('input')[7].id}" autocomplete="nope" value="0"></td>`,
+            `<td><input step="0.1" min="0" type="number" id="${rows[0].getElementsByTagName('input')[8].id}" autocomplete="nope" value="0"></td>`,
+            `<td><input step="0.1" min="0" type="number" id="${rows[0].getElementsByTagName('input')[9].id}" autocomplete="nope" value="0"></td>`,
             '<td>0</td>',
             '<td><i class="fa fa-fw fa-trash"></i></td>',
         ];
@@ -160,35 +161,28 @@ function convCurrSheetJson() {
         let projectName = rows[i].getElementsByTagName('input')[1].value;
         let projectDesc = rows[i].getElementsByTagName('input')[2].value;
         let projectTime = parseInt(tableBody.rows[i].cells[11].innerText);
-        let mon = parseInt(rows[i].getElementsByTagName('input')[3].value)
-        let tue = parseInt(rows[i].getElementsByTagName('input')[4].value)
-        let wed = parseInt(rows[i].getElementsByTagName('input')[5].value)
-        let thu = parseInt(rows[i].getElementsByTagName('input')[6].value)
-        let fri = parseInt(rows[i].getElementsByTagName('input')[7].value)
-        let sat = parseInt(rows[i].getElementsByTagName('input')[8].value)
-        let sun = parseInt(rows[i].getElementsByTagName('input')[9].value)
 
-        projectArr.push({
+        let projectTimeArray = {
             "projectId": projectId,
             "projectNumber": projectNo,
             "projectName": projectName,
             "description": projectDesc,
             "time": projectTime,
-            "dayHours": {
-                "mon": mon,
-                "tue": tue,
-                "wed": wed,
-                "thu": thu,
-                "fri": fri,
-                "sat": sat,
-                "sun": sun
-            }
-        });
+        }
+
+        let dayHours = {};
+        for (let j = 3; j < 10; j++) {
+            let time = parseInt(rows[i].getElementsByTagName('input')[j].value)
+            let date = rows[i].getElementsByTagName('input')[j].id
+            Object.assign(dayHours, { [date]: time });
+        }
+        Object.assign(projectTimeArray, { "dayHours": dayHours })
+
+        projectArr.push(projectTimeArray);
     }
     timesheet.timesheet = projectArr;
     return timesheet;
 }
-
 
 // =========================
 // Logic for server requests
@@ -346,11 +340,15 @@ function populateTimesheet(timesheet) {
         rows[i].getElementsByTagName('input')[1].value = timesheet.timesheet[i].projectName;
         rows[i].getElementsByTagName('input')[2].value = timesheet.timesheet[i].description;
 
-        let weekDays = { 1: "mon", 2: "tue", 3: "wed", 4: "thu", 5: "fri", 6: "sat", 7: "sun" }
-
         for (let j = 3; j < 10; j++) {
+
+            rows[i].getElementsByTagName('input')[j].id = Object.keys(timesheet.timesheet[0].dayHours)[j - 3];
+
             let cell = rows[i].getElementsByTagName('input')[j]
-            cell.value = parseInt(timesheet.timesheet[i].dayHours[weekDays[j - 2]]);
+
+            let projectDates = Object.keys(timesheet.timesheet[0].dayHours)
+            cell.value = parseInt(timesheet.timesheet[i].dayHours[projectDates[j - 3]]);
+
             updateDayTime(j + 1);
         }
         updateProjectTime(i + 1);
@@ -452,8 +450,8 @@ function newTimesheet() {
 }
 
 // Disable input in tables !! To be implemented !!
-function disableInput(status){
-    if(status === "closed"){
+function disableInput(status) {
+    if (status === "closed") {
         document.getElementById("myText").disabled = true;
         tableBody.rows[0].cells[1].getElementsByTagName('input')[0].disabled = true
     }
@@ -482,9 +480,9 @@ function dateLimit() {
             let lastDate = new Date(
                 parseInt(last.substr(6, 4)),
                 parseInt(last.substr(3, 2)) - 1,
-                parseInt(last.substr(0, 2))
+                parseInt(last.substr(0, 2)) + 6
             );
-            
+
             // Check if DatePickerX is initialised
             let isDatePickerX = document.getElementById("timesheetDate").classList.contains("date-picker-x-input");
 
