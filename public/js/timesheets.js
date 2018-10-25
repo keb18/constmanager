@@ -141,7 +141,7 @@ function rowRenumber() {
 // =================================================
 
 // Convert the timesheet table values to json
-function currSheet() {
+function convCurrSheetJson() {
     // Remove error message
     document.querySelector('.flashMessage').innerHTML = "";
 
@@ -243,7 +243,7 @@ document.querySelector('.nextSheet').addEventListener('click', e => {
 });
 
 function getNextTimesheet() {
-    let timesheet = currSheet();
+    let timesheet = convCurrSheetJson();
     http.post(`${window.location.href}/timesheet/next`, timesheet)
         .then(res => {
             if (res.status) {
@@ -299,7 +299,7 @@ document.querySelector('.previousSheet').addEventListener('click', e => {
 });
 
 function getPreviousTimesheet() {
-    let timesheet = currSheet();
+    let timesheet = convCurrSheetJson();
     http.post(`${window.location.href}/timesheet/previous`, timesheet)
         .then(res => {
             if (res.status) {
@@ -341,6 +341,7 @@ function populateTimesheet(timesheet) {
 
     for (let i = 0; i < timesheetLength; i++) {
         if (i > 0) { addNewRow() };
+        rows[i].getElementsByTagName('td')[0].id = timesheet.timesheet[i].projectId;
         rows[i].getElementsByTagName('input')[0].value = timesheet.timesheet[i].projectNumber;
         rows[i].getElementsByTagName('input')[1].value = timesheet.timesheet[i].projectName;
         rows[i].getElementsByTagName('input')[2].value = timesheet.timesheet[i].description;
@@ -366,7 +367,7 @@ document.querySelector('.btn-save-timesheet').addEventListener('click', e => {
 });
 
 function saveTimesheet() {
-    let timesheetList = currSheet();
+    let timesheetList = convCurrSheetJson();
     let listLength = timesheetList.timesheet.length;
     let timesheet = timesheetList.timesheet;
     let check = "false";
@@ -419,7 +420,7 @@ document.querySelector('.btn-submit-timesheet').addEventListener('click', e => {
 });
 
 function submitTimesheet() {
-    let timesheetList = currSheet();
+    let timesheetList = convCurrSheetJson();
     http.post(`${window.location.href}/timesheet/submit`, timesheetList)
         .then(res => {
             flashMessage(res);
