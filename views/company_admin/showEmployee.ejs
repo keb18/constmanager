@@ -1,0 +1,16 @@
+<% include ../partials/header %>
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="/<%= currentCompany._id %>/dashboard">Dashboard</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a href="/<%= currentCompany._id %>/employees">Employees</a>
+  </li>
+  <li class="breadcrumb-item active"><%= employee.firstName %> <%= employee.lastName %></li>
+</ol>
+
+<p><%= employee.firstName %></p>
+<p><%= employee.lastName %></p>
+
+<% include ../partials/footer %>

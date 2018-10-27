@@ -16,7 +16,8 @@ const companyRoutes = require('./routes/company'),
     employeesRoutes = require('./routes/employees'),
     indexRoutes = require('./routes/index'),
     projectsRoutes = require('./routes/projects'),
-    userRoutes = require('./routes/user');
+    userRoutes = require('./routes/user'),
+    companyAdminRoutes = require('./routes/company_admin');
 
 // use favicon
 app.use(favicon(__dirname + '/public/images/favicons/favicon.ico'));
@@ -78,6 +79,7 @@ app.use('/adminDashboard', adminRoutes);
 app.use(employeesRoutes);
 app.use(projectsRoutes);
 app.use(userRoutes);
+app.use(companyAdminRoutes);
 
 
 

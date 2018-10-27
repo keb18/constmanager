@@ -16,7 +16,6 @@ router.get('/:companyId/employees',
   mid.disableCache,
   // mid.checkCompanyAuth,
   function (req, res) {
-    // console.log(req.user);
     Company.findById(req.params.companyId).populate('users').exec(function (err, foundCompany) {
       if (err) {
         mid.errorDb(err);

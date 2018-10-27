@@ -1,0 +1,103 @@
+<% include ../partials/header %>
+
+<link rel="stylesheet" href="/css/company_admin.css">
+
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="/<%= currentCompany._id %>/dashboard">Dashboard</a>
+    </li>
+    <li class="breadcrumb-item active">Admin</li>
+</ol>
+
+
+<!-- ========================== CONTENT =============================== -->
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+            aria-selected="true">To include</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="timesheets-tab" data-toggle="tab" href="#timesheets" role="tab" aria-controls="timesheets"
+            aria-selected="false">Timesheets</a>
+    </li>
+</ul>
+
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+        <h4>Content to be added</h4>
+
+    </div>
+
+    <div class="tab-pane fade" id="timesheets" role="tabpanel" aria-labelledby="timesheets-tab">
+
+        <table class="table table-hover text-center table-sm">
+
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Timesheets Open</th>
+            <% employees.forEach(function(employee, i){ %>
+                <!-- to implement  different th depending on the timesheet status -->
+                <% if(employee.openTimesheetsDates.length ) %>
+                    <th>Weeks</th>
+                <!-- to implement -->
+                </tr>
+            </thead>
+            <tbody>
+                <td>
+                    <%= i %>
+                </td>
+                <td>
+                    <%= employee.firstName %>
+                    <%= employee.lastName %>
+                </td>
+                <td>
+                    <%= employee.position %>
+                </td>
+                <td>
+                    <%= employee.totalOpenTimesheets %>
+                </td>
+                <td>
+                    <% employee.openTimesheetsDates.forEach(function(date) { %>
+                    <p class="dateParagraph">
+                        <%= date %>
+                    </p>
+                    <% }) %>
+                </td>
+            </tbody>
+            <% }); %>
+        </table>
+
+        <form class="tablist-views" action="/<%= currentCompany._id %>/employee" method="POST">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputCodeDescription">Code description</label>
+                    <input type="text" class="form-control" name="timesheetCodes[firstName]" placeholder="John"
+                        required>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="inputCode">Code</label>
+                    <input type="text" class="form-control" name="employee[lastName]" placeholder="Doe" required>
+                </div>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+    </div>
+</div>
+<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+
+
+</div>
+</div>
+
+<!-- ========================== CONTENT =============================== -->
+
+
+<% include ../partials/footer %>
