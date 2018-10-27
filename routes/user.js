@@ -23,6 +23,39 @@ router.get('/:companyId/user/:userId',
     });
   });
 
+// ==================================================================
+// ===================== USER SETTINGS LOGIC ========================
+// ==================================================================
+
+// ==================================================
+// SAVE USER SETTINGS
+// router.post('/:companyId/user/:userId/user_settings/save',
+//   mid.isLoggedIn,
+//   mid.disableCache,
+//   (req, res) => {
+//     let selectedDate = req.body.selectedDate;
+
+//     let selectedWeek = moment(selectedDate, "DD.MM.YYYY").startOf('isoWeek').format("DD.MM.YYYY");
+
+//     // find user with provided id in db and search for the selected timesheet
+//     User.findById(req.params.userId)
+//       .then(foundUser => {
+//         // Get only the user's timesheet
+//         let foundTimesheets = foundUser.timesheets;
+
+//         // Find index of current date in all timesheets
+//         let timesheetIndex = foundTimesheets.findIndex(obj => obj.timesheetDate == selectedWeek);
+
+//         return res.json(foundTimesheets[timesheetIndex]);
+//       })
+//       .catch(err => {
+//         mid.errorDb(err);
+//         req.flash("error", "User was not found in the database.");
+//         res.redirect('back');
+//       });
+//   });
+
+
 // ===============================================================
 // ===================== TIMESHEETS LOGIC ========================
 // ===============================================================
@@ -119,8 +152,8 @@ router.get('/:companyId/user/:userId/timesheet/first',
       });
   });
 
-// // ===========================================
-// // GET SELECTED timesheet for the calendar choice
+// ==============================================
+// GET SELECTED timesheet for the calendar choice
 router.post('/:companyId/user/:userId/timesheet/date',
   mid.isLoggedIn,
   mid.disableCache,
