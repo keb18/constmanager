@@ -47,6 +47,7 @@ router.post('/register',
         timesheetNumber: 0,
         timesheetDate: moment().startOf('isoWeek').format("DD.MM.YYYY"),
         status: "open",
+        approved: "no",
         timesheet:
           [{
             projectId: "",

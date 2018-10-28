@@ -1,0 +1,54 @@
+<div class="container-fluid">
+  <h4>
+    <i class="fa fa-fw fa-calendar-alt plm"></i>Timesheets
+  </h4>
+</div>
+
+
+<div class="container-fluid">
+  <table class="table table-bordered table-hover text-center table-sm">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Position</th>
+        <th colspan="2">Open timesheets</th>
+        <th colspan="2">Timesheets to approve</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% employees.forEach(function(employee, i){ %>
+      <td>
+        <%= i %>
+      </td>
+      <td>
+        <%= employee.firstName %>
+        <%= employee.lastName %>
+      </td>
+      <td>
+        <%= employee.position %>
+      </td>
+      <td>
+        <%= employee.totalOpenTimesheets %>
+      </td>
+      <td>
+        <% employee.openTimesheetsDates.forEach(function(date) { %>
+        <p class="dateParagraph">
+          <%= date %>
+        </p>
+        <% }) %>
+      </td>
+      <td>
+        <%= employee.totalNotApprovedTimesheets %>
+      </td>
+      <td>
+        <% employee.notApprovedTimesheetsDates.forEach(function(date) { %>
+        <p class="dateParagraph">
+          <%= date %>
+        </p>
+        <% }) %>
+      </td>
+    </tbody>
+    <% }); %>
+  </table>
+</div>

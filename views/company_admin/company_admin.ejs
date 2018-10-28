@@ -13,91 +13,44 @@
 
 <!-- ========================== CONTENT =============================== -->
 
-<ul class="nav nav-tabs" id="myTab" role="tablist">
+<ul class="nav nav-tabs" id="companyAdminInfoTab" role="tablist">
+    <!-- Settings tab -->
     <li class="nav-item">
-        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
-            aria-selected="true">To include</a>
+        <a class="nav-link settings-tab active" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings"
+            aria-selected="true">Settings</a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" id="timesheets-tab" data-toggle="tab" href="#timesheets" role="tab" aria-controls="timesheets"
-            aria-selected="false">Timesheets</a>
+
+    <!-- Timesheets navs -->
+    <li class="nav-item dropdown">
+        <a class="nav-link timesheet-tab dropdown-toggle" id="timesheet-tab" data-toggle="dropdown" href="#" role="button"
+            aria-haspopup="true" aria-expanded="false">Timesheets</a>
+
+        <div class="dropdown-menu">
+            <a class="dropdown-item timesheet-btn" id="time-sheet-tab" data-toggle="tab" href="#time-sheet" role="tab"
+                aria-controls="time-sheet" aria-selected="false">Time Sheets</a>
+
+            <a class="dropdown-item" id="time-sheet-settings-tab" data-toggle="tab" href="#time-sheet-settings" role="tab" aria-controls="time-sheet-settings" aria-selected="false">Timesheet Settings</a>
+        </div>
     </li>
 </ul>
 
-<div class="tab-content" id="myTabContent">
-    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+<div class="tab-content" id="companyAdminInfoTabContent">
+    <!-- Setting tab -->
+    <div class="tab-pane fade show active" id="settings" role="tabpanel" aria-labelledby="settings-tab">
         <h4>Content to be added</h4>
-
     </div>
 
-    <div class="tab-pane fade" id="timesheets" role="tabpanel" aria-labelledby="timesheets-tab">
+    <!-- Timesheets tab -->
+    <div class="tab-pane fade" id="time-sheet" role="tabpanel" aria-labelledby="time-sheet">
+            <p><% include ./partials/timesheets %></p>
+    </div>
 
-        <table class="table table-hover text-center table-sm">
-
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Position</th>
-                    <th>Timesheets Open</th>
-            <% employees.forEach(function(employee, i){ %>
-                <!-- to implement  different th depending on the timesheet status -->
-                <% if(employee.openTimesheetsDates.length ) %>
-                    <th>Weeks</th>
-                <!-- to implement -->
-                </tr>
-            </thead>
-            <tbody>
-                <td>
-                    <%= i %>
-                </td>
-                <td>
-                    <%= employee.firstName %>
-                    <%= employee.lastName %>
-                </td>
-                <td>
-                    <%= employee.position %>
-                </td>
-                <td>
-                    <%= employee.totalOpenTimesheets %>
-                </td>
-                <td>
-                    <% employee.openTimesheetsDates.forEach(function(date) { %>
-                    <p class="dateParagraph">
-                        <%= date %>
-                    </p>
-                    <% }) %>
-                </td>
-            </tbody>
-            <% }); %>
-        </table>
-
-        <form class="tablist-views" action="/<%= currentCompany._id %>/employee" method="POST">
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="inputCodeDescription">Code description</label>
-                    <input type="text" class="form-control" name="timesheetCodes[firstName]" placeholder="John"
-                        required>
-                </div>
-
-                <div class="form-group col-md-6">
-                    <label for="inputCode">Code</label>
-                    <input type="text" class="form-control" name="employee[lastName]" placeholder="Doe" required>
-                </div>
-            </div>
-
-
-            <button type="submit" class="btn btn-primary">Add</button>
-        </form>
+    <div class="tab-pane fade" id="time-sheet-settings" role="tabpanel" aria-labelledby="time-sheet-settings">
+            <p><% include ./partials/timesheet_settings %></p>
     </div>
 </div>
-<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+<br>
 
-
-</div>
-</div>
-
-<!-- ========================== CONTENT =============================== -->
-
+<!-- ========================== END OF CONTENT =============================== -->
 
 <% include ../partials/footer %>

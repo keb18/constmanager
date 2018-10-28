@@ -39,16 +39,32 @@ function findOpenTimesheets(foundCompany) {
     employees.push({
       firstName: user.firstName,
       lastName: user.lastName,
+      id: user.id,
       position: user.position,
       totalOpenTimesheets: 0,
-      openTimesheetsDates: []
+      openTimesheetsDates: [],
+      totalNotApprovedTimesheets: 0,
+      notApprovedTimesheetsDates: []
     });
+
     user.timesheets.forEach(function (timesheet) {
       if (timesheet.status === "open") {
         employees[i].totalOpenTimesheets++;
         employees[i].openTimesheetsDates.push(String(timesheet.timesheetDate));
       }
+      if (timesheet.approved === "no") {
+        employees[i].totalNotApprovedTimesheets++;
+        employees[i].notApprovedTimesheetsDates.push(String(timesheet.timesheetDate));
+      }
     });
+
+    if (employees[i].totalOpenTimesheets === 0) {
+      employees[i].openTimesheetsDates.push("All timesheets submitted.");
+    }
+    if (employees[i].totalNotApprovedTimesheets === 0) {
+      employees[i].totalNotApprovedTimesheets.push("All timesheets approved.");
+    }
+
   });
   return employees
 }
