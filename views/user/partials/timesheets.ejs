@@ -3,22 +3,16 @@
     <i class="fa fa-fw fa-calendar-alt plm"></i>Timesheets
   </h4>
   <h6>
-      <i class="fa fa-fw fa-question" 
-      data-toggle="tooltip"
-      data-html="true"  
-      data-placement="right" 
-      title="
+    <i class="fa fa-fw fa-question" data-toggle="tooltip" data-html="true" data-placement="right" title="
       <div class='text-justify'>
-      Codes for non-projects: <br/>
-      Holidays: hol <br/>
-      Public holiday: phl <br/>
-      Training: tra <br/>
-      Doctor: doc <br/>
-      Sick time: sck <br/>
+        Codes for non-projects: <br/>
+      <% for(let code in currentCompany.admin.timesheetCodes){ %>
+        <%= currentCompany.admin.timesheetCodes[code] %>: <%= code %><br/>
+      <% } %>
       </div>"></i>
-      <%= currentCompany %>
+
   </h6>
- 
+
   <div class="container sheetPick">
     <div class="row no-gutters">
       <div class="col-auto">
@@ -139,22 +133,23 @@
 
 
 <!-- Submit Modal-->
-<div class="modal fade" id="submitTimesheetModal" tabindex="-1" role="dialog" aria-labelledby="submitTimesheetModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="submitTimesheetModalLabel">Ready to submit?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">You will not be able to modify the timesheet once it has been submitted.</div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary btn-submit-timesheet" data-dismiss="modal" href="#">Submit</a>
-            </div>
-        </div>
+<div class="modal fade" id="submitTimesheetModal" tabindex="-1" role="dialog" aria-labelledby="submitTimesheetModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="submitTimesheetModalLabel">Ready to submit?</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">You will not be able to modify the timesheet once it has been submitted.</div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        <a class="btn btn-primary btn-submit-timesheet" data-dismiss="modal" href="#">Submit</a>
+      </div>
     </div>
+  </div>
 </div>
 
 
