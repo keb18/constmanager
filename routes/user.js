@@ -79,6 +79,12 @@ router.get('/:companyId/user/:userId/timesheet/findName/:projectNumber(*)',
               "_id": projects[i]._id
             }
             return res.json(foundProject);
+          } else if (company.admin.timesheetCodes.hasOwnProperty(req.params.projectNumber)) {
+            foundProject = {
+              "projectName": company.admin.timesheetCodes[req.params.projectNumber],
+              "_id": req.params.projectNumber
+            }
+            return res.json(foundProject);
           } else if (i === projects.length - 1 && !k) {
             foundProject = { "projectName": "n/a", "_id": "n/a" }
             return res.json(foundProject);
@@ -362,7 +368,7 @@ router.post('/:companyId/user/:userId/timesheet/submit',
   });
 
 
-  // PUT TIMESHEETS (save current timesheet)
+// PUT TIMESHEETS (save current timesheet)
 router.put('/:companyId/user/:userId/timesheet/save',
   mid.isLoggedIn,
   mid.disableCache,
@@ -418,7 +424,7 @@ function updateTimesheet(foundUser, timesheetBody, instruction) {
   if (timeSpent.status === 'open') {
     // Delete the exisiting times
     foundUser.timesheets[indexOfTimesheet].timesheet.splice(0, lengthOfSpentTime);
-    
+
     // Delete the current status
 
     // Push the new times
@@ -426,8 +432,8 @@ function updateTimesheet(foundUser, timesheetBody, instruction) {
     times.forEach(element => {
       foundUser.timesheets[indexOfTimesheet].timesheet.push(element);
     });
-    
-    if(instruction === "submit"){
+
+    if (instruction === "submit") {
       foundUser.timesheets[indexOfTimesheet].status = "closed";
     }
 

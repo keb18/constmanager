@@ -5,21 +5,35 @@
 </div>
 
 
+<div class="row">
+    <div class="col-auto">
+        <div class="container-fluid timesheetCodes">
+            <h5>Timesheet codes</h5>
+            <ul>
+                <% for(let code in currentCompany.admin.timesheetCodes){ %>
+                <li>
+                    <%= currentCompany.admin.timesheetCodes[code] %> -
+                    <%= code %>
+                </li>
+                <% } %>
+            </ul>
 
-<div class="container-fluid timesheetCodes">
-    <form class="tablist-views" action="/<%= currentCompany._id %>/employee" method="POST">
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <label for="inputCodeDescription">Code description</label>
-                <input type="text" class="form-control" name="timesheetCodes[firstName]" placeholder="John" required>
-            </div>
+            <form class="tablist-views" action="/<%= currentCompany._id %>/employee" method="POST">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputCodeDescription">Code description</label>
+                        <input type="text" class="form-control" name="timesheetCodes[firstName]" placeholder="John"
+                            required>
+                    </div>
 
-            <div class="form-group col-md-6">
-                <label for="inputCode">Code</label>
-                <input type="text" class="form-control" name="employee[lastName]" placeholder="Doe" required>
-            </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputCode">Code</label>
+                        <input type="text" class="form-control" name="employee[lastName]" placeholder="Doe" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Add</button>
+            </form>
         </div>
-
-        <button type="submit" class="btn btn-primary">Add</button>
-    </form>
+    </div>
 </div>

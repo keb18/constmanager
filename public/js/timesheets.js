@@ -101,7 +101,7 @@ function addNewRow() {
         // Add cell information:
         let cellsList = [
             `<td>${tableRowNumber + 1}</td>`,
-            '<td><input id="projectNumber" type="text" name="timesheet[projectNumber]" autocomplete="nope"></td>',
+            '<td><input id="projectNumber" type="text" name="timesheet[projectNumber]" autocomplete="nope" placeholder="search"></td>',
             '<td><input id="projectName" type="text" name="timesheet[projectName]" disabled autocomplete="nope"></td>',
             '<td><input type="text" name="timesheet[projectDescription]" autocomplete="nope"></td>',
             `<td><input step="0.1" min="0" type="number" id="${rows[0].getElementsByTagName('input')[3].id}" autocomplete="nope" value="0"></td>`,
