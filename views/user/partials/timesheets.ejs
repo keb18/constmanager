@@ -1,17 +1,19 @@
 <div class="container-fluid">
+
   <h4>
     <i class="fa fa-fw fa-calendar-alt plm"></i>Timesheets
   </h4>
   <h6>
     <i class="fa fa-fw fa-question" data-toggle="tooltip" data-html="true" data-placement="right" title="
-      <div class='text-justify'>
-        Codes for non-projects: <br/>
-      <% for(let code in currentCompany.admin.timesheetCodes){ %>
-        <%= currentCompany.admin.timesheetCodes[code] %>: <%= code %><br/>
-      <% } %>
-      </div>"></i>
-
+            <div class='text-justify'>
+              Codes for non-projects: <br/>
+            <% for(let code in currentCompany.admin.timesheetCodes){ %>
+              <%= currentCompany.admin.timesheetCodes[code] %> - <%= code %><br/>
+            <% } %>
+            </div>"></i>
   </h6>
+
+
 
   <div class="container sheetPick">
     <div class="row no-gutters">
