@@ -5,3 +5,13 @@
 .table td {
   vertical-align: middle;
 }
+
+.add-timesheet-code, 
+.cancel-code,
+.confirm-add-code,
+.confirm-edit-code,
+.confirm-delete-code,
+.cancel-code
+{
+  visibility: hidden;
+}

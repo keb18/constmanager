@@ -9,30 +9,38 @@
     <div class="col-auto">
         <div class="container-fluid timesheetCodes">
             <h5>Timesheet codes</h5>
-            <ul>
+            <ul class="list-group">
                 <% for(let code in currentCompany.admin.timesheetCodes){ %>
-                <li>
+                <li class="list-group-item">
                     <%= currentCompany.admin.timesheetCodes[code] %> -
                     <%= code %>
                 </li>
                 <% } %>
             </ul>
+            <br>
+            <div class="container">
+                <button class="btn btn-primary hide1">Add</button>
+                <button class="btn btn-warning hide1">Edit</button>
+                <button class="btn btn-danger hide1">Delete</button>
+                <button class="btn btn-primary hide1">Confirm add</button>
+                <button class="btn btn-warning hide1">Confirm edit</button>
+                <button class="btn btn-danger hide1">Confirm delete</button>
+                <button class="btn btn-warning hide1">Cancel</button>
+            </div>
 
-            <form class="tablist-views" action="/<%= currentCompany._id %>/employee" method="POST">
+
+            <form class="tablist-views add-timesheet-code">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="inputCodeDescription">Code description</label>
-                        <input type="text" class="form-control" name="timesheetCodes[firstName]" placeholder="John"
-                            required>
+                        <input type="text" class="form-control" placeholder="Code description">
                     </div>
 
                     <div class="form-group col-md-6">
                         <label for="inputCode">Code</label>
-                        <input type="text" class="form-control" name="employee[lastName]" placeholder="Doe" required>
+                        <input type="text" class="form-control" placeholder="Code">
                     </div>
                 </div>
-
-                <button type="submit" class="btn btn-primary">Add</button>
             </form>
         </div>
     </div>

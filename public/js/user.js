@@ -504,3 +504,9 @@ function dateLimit() {
         });
 }
 
+// ===========
+// CLEAR ERROR -> not implemented
+setTimeout(clearError(), 3000);
+function clearError(){
+    document.querySelector('.alert').remove();
+}

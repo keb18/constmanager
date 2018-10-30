@@ -10,7 +10,7 @@ let Project = require('../models/project'),
 // Require the middleware
 let mid = require("../middleware");
 
-// ADMIN DASHBOARD
+// ADMIN TIMESHEETS DASHBOARD
 router.get('/:companyId/company_admin',
   mid.isLoggedIn,
   mid.disableCache,
